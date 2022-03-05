@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <img class="confidential" src="{{ asset('images/confidential-stamp.png') }}" alt="Badge confidentiel">
+
+    <div class="profil">
+
+        <div class="profil-head">
+            <img src="{{ asset('images/badge.png') }}" alt="Badge BarterJailer">
+            <p>BARTER PRISON</p>
+            <img src="{{ asset('images/badge.png') }}" alt="Badge BarterJailer">
+        </div>
+
+        <h1 class="profil-title">Fiche gardien</h1>
+
+        <div class="profil-body">
+
+            <div class="profil-body__infos">
+                <div>
+                    <p><b>Nom :</b><br> {{ app.user.lastname|upper }}</p>
+                    <p><b>Prénom :</b><br> {{ app.user.firstname|upper }}</p>
+                </div>
+
+                <div>
+                    <p><b>Surnom :</b><br> {{ app.user.username|upper }}</p>
+                    <p><b>Email :</b><br> {{ app.user.email }}</p>
+                </div>
+
+                <div>
+                    <p><b>Date inscription :</b><br> {{ app.user.dateInscription|date('d/m/Y H:i')|capitalize }}</p>
+                    <p><b>Dernière connexion :</b><br> {{ app.user.lastConnection|date('d/m/Y H:i')|capitalize }}</p>
+                </div>
+
+                <p><b>Identifiant gardien :</b> <br>{{ app.user.id ~ app.user.dateInscription|date('dmY')|capitalize }}</p>
+
+                <img src="{{ asset('images/codebarre.png') }}" alt="Code barre">
+
+            </div>
+
+            <div class="profil-body__image">
+                <p><b>Statut du gardien :</b><br>
+                    {% if app.user.state == 0 %}
+                        <span style="color: #53d253">En service</span>
+                    {% else %}
+                        <span style="color: orangered">Indisponible</span>
+                    {% endif %}
+                </p>
+                <img class="avatar" src="{{ asset('avatars/' ~ app.user.avatar ~ '.png') }}" alt="Avatar">
+            </div>
+
+        </div>
+
+        <h1 class="profil-title">Statistiques gardien</h1>
+
+        <div class="profil-body">
+
+            <div class="profil-body__infos">
+                <div>
+                    <p><b>Nom :</b><br> {{ app.user.lastname|upper }}</p>
+                    <p><b>Prénom :</b><br> {{ app.user.firstname|upper }}</p>
+                </div>
+
+                <div>
+                    <p><b>Surnom :</b><br> {{ app.user.username|upper }}</p>
+                    <p><b>Email :</b><br> {{ app.user.email }}</p>
+                </div>
+
+                <div>
+                    <p><b>Date inscription :</b><br> {{ app.user.dateInscription|date('d/m/Y H:i')|capitalize }}</p>
+                    <p><b>Dernière connexion :</b><br> {{ app.user.lastConnection|date('d/m/Y H:i')|capitalize }}</p>
+                </div>
+
+                <p><b>Identifiant gardien :</b> <br>{{ app.user.id ~ app.user.dateInscription|date('dmY')|capitalize }}</p>
+
+                <img src="{{ asset('images/codebarre.png') }}" alt="Code barre">
+
+            </div>
+
+            <div class="profil-body__rank">
+                <p><b>Statut du gardien :</b><br>
+                    {% if app.user.state == 0 %}
+                        <span style="color: #53d253">En service</span>
+                    {% else %}
+                        <span style="color: orangered">Indisponible</span>
+                    {% endif %}
+                </p>
+                <img class="avatar" src="{{ asset('avatars/' ~ app.user.avatar ~ '.png') }}" alt="Avatar">
+            </div>
+
+        </div>
+
+    </div>
+
+
+{#            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}#}
+{#                <p>{{ app.user.firstname }} {{ app.user.lastname }}</p>#}
+{#                <p>Email: {{ app.user.email }}</p>#}
+{#                <p>Dernière connexion: {{ app.user.lastConnection|format_datetime('full', 'short', locale='fr')|capitalize }}</p>#}
+{#            {% endif %}#}
+
+{% endblock %}
+
