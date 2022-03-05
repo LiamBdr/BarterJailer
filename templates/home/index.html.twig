@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+{% endblock %}
+
+{% block body %}
+{#    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}        #}{# PLAYER CONNECTÉ #}
+{#        <p>{{ app.user.firstname }} {{ app.user.lastname }}</p>#}
+{#        <p>Email: {{ app.user.email }}</p>#}
+{#        <p>Dernière connexion: {{ app.user.lastConnection|format_datetime('full', 'short', locale='fr')|capitalize }}</p>#}
+{#    {% endif %}#}
+
+    <div class="home-intro">
+        <img class="home-intro__card" src="{{ asset('images/home_card.png') }}" alt="Carte Barter Jailer">
+
+        <div>
+            <h1>Barter Jailer</h1>
+            <p>Sed in sem euismod, lacinia dui vel, accumsan nunc. Suspendisse tempus vehicula nisl eu hendrerit. Donec tincidunt sagittis risus, sed faucibus odio faucibus ut. Curabitur eget condimentum sem. Phasellus elit leo, porta sed augue in, gravida pellentesque odio. In non tortor dictum, malesuada nisl sed, rhoncus tellus. Donec vel augue non quam imperdiet gravida non id erat.</p>
+        </div>
+    </div>
+    
+{% endblock %}
