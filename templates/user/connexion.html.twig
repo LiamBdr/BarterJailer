@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <form action="{{ path('app_connexion') }}" method="post">
+        <h1>Connexion</h1>
+
+        <div>
+            <label for="username">Email:</label>
+            <input type="text" id="username" name="_username" value="{{ last_username }}"/>
+        </div>
+
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="_password"/>
+            <a href="{{ path('app_forgot_password_request') }}" class="help">Mot de passe oublié</a>
+        </div>
+
+        <div class="form-checkbox" style="margin-bottom: 10px">
+            <p>Se souvenir de moi</p>
+            <input id="remember" type="checkbox" name="_remember_me" checked/>
+            <label for="remember"></label>
+        </div>
+
+
+        <input type="hidden" name="_target_path" value="/"/>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+        {% if error %}
+            <div class="error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        <button class="btn" type="submit">Se connecter</button>
+        <a href="{{ path('app_home') }}">Retour à l'accueil</a>
+    </form>
+    <p class="bellow-link">Vous n'avez pas de compte ? <a href="{{ path('app_register') }}">Inscrivez vous</a></p>
+{% endblock %}

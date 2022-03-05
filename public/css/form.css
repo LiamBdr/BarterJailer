@@ -1,0 +1,236 @@
+form {
+    position: relative;
+    width: 100%;
+    max-width: 448px;
+    background: white;
+    border-radius: 4px;
+    padding: 20px;
+
+    box-shadow: rgba(60, 66, 87, 0.12) 0 7px 14px 0, rgba(0, 0, 0, 0.12) 0 3px 6px 0;
+    margin: auto;
+}
+
+form > div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+form label, form p {
+    display: block;
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+form input[type='text'],form input[type='email'], form input[type='password'] {
+    font-size: 1.3rem;
+    padding: 5px 10px;
+    width: 100%;
+    border: unset;
+    border-radius: 4px;
+    outline-color: rgb(84 105 212 / 0.5);
+    box-shadow: 0 0 1px 1px rgba(60, 66, 87, 0.16) ;
+}
+
+form input:focus, form input:focus-within {
+    outline-color: var(--tonic1);
+}
+
+form .form-names {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+form .form-names div:nth-child(1) {
+    flex: 0.8;
+}
+
+form .form-names div:nth-child(2) {
+    flex: 1.2;
+}
+
+form .form-avatars {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+    padding-top: 10px;
+}
+
+form .form-avatars div {
+    position: relative;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form .form-avatars label {
+    position: relative;
+    width: 100%;
+    font-weight: 300;
+    font-size: 1.3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all ease 0.2s;
+}
+
+form .form-avatars input {
+    opacity: 0;
+    height: 0;
+    width: 0;
+}
+
+form .form-avatars .avatar {
+    height: 70px;
+    cursor: pointer;
+    object-fit: contain;
+    transition: all ease 0.3s;
+    transform-origin: bottom;
+    margin-bottom: 5px;
+}
+
+.form-avatars input:checked + label {
+    color: var(--tonic1);
+}
+
+.form-avatars input:checked + label .avatar {
+    transform: scale(1.2);
+    -webkit-filter: drop-shadow(0 0 10px rgba(238, 117, 77, 0.5));
+    filter: drop-shadow(0 0 10px rgba(238, 117, 77, 0.5));
+}
+
+/**** CHECKBOX ****/
+
+form .form-checkbox {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-style: italic;
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 0;
+}
+
+form .form-checkbox p {
+    font-weight: 300;
+    font-style: normal;
+}
+
+form .form-checkbox input {
+    display: none;
+    height: 0;
+    width: 0;
+}
+
+form .form-checkbox label {
+    background-color: lightgray;
+    width: 3.5rem;
+    height: 2rem;
+    border-radius: 3rem;
+    display: inline-block;
+    position: relative;
+    transition: .3s;
+    cursor: pointer;
+}
+
+form .form-checkbox label::before {
+    transition: .2s;
+    display: block;
+    position: absolute;
+    content: '';
+    left: .5rem;
+    top: 0.35rem;
+
+    width: 1.25rem;
+    height: 1.25rem;
+
+    background-color: white;
+    border-radius: 50%;
+}
+
+form .form-checkbox input:checked + label {
+    background-color: var(--tonic1);
+    transition: .3s;
+}
+
+form .form-checkbox input:checked + label::before {
+    transform: translateX(1.25rem);
+    transition: .3s;
+}
+
+
+
+form a {
+    display: block;
+    margin-right: 10px;
+    font-size: 1.5rem;
+    color: var(--tonic2);
+    text-align: center;
+    margin-top: 10px;
+    text-decoration: none;
+}
+
+form a:hover {
+    text-decoration: underline;
+}
+
+form .btn {
+    position:relative ;
+    width: 100%;
+    background: var(--tonic1);
+    padding: 10px;
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: krungthep, sans-serif;
+    transition: all ease 0.2s;
+}
+
+form .btn:hover {
+    background: #d75f3c;
+}
+
+form .help {
+    font-size: 1.1rem;
+    text-align: left;
+    color: var(--secondary);
+}
+
+form .error {
+    color: lightcoral;
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+}
+
+form ul {
+    list-style: none inside none;
+    margin-bottom: 10px;
+}
+
+form ul li {
+    font-size: 1.4rem;
+    color: lightcoral;
+    font-weight: 300;
+}
+
+.bellow-link {
+    text-align: center;
+    margin: 30px 0;
+    font-size: 1.3rem;
+    font-weight: 300;
+}
+
+.bellow-link a {
+    color: #d95b36;
+}
+
+#inscription_form_captcha div {
+    margin: 10px auto;
+}

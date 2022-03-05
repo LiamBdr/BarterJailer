@@ -1,0 +1,37 @@
+<header class="main-menu">
+
+
+    <nav class="main-menu__left">
+        <a href="{{ path('app_home') }}" class="main-menu__link {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}">
+            Accueil
+        </a>
+        <a class="main-menu__link" href="">Jouer</a>
+        <a class="main-menu__link" href="">A propos</a>
+    </nav>
+
+    <img class="main-menu__logo" src="{{ asset('images/svg/logo-white.svg') }}" alt="Logo BarterJailer">
+
+    <nav class="main-menu__right">
+
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}        {# PLAYER CONNECTÉ #}
+
+            <a class="main-menu__link" href="{{ path('app_account') }}">
+                Mon compte
+            </a>
+            <a class="main-menu__link" href="{{ path('app_logout') }}">
+                Déconnexion
+            </a>
+
+        {% else %}  {# PLAYER DÉCONNECTÉ #}
+
+            <a href="{{ path('app_connexion') }}" class="main-menu__link {% if app.request.attributes.get('_route') == 'app_connexion' %}active{% endif %}">
+                Connexion
+            </a>
+            <a href="{{ path('app_register') }}" class="main-menu__link {% if app.request.attributes.get('_route') == 'app_register' %}active{% endif %}">
+                Inscription
+            </a>
+
+        {% endif %}
+    </nav>
+
+</header>

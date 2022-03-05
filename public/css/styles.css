@@ -1,0 +1,130 @@
+@font-face {
+    font-family: 'krungthep';
+    src: url('../fonts/krungthep.ttf')
+}
+
+:root {
+    --tonic1: #f88056;
+    --tonic2: #49A4D5;
+    --secondary: #3B5285;
+    --dark-blue: #21284B;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+h1 {
+    font-family: 'krungthep', sans-serif;
+    font-size: 3.2rem;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.main-container {
+    position: relative;
+    margin: auto;
+    width: 80%;
+    padding: 50px 0;
+}
+
+/******** HEADER ********/
+
+.main-menu {
+    position: relative;
+    height: 100px;
+    width: 100%;
+    padding: 0 7%;
+
+    background: var(--secondary);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-menu__logo {
+    position: absolute;
+
+    height: 60%;
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    margin: auto;
+}
+
+.main-menu__left, .main-menu__right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.main-menu__link {
+    position: relative;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    transition: all ease 0.2s;
+    z-index: 5;
+}
+
+.main-menu__link::before {
+    position: absolute;
+    content: "";
+
+    bottom: -15%;
+    left: 50%;
+    width: 0;
+    height: 130%;
+    background: rgba(237,117,77);
+    transition: all ease-out 0.2s;
+    z-index: -1;
+}
+
+.main-menu__link:hover:not(.active)::before {
+    left: -5%;
+    width: 110%;
+}
+
+.main-menu__link.active {
+    color: var(--tonic1);
+}
+
+/******** FLASH ********/
+
+.flash-message {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+
+    width: auto;
+    font-size: 1.6rem;
+    padding: 15px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: hsl(180, 3%, 100%);
+    box-shadow: inset 0 0 .5px 1px hsla(0, 0%, 100%, 0.075), 0 5px 10px rgba(0,0,0,0.1) ;
+    border-radius: 5px;
+    cursor: pointer;
+}

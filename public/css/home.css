@@ -1,0 +1,62 @@
+.home-intro {
+    position: relative;
+    padding: 50px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: url("../images/mail-barreau.png");
+    background-size: contain;
+    z-index: -5;
+}
+
+.home-intro__card {
+    position: relative;
+    width: 40%;
+    height: 400px;
+    object-fit: contain;
+
+    transform: rotate(-10deg);
+    filter: drop-shadow(0 5px 20px rgba(0,0,0,0.3));
+    -webkit-filter: drop-shadow(0 5px 20px rgba(0,0,0,0.3));
+}
+
+.home-intro > div {
+    width: 55%;
+}
+
+.home-intro h1 {
+    position: relative;
+    font-size: 4rem;
+    text-align: right;
+    color: white;
+    background: var(--tonic1);
+    padding: 5px 20px;
+}
+
+.home-intro p {
+    position: relative;
+    line-height: 150%;
+    font-size: 1.5rem;
+    font-weight: 300;
+    padding: 30px 20px;
+    /*background: var(--secondary);*/
+    text-align: left;
+    color: white;
+    z-index: 10;
+}
+
+.home-intro p::before {
+    position: absolute;
+    content: '';
+
+    top: 0;
+    left: 0;
+
+    height: 100%;
+    width: 1000px;
+    background: var(--secondary);
+    z-index: -1;
+}
+
+
