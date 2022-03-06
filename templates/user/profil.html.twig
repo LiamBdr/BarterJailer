@@ -3,7 +3,7 @@
 {% block title %}Profil{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/profil.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -29,7 +29,7 @@
                 </div>
 
                 <div>
-                    <p><b>Surnom :</b><br> {{ app.user.username|upper }}</p>
+                    <p><b>Alias :</b><br> {{ app.user.username|upper }}</p>
                     <p><b>Email :</b><br> {{ app.user.email }}</p>
                 </div>
 
