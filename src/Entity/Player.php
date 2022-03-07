@@ -71,8 +71,7 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
-    #[ORM\ManyToOne(targetEntity: Avatar::class, inversedBy: 'players')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\Column(type: 'string')]
     private $avatar;
 
     public function getId(): ?int
@@ -229,12 +228,12 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAvatar(): ?Avatar
+    public function getAvatar(): ?string
     {
         return $this->avatar;
     }
 
-    public function setAvatar(?Avatar $avatar): self
+    public function setAvatar(string $avatar): self
     {
         $this->avatar = $avatar;
 

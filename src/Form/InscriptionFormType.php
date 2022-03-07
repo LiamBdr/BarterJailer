@@ -2,13 +2,11 @@
 
 namespace App\Form;
 
-use App\Entity\Avatar;
 use App\Entity\Player;
 use App\Security\Captcha\ReCaptchaType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -40,12 +38,19 @@ class InscriptionFormType extends AbstractType
                 'required'   => true,
                 'label' => 'Email'
             ])
-            ->add('avatar', EntityType::class, [
-                'class' => Avatar::class,
+            ->add('avatar', ChoiceType::class, [
                 'expanded' => true,
                 'required' => true,
-                'choice_label' => 'name',
-                'choice_attr' => function () { return array('checked' => 'true'); }
+                'choices' => [
+                    'Armand' => 'armand',
+                    'Roberto' => 'roberto'
+                ],
+                'choice_attr' => function($choice, $key) {
+                    if ($key == 'Armand') {
+                        return ['checked' => true];
+                    }
+                    return ['checked' => false];
+                }
             ])
             ->add('captcha', ReCaptchaType::class, [
                 'type' => 'checkbox', // (invisible, checkbox)

@@ -27,22 +27,10 @@
         <p>Avatar</p>
         <div class="form-avatars">
             {% for avatar in  registrationForm.avatar %}
-                {%  if avatar.vars.value == 1 %}
-                    {%  set src = asset('avatars/armand.png') %}
-                    {%  set checked = 'checked' %}
-                {%  elseif avatar.vars.value == 2 %}
-                    {%  set src = asset('avatars/roberto.png') %}
-                    {%  set checked = '' %}
-                {% else %}
-                    {%  set src = asset('avatars/armand.png')%}
-                    {%  set checked = '' %}
-                {% endif %}
                 <div>
                     {{ form_widget(avatar) }}
-{#                    {{ avatar.vars.checked }}#}
-{#                    <input {{ checked }} type="radio" id="{{ avatar.vars.id }}" name="{{ avatar.vars.full_name }}" value="{{ avatar.vars.value }}" required>#}
                     <label for="{{ avatar.vars.id }}">
-                        <img class="avatar" src="{{ src }}" alt="">
+                        <img class="avatar" src="{{ asset('avatars/' ~ avatar.vars.value ~ '.png') }}" alt="{{ avatar.vars.value }}">
                         {{ avatar.vars.label }}
                     </label>
                 </div>
