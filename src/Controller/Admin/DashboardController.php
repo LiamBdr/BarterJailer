@@ -23,12 +23,15 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Barterjailer Back Office');
+            ->setTitle('<img src="images/svg/favicon.svg" style="display: block; width: 50%; margin: auto; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2))">')
+
+            ->setFaviconPath('images/svg/favicon.svg');
     }
 
     public function configureMenuItems(): iterable
     {
         return [
+            MenuItem::linkToRoute('Retour à l\'accueil', 'fa fa-arrow-left', 'app_home'),
             MenuItem::linkToDashboard('Dashboard', 'fa fa-home'),
 
             MenuItem::section('Users'),
