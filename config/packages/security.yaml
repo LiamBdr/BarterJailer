@@ -1,23 +1,41 @@
 security:
     enable_authenticator_manager: true
-    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
         App\Entity\Player:
             algorithm: auto
+        App\Entity\Admin:
+            algorithm: auto
 
-    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+
+    role_hierarchy:
+        ROLE_PLAYER: [ROLE_USER]
+#        ROLE_ADMIN: [ROLE_PLAYER]
+
     providers:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
                 class: App\Entity\Player
                 property: email
+        app_admin_provider:
+            entity:
+                class: App\Entity\Admin
+                property: username
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        admin:
+            pattern: ^/admin
+            provider: app_admin_provider
+            custom_authenticator:
+                - App\Security\AdminAuthenticator
+            logout:
+                path: app_admin_logout
         main:
+            pattern: ^/
             lazy: true
             provider: app_user_provider
             form_login:
@@ -30,7 +48,6 @@ security:
             user_checker: App\Security\UserChecker
             logout:
                 path: app_logout
-            pattern: ^/
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -41,7 +58,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-#        - { path: '^/admin', roles: ROLE_ADMIN }
+        - { path: '^/admin/dashboard', roles: [ROLE_ADMIN] }
         - { path: '^/profil', roles: [ROLE_PLAYER] }
 
 when@test:
