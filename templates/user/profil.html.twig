@@ -57,6 +57,8 @@
 
         </div>
 
+        <a class="profil-btn" href="{{ path('app_account_update') }}">Modifier le profil</a>
+
         <h1 class="profil-title">Statistiques gardien</h1>
 
         <div class="profil-body">
@@ -75,12 +77,12 @@
             </div>
 
             <div class="profil-body__stats">
-                <p><b>Parties jouées:</b><br> {{ app.user.lastname|upper }}</p>
-                <p><b>Parties en cours :</b><br> {{ app.user.firstname|upper }}</p>
-                <p><b>Parties gagnées :</b><br> {{ app.user.username|upper }}</p>
-                <p><b>Parties perdues :</b><br> {{ app.user.email }}</p>
-                <p><b>Type de victoire :</b><br> {{ app.user.dateInscription|date('d/m/Y H:i')|capitalize }}</p>
-                <p><b>Parties terminées :</b><br> {{ app.user.lastConnection|date('d/m/Y H:i')|capitalize }}</p>
+                <p><b>Parties jouées:</b><br> 10</p>
+                <p><b>Parties en cours :</b><br> 2</p>
+                <p><b>Parties gagnées :</b><br> 7</p>
+                <p><b>Parties perdues :</b><br> 1</p>
+                <p><b>Type de victoire :</b><br> oui</p>
+                <p><b>Parties terminées :</b><br> 8</p>
             </div>
 
         </div>
@@ -88,4 +90,3 @@
     </div>
 
 {% endblock %}
-

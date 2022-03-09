@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<!-- saved from url=(0176)https://console.monaca.mobi/preview/62286d39e78885106d1b3cc8?id=1&terminal=true&is_attach=1&previewUrl=https://c-81cd06abc8bb84d76b7f9b5f9e7bca-%2D507299520-8080.monaca-app.com -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>Monaca</title>
+
+  <link rel="shortcut icon" href="https://console.monaca.mobi/favicon.ico?lang=en&amp;677575bff44bfc10d94a676c1c6810a9">
+
+  <script>
+    window.LANG = 'en';
+    window.previewUrl = 'https://c-81cd06abc8bb84d76b7f9b5f9e7bca--507299520-8080.monaca-app.com';
+    window.projectId = '62286d39e78885106d1b3cc8'
+  </script>
+
+  <script src="./jquery.min.js"></script>
+  <script src="./preview-panel.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      background: url('https://console.monaca.mobi/img/preview/preview_device_bg.png');
+      font-size: 13px;
+      overflow: hidden;
+    }
+
+    #PreviewFrame {
+        position: absolute;
+    }
+    
+    #PreviewWrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1 0 auto;
+      width: 100%;
+    }
+
+    #PreviewBox {
+      overflow: hidden;
+      background: #FFF;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    iframe {
+      border: none;
+      transform-origin: 0 0;
+      -webkit-transform-origin: 0 0;
+    }
+
+    iframe::-webkit-scrollbar {
+      display: none;
+    }
+
+    .warning {
+      display: flex;
+      position: absolute;
+      top: 28px;
+      width: 100%;
+      color: #333;
+      background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMjYgMjYiIHZlcnNpb249IjEuMSIgZmlsbD0iIzQ0NDQ0NCI+PGcgaWQ9InN1cmZhY2UxIiBmaWxsPSIjNDQ0NDQ0Ij48cGF0aCBzdHlsZT0iICIgZD0iTSAyNS4yODkwNjMgMjAuMTMyODEzIEwgMTUuMjM0Mzc1IDIuNzE4NzUgQyAxNC4wMDM5MDYgMC41ODk4NDQgMTEuOTk2MDk0IDAuNTg5ODQ0IDEwLjc2NTYyNSAyLjcxODc1IEwgMC43MTA5MzggMjAuMTMyODEzIEMgLTAuNTE5NTMxIDIyLjI2MTcxOSAwLjQ4ODI4MSAyNCAyLjk0NTMxMyAyNCBMIDIzLjA1NDY4OCAyNCBDIDI1LjUxMTcxOSAyNCAyNi41MTU2MjUgMjIuMjYxNzE5IDI1LjI4OTA2MyAyMC4xMzI4MTMgWiBNIDExLjYxNzE4OCA3LjY2MDE1NiBDIDExLjk4MDQ2OSA3LjI2OTUzMSAxMi40Mzc1IDcuMDc0MjE5IDEzIDcuMDc0MjE5IEMgMTMuNTYyNSA3LjA3NDIxOSAxNC4wMTk1MzEgNy4yNjU2MjUgMTQuMzgyODEzIDcuNjUyMzQ0IEMgMTQuNzM4MjgxIDguMDM1MTU2IDE0LjkyMTg3NSA4LjUxOTUzMSAxNC45MjE4NzUgOS4xMDE1NjMgQyAxNC45MjE4NzUgOS41OTc2NTYgMTQuMTcxODc1IDEzLjI2OTUzMSAxMy45MjE4NzUgMTUuOTM3NSBMIDEyLjExMzI4MSAxNS45Mzc1IEMgMTEuODk0NTMxIDEzLjI2OTUzMSAxMS4wNzgxMjUgOS41OTc2NTYgMTEuMDc4MTI1IDkuMTAxNTYzIEMgMTEuMDc4MTI1IDguNTI3MzQ0IDExLjI2MTcxOSA4LjA0Njg3NSAxMS42MTcxODggNy42NjAxNTYgWiBNIDE0LjM1NTQ2OSAyMC4zNTU0NjkgQyAxMy45NzY1NjMgMjAuNzIyNjU2IDEzLjUyMzQzOCAyMC45MTAxNTYgMTMgMjAuOTEwMTU2IEMgMTIuNDc2NTYzIDIwLjkxMDE1NiAxMi4wMjM0MzggMjAuNzIyNjU2IDExLjY0NDUzMSAyMC4zNTU0NjkgQyAxMS4yNjU2MjUgMTkuOTg0Mzc1IDExLjA3ODEyNSAxOS41MzkwNjMgMTEuMDc4MTI1IDE5LjAxMTcxOSBDIDExLjA3ODEyNSAxOC40ODgyODEgMTEuMjY1NjI1IDE4LjAzNTE1NiAxMS42NDQ1MzEgMTcuNjU2MjUgQyAxMi4wMjM0MzggMTcuMjc3MzQ0IDEyLjQ3NjU2MyAxNy4wODk4NDQgMTMgMTcuMDg5ODQ0IEMgMTMuNTIzNDM4IDE3LjA4OTg0NCAxMy45NzY1NjMgMTcuMjc3MzQ0IDE0LjM1NTQ2OSAxNy42NTYyNSBDIDE0LjczNDM3NSAxOC4wMzUxNTYgMTQuOTIxODc1IDE4LjQ4ODI4MSAxNC45MjE4NzUgMTkuMDExNzE5IEMgMTQuOTIxODc1IDE5LjUzOTA2MyAxNC43MzQzNzUgMTkuOTg0Mzc1IDE0LjM1NTQ2OSAyMC4zNTU0NjkgWiAiIGZpbGw9IiM0NDQ0NDQiLz48L2c+PC9zdmc+Cg==') no-repeat left center;
+      background-color: #F0BA31;
+      opacity: 0.7;
+      border-color: #ccc;
+      background-size: 12px;
+      padding: 3px 0;
+      font-family: sans-serif;
+      font-size: 13px;
+      background-position: 5px center;
+      justify-content: space-between;
+      z-index: 9999;
+    }
+    .warning:hover {
+      opacity: 1.0;
+    }
+
+    .warning .message {
+      padding-left: 25px;
+      display: block;
+      align-self: stretch
+    }
+    .warning .close {
+      background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzAwMDAwMCI+PHBhdGggZD0iTTE5LDNINUMzLjg5NSwzLDMsMy44OTUsMyw1djE0YzAsMS4xMDUsMC44OTUsMiwyLDJoMTRjMS4xMDUsMCwyLTAuODk1LDItMlY1QzIxLDMuODk1LDIwLjEwNSwzLDE5LDN6IE0xNywxNS41OUwxNS41OSwxNyBMMTIsMTMuNDFMOC40MSwxN0w3LDE1LjU5TDEwLjU5LDEyTDcsOC40MUw4LjQxLDdMMTIsMTAuNTlMMTUuNTksN0wxNyw4LjQxTDEzLjQxLDEyTDE3LDE1LjU5eiIgZmlsbD0iIzAwMDAwMCIvPjwvc3ZnPgo=') no-repeat center center;
+      width: 10px;
+      padding: 2px 4px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .settings-menu {
+      display: flex;
+      flex: 0 0 auto;
+      padding: 5px 10px;
+      background-color: #fff;
+      border-bottom: 1px solid #e8eaed;
+    }
+
+    #device-dropdown {
+      flex: 1;
+      margin-right: 5px;
+      max-width: 100%;
+      min-width: 50px;
+      background-color: #fff;
+      color: #808080;
+      border-color: #ccc;
+    }
+
+    .settings-button {
+      display: flex;
+      align-items: center;
+      margin: 0 4px;
+    }
+
+    .settings-button.disabled {
+      opacity: 0.5;
+      cursor: pointer;
+      pointer-events: none;
+    }
+
+    .settings-button:last-of-type {
+      margin-right: 0;
+    }
+
+    .settings-button img {
+      width: 16px;
+      height: 16px;
+    }
+
+    .settings-button#orientation-button-landscape img {
+      transform: rotate(-90deg);
+    }
+  </style>
+</head>
+<body>
+
+<nav class="settings-menu">
+  <select id="device-dropdown"><optgroup label="iOS"><option value="iphone8" selected="">iPhone 8 (750x1334)</option><option value="iphone8plus">iPhone 8 Plus (1242x2208)</option><option value="iphonex">iPhone X (1125x2436)</option><option value="ipadpro10">iPad Pro 10.5in (1668x2224)</option><option value="ipadpro12">iPad Pro 12.9in (2048x2732)</option></optgroup><optgroup label="Android"><option value="pixel2">Pixel 2 (1080x1920)</option><option value="pixel2xl">Pixel 2 XL (1440x2880)</option><option value="galaxys8">Galaxy S8 (1440x2960)</option><option value="xperiaxz1">Xperia XZ1 (1080x1920)</option></optgroup></select>
+
+  <a href="https://console.monaca.mobi/preview/62286d39e78885106d1b3cc8?id=1&amp;terminal=true&amp;is_attach=1&amp;previewUrl=https://c-81cd06abc8bb84d76b7f9b5f9e7bca--507299520-8080.monaca-app.com#" class="settings-button disabled" id="orientation-button-portait" title="Portrait Orientation"><img src="./device.svg"></a>
+  <a href="https://console.monaca.mobi/preview/62286d39e78885106d1b3cc8?id=1&amp;terminal=true&amp;is_attach=1&amp;previewUrl=https://c-81cd06abc8bb84d76b7f9b5f9e7bca--507299520-8080.monaca-app.com#" class="settings-button" id="orientation-button-landscape" title="Landscape Orientation"><img src="./device.svg"></a>
+      <a href="https://console.monaca.mobi/preview/62286d39e78885106d1b3cc8?id=1&amp;terminal=true&amp;is_attach=1&amp;previewUrl=https://c-81cd06abc8bb84d76b7f9b5f9e7bca--507299520-8080.monaca-app.com#" class="settings-button" id="detach-button" title="Detach"><img src="./detach.svg"></a>
+    <a href="https://console.monaca.mobi/preview/62286d39e78885106d1b3cc8?id=1&amp;terminal=true&amp;is_attach=1&amp;previewUrl=https://c-81cd06abc8bb84d76b7f9b5f9e7bca--507299520-8080.monaca-app.com#" class="settings-button" id="reload-button" title="Reload"><img src="./reload.svg"></a>
+</nav>
+
+<section id="PreviewWrap">
+    <div id="PreviewBox" style="width: 321px; height: 571px;">
+    <iframe id="PreviewFrame" src="./saved_resource(1).html" allow="geolocation; microphone; camera" style="width: 375px; height: 667px; transform: scale(0.856072);"></iframe>
+  </div>
+</section>
+
+
+
+</body></html>

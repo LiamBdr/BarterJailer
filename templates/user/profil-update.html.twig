@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier profil{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    {{ form_start(form) }}
+
+        <h1>Modifier profil</h1>
+
+        {{ form_row(form.username) }}
+
+        <div class="form-names">
+            {{ form_row(form.firstname) }}
+            {{ form_row(form.lastname) }}
+        </div>
+
+        <p>Avatar</p>
+        <div class="form-avatars">
+            {% for avatar in  form.avatar %}
+                <div>
+                    {{ form_widget(avatar) }}
+                    <label for="{{ avatar.vars.id }}">
+                        <img class="avatar" src="{{ asset('avatars/' ~ avatar.vars.value ~ '.png') }}" alt="{{ avatar.vars.value }}">
+                        {{ avatar.vars.label }}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div>
+            {{ form_label (form.plainPassword.first) }}
+            {{ form_widget (form.plainPassword.first) }}
+        </div>
+
+        <div>
+            {{ form_label (form.plainPassword.second) }}
+            {{ form_widget (form.plainPassword.second) }}
+        </div>
+
+        {{ form_rest(form) }}
+
+        <div class="form-errors">
+            {{ form_errors(form) }}
+        </div>
+
+        <button type="submit" class="btn">Sauvegarder les modifications</button>
+
+        <a href="{{ path('app_account') }}">Retour au profil</a>
+{% endblock %}
