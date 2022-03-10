@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Jouer{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/game.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <h1>JOUER</h1>
+
+    <ul>
+        {% for game in games %}
+            <li>
+                <b>{{ game.name }}</b> | {{ game.player1.username }} vs {{ game.player2.username }}
+                <a href="{{ path('app_game', { 'id': game.id }) }}">Rejoindre</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Jouer{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/game.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <i>total cartes : {{ game.player1Cards|length + game.player2Cards|length + game.stockCards|length + game.market|length }}</i>
+
+    <h2>CARTES JOUEUR 1</h2>
+    <ul>
+        {% for card in game.player1Cards %}
+            <li>{{ card.type }} (id:{{ card.id }})</li>
+        {% endfor %}
+    </ul>
+
+    <br>
+
+    <h2>CARTES JOUEUR 2</h2>
+    <ul>
+        {% for card in game.player2Cards %}
+            <li>{{ card.type }} (id:{{ card.id }})</li>
+        {% endfor %}
+    </ul>
+
+    <h2>MARCHÉ</h2>
+    <ul>
+        {% for card in game.market %}
+            <li>{{ card.type }} (id:{{ card.id }})</li>
+        {% endfor %}
+    </ul>
+
+    <h2>PIOCHE</h2>
+    <strong>{{ game.stockCards|length }}</strong>
+    <ul>
+        {% for card in game.stockCards %}
+            <li>{{ card.type }} (id:{{ card.id }})</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+
+
