@@ -31,9 +31,11 @@ class AccountController extends AbstractController
         $player = $playerRepository->find($id);
 
         if (!$player) {
-            throw $this->createNotFoundException(
-                'Aucun joueur'
+            $this->addFlash(
+                'notice',
+                'Aucun joueur avec cet identifiant !'
             );
+            return $this->redirectToRoute('app_account');
         }
 
         return $this->render('user/profil.html.twig', [

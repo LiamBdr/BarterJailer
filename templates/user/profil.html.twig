@@ -8,8 +8,6 @@
 
 {% block body %}
 
-    <img class="confidential" src="{{ asset('images/confidential-stamp.png') }}" alt="Badge confidentiel">
-
     <div class="profil">
 
         <div class="profil-head">
@@ -24,21 +22,21 @@
 
             <div class="profil-body__infos">
                 <div>
-                    <p><b>Nom :</b><br> {{ app.user.lastname|upper }}</p>
-                    <p><b>Prénom :</b><br> {{ app.user.firstname|upper }}</p>
+                    <p><b>Nom :</b><br> {{ player.lastname|upper }}</p>
+                    <p><b>Prénom :</b><br> {{ player.firstname|upper }}</p>
                 </div>
 
                 <div>
-                    <p><b>Alias :</b><br> {{ app.user.username|upper }}</p>
-                    <p><b>Email :</b><br> {{ app.user.email }}</p>
+                    <p><b>Alias :</b><br> {{ player.username|upper }}</p>
+                    <p><b>Email :</b><br> {{ player.email }}</p>
                 </div>
 
                 <div>
-                    <p><b>Date inscription :</b><br> {{ app.user.dateInscription|date('d/m/Y H:i')|capitalize }}</p>
-                    <p><b>Dernière connexion :</b><br> {{ app.user.lastConnection|date('d/m/Y H:i')|capitalize }}</p>
+                    <p><b>Date inscription :</b><br> {{ player.dateInscription|date('d/m/Y H:i')|capitalize }}</p>
+                    <p><b>Dernière connexion :</b><br> {{ player.lastConnection|date('d/m/Y H:i')|capitalize }}</p>
                 </div>
 
-                <p><b>Identifiant gardien :</b> <br>{{ app.user.id ~ app.user.dateInscription|date('dmY')|capitalize }}</p>
+                <p><b>Identifiant gardien :</b> <br>{{ player.id ~ player.dateInscription|date('dmY')|capitalize }}</p>
 
                 <img src="{{ asset('images/codebarre.png') }}" alt="Code barre">
 
@@ -46,19 +44,20 @@
 
             <div class="profil-body__image">
                 <p><b>Statut du gardien :</b><br>
-                    {% if app.user.state == 0 %}
+                    {% if player.state == 0 %}
                         <span style="color: #53d253">En service</span>
                     {% else %}
                         <span style="color: orangered">Indisponible</span>
                     {% endif %}
                 </p>
-                <img class="avatar" src="{{ asset('avatars/' ~ app.user.avatar ~ '.png') }}" alt="Avatar">
+                <img class="avatar" src="{{ asset('avatars/' ~ player.avatar ~ '.png') }}" alt="Avatar">
             </div>
 
         </div>
 
-        <a class="profil-btn" href="{{ path('app_account_update') }}">Modifier le profil</a>
-
+        {% if app.user.id == player.id %}
+            <a class="profil-btn" href="{{ path('app_account_update') }}">Modifier le profil</a>
+        {% endif %}
         <h1 class="profil-title">Statistiques gardien</h1>
 
         <div class="profil-body">

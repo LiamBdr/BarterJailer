@@ -1,12 +1,3 @@
-.confidential {
-    position: absolute;
-    top: 50px;
-    left: -10%;
-    height: 200px;
-    z-index: 50;
-    filter: drop-shadow(0 0 10px rgba(0,0,0,0.4));
-}
-
 .profil {
     position: relative;
     height: 100%;
@@ -41,7 +32,7 @@
     top: -30%;
     left: 50px;
     background: white;
-    height: 150px;
+    height: 130px;
     padding: 5px;
 }
 

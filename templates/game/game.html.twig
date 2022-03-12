@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Jouer{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/game.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <h1>P1 : {{ game.player1.username }} VS P2 : {{ game.player2.username }}</h1>
+
+    <h2>Nombre de cartes total : <i>(<span id="totalTotal"></span>)</i> </h2>
+    <br><br>
+
+    <h2>Tour du joueur id n°<span class="playerTurn"></span></h2>
+    <br><br>
+
+    <input class="gameId" type="hidden" value="{{ game.id }}">
+    <input class="userId" type="hidden" value="{{ app.user.id }}">
+
+    <h2>CARTES JOUEUR 1 <i>(<span id="p1Total"></span>)</i></h2>
+    <div class="cards-container player1-cards">
+    </div>
+
+    <h2>CARTES JOUEUR 2 <i>(<span id="p2Total"></span>)</i></h2>
+    <div class="cards-container player2-cards">
+    </div>
+
+    <h2>MARCHÉ <i>(<span id="marketTotal"></span>)</i></h2>
+    <div class="cards-container market">
+    </div>
+
+    <h2>PIOCHE <i>(<span id="piocheTotal"></span>)</i></h2>
+    <div class="cards-container pioche">
+    </div>
+
+    <h2>DÉFAUSSE <i>(<span id="fausseTotal"></span>)</i></h2>
+    <div class="cards-container defausse">
+    </div>
+
+    <button class="btn valid-btn">VALIDER TOUR</button>
+
+{% endblock %}
+
+{% block additional_scripts %}
+    <script src={{ asset('js/game.js') }}></script>
+{% endblock %}

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PlayerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -73,6 +75,19 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string')]
     private $avatar;
+
+//    #[ORM\OneToMany(mappedBy: 'player1', targetEntity: Game::class, orphanRemoval: true)]
+//    private $games;
+
+//    public function __construct()
+//    {
+//        $this->games = new ArrayCollection();
+//    }
+
+    public function __toString(): string
+    {
+        return $this->username;
+    }
 
     public function getId(): ?int
     {
@@ -239,4 +254,34 @@ class Player implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+//    /**
+//     * @return Collection<int, Game>
+//     */
+//    public function getGames(): Collection
+//    {
+//        return $this->games;
+//    }
+//
+//    public function addGame(Game $game): self
+//    {
+//        if (!$this->games->contains($game)) {
+//            $this->games[] = $game;
+//            $game->setPlayer1($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeGame(Game $game): self
+//    {
+//        if ($this->games->removeElement($game)) {
+//            // set the owning side to null (unless already changed)
+//            if ($game->getPlayer1() === $this) {
+//                $game->setPlayer1(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
 }

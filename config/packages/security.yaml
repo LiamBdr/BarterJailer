@@ -60,6 +60,7 @@ security:
     access_control:
         - { path: '^/admin/dashboard', roles: [ROLE_ADMIN] }
         - { path: '^/profil', roles: [ROLE_PLAYER] }
+        - { path: '^/game', roles: [ ROLE_PLAYER ] }
 
 when@test:
     security:

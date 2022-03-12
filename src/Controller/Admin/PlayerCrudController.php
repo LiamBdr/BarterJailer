@@ -30,8 +30,7 @@ class PlayerCrudController extends AbstractCrudController
             IntegerField::new('state')->setLabel('État'),
             ChoiceField::new('avatar')->setChoices([
                 'armand' => 'armand',
-                'Invoice Sent but Unpaid' => 'pending',
-                'Refunded Invoice' => 'refunded',
+                'roberto' => 'roberto'
             ]),
             BooleanField::new('is_verified')->setLabel('Email verifié'),
             DateTimeField::new('date_inscription')->onlyOnForms(),
