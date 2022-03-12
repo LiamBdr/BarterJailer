@@ -2,10 +2,24 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\GameRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: GameRepository::class)]
+#[ApiResource(
+    collectionOperations: [],
+    itemOperations: [
+        'get'  => [
+            "security" => "object.player1 == user or object.player2 == user",
+            "security_message" => "Vous devez être joueur de la partie",
+        ],
+        'patch' => [
+            "security" => "object.player1 == user or object.player2 == user",
+            "security_message" => "Vous devez être joueur de la partie",
+        ]
+    ]
+)]
 class Game
 {
     #[ORM\Id]
@@ -16,12 +30,14 @@ class Game
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    #[ORM\ManyToOne(targetEntity: Player::class, inversedBy: 'games')]
+//    #[ORM\ManyToOne(targetEntity: Player::class, inversedBy: 'games')]
+    #[ORM\ManyToOne(targetEntity: Player::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private $player1;
+    public $player1;
 
-    #[ORM\ManyToOne(targetEntity: Player::class, inversedBy: 'games')]
-    private $player2;
+//    #[ORM\ManyToOne(targetEntity: Player::class, inversedBy: 'games')]
+    #[ORM\ManyToOne(targetEntity: Player::class)]
+    public $player2;
 
     #[ORM\Column(type: 'integer')]
     private $playerTurn;
@@ -76,6 +92,9 @@ class Game
 
     #[ORM\Column(type: 'integer', nullable: true)]
     private $round;
+
+    #[ORM\Column(type: 'json', nullable: true)]
+    private $defausse = [];
 
     public function getId(): ?int
     {
@@ -274,14 +293,14 @@ class Game
         return $this;
     }
 
-    public function getGameState(): ?bool
+    public function getGameFinish(): ?bool
     {
-        return $this->gameState;
+        return $this->gameFinish;
     }
 
-    public function setGameState(?bool $gameFinish): self
+    public function setGameFinish(?bool $gameFinish): self
     {
-        $this->gameState = $gameFinish;
+        $this->gameFinish = $gameFinish;
 
         return $this;
     }
@@ -330,6 +349,18 @@ class Game
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDefausse(): ?array
+    {
+        return $this->defausse;
+    }
+
+    public function setDefausse(?array $defausse): self
+    {
+        $this->defausse = $defausse;
 
         return $this;
     }

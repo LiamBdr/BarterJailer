@@ -1,0 +1,85 @@
+.cards-container {
+    position: relative;
+    width: 100%;
+
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+
+    margin: 50px 0;
+}
+
+.card {
+    height: 100px;
+    width: 60px;
+    border-radius: 10px;
+    padding: 1px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+
+    color: white;
+    font-weight: 500;
+    text-align: center;
+    text-shadow: 0 3px 3px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all ease 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.1);
+}
+
+.card.diamant {
+    background: lightskyblue;
+}
+
+.card.or {
+    background: gold;
+}
+
+.card.argent {
+    background: lightgrey;
+}
+
+.card.tissu {
+    background: #4c1d95;
+}
+
+.card.epice {
+    background: #d95b36;
+}
+
+.card.cuir {
+    background: lightseagreen;
+}
+
+.card.chameau {
+    background: sandybrown;
+}
+
+.btn {
+    position: relative;
+    width: 200px;
+    background: var(--secondary);
+    padding: 10px;
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: krungthep, sans-serif;
+    transition: all ease 0.2s;
+    text-decoration: none;
+    text-align: center;
+    margin-top: -15px;
+    margin-left: auto;
+    margin-bottom: 30px;
+}
+
+.btn:hover {
+    background: #486097;
+}

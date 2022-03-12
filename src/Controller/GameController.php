@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Game;
+use App\Entity\Player;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -77,25 +78,25 @@ class GameController extends AbstractController
         $game->setName('Partie du boss');
         $game->setPlayer1($this->getUser());
 
-        function cardsInit(&$cards, &$id, $type, $nombre) {
-            for ($i = 1; $i <= $nombre; $i++) {
-                $cards[] = ['id' => $id, 'type' => $type];
-                $id++;
-            }
-        }
+        //pour dev
+        $player2 = $doctrine->getRepository(Player::class)->find(2);
+        $game->setPlayer2($player2);
 
         //crée les cartes dans un tableau
         $cards = [] ;
-        $id = 0;
-        cardsInit($cards, $id, 'diamant', 6);
-        cardsInit($cards, $id, 'or', 6);
-        cardsInit($cards, $id, 'argent', 6);
-        cardsInit($cards, $id, 'tissu', 8);
-        cardsInit($cards, $id, 'epice', 8);
-        cardsInit($cards, $id, 'cuir', 10);
-        cardsInit($cards, $id, 'chameau', 11);
+        $id = 1;
+        $this->cardsInit($cards, $id, 'diamant', 6);
+        $this->cardsInit($cards, $id, 'or', 6);
+        $this->cardsInit($cards, $id, 'argent', 6);
+        $this->cardsInit($cards, $id, 'tissu', 8);
+        $this->cardsInit($cards, $id, 'epice', 8);
+        $this->cardsInit($cards, $id, 'cuir', 10);
+        $this->cardsInit($cards, $id, 'chameau', 11);
 
-        //distribue les cartes
+        //mélange les cartes
+        $this->shuffleAssoc($cards);
+
+        //distribue 5 cartes depuis les cartes déjà mélangées
         $player1Cards = $this->cardsDistribute($cards);
         $game->setPlayer1Cards($player1Cards);
 
@@ -105,15 +106,12 @@ class GameController extends AbstractController
         $market = $this->cardsDistribute($cards);
         $game->setMarket($market);
 
-        $object = json_decode(json_encode($cards));
-
         $game->setStockCards($cards);
 
-        $game->setPlayerTurn(1);
+        $game->setPlayerTurn($game->getPlayer1()->getId());
 
         $game->setPlayer1Points(0);
         $game->setPlayer2Points(0);
-
 
         $entityManager->persist($game);
         $entityManager->flush();
@@ -121,6 +119,27 @@ class GameController extends AbstractController
         return $this->redirectToRoute('app_game', ['id' => $game->getId()]);
     }
 
+    // génère les cartes avec le type
+    private function cardsInit(&$cards, &$id, $type, $nombre)
+    {
+        for ($i = 1; $i <= $nombre; $i++) {
+            $cards[] = ['id' => $id, 'type' => $type];
+            $id++;
+        }
+    }
+
+    // distribue cinq cartes en prenant les premières du tableau cards
+    private function cardsDistribute(&$cards): array
+    {
+        for ($i = 1; $i <= 5; $i ++) {
+            $randomCards = array_pop($cards);
+            $array[$randomCards['id']] = $randomCards;
+        }
+
+        return $array;
+    }
+
+    // mélange les cartes en gardant les clés associatives dans le tableau des cards
     private function shuffleAssoc(&$array): void
     {
         $keys = array_keys($array);
@@ -128,23 +147,10 @@ class GameController extends AbstractController
         shuffle($keys);
 
         foreach($keys as $key) {
-            $new[$key] = $array[$key];
+            $new[$key+1] = $array[$key];
         }
 
         $array = $new;
-    }
-
-    private function cardsDistribute(&$cards): array
-    {
-        //mélange les cartes
-        $this->shuffleAssoc($cards);
-
-        for ($i = 1; $i <= 5; $i ++) {
-            $randomCards = array_pop($cards);
-            $playerCards[$randomCards['id']] = $randomCards;
-        }
-
-        return $playerCards;
     }
 
 }

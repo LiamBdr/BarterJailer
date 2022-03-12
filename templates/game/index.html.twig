@@ -10,6 +10,10 @@
 
     <h1>JOUER</h1>
 
+
+    <p><a class="btn" href="{{ path('app_game_create') }}">Créer partie</a></p>
+    <br><br>
+
     <ul>
         {% for game in games %}
             <li>
@@ -18,5 +22,6 @@
             </li>
         {% endfor %}
     </ul>
+
 
 {% endblock %}
