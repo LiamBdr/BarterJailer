@@ -1,6 +1,6 @@
 //variables pour API
 let gameId = document.querySelector('.gameId').value,
-    userId = document.querySelector('.userId').value,
+    userId = parseInt(document.querySelector('.userId').value),
     getUrl = window.location,
     apiGetUrl = getUrl.protocol + "//" + getUrl.host + "/" + "api/games/" + gameId,
     game = [];
@@ -15,7 +15,8 @@ let player1Cards = document.querySelector('.player1-cards'),
     market = document.querySelector('.market'),
     pioche = document.querySelector('.pioche'),
     defausse = document.querySelector('.defausse'),
-    validTurnBtn =  document.querySelector('.valid-btn');
+    validTurnBtn =  document.querySelector('.valid-btn'),
+    tokensPioche = document.querySelector('.pioche-tokens');
 
 
 window.onload = function() {
@@ -25,74 +26,62 @@ window.onload = function() {
     validTurnBtn.addEventListener('click', finishTurn);
 };
 
-function gameDisplay() {
+function gameDisplay()
+{
     //AFFICHAGE DES CARTES
     displayCards(game.player1Cards, player1Cards);
     displayCards(game.player2Cards, player2Cards);
     displayCards(game.market, market);
     displayCards(game.stockCards, pioche);
     displayCards(game.defausse, defausse);
+    displayTokens(game.stockTokens, tokensPioche)
 
     // ACTUALISE LES DONNÉES TOUTES LES 1.5s
     const waitTurnInterval = setInterval(function (){
-        if (parseInt(game.playerTurn) !== parseInt(userId)) { // JOUEUR ATTEND SON TOUR
+        if (parseInt(game.playerTurn) !== userId) { // JOUEUR ATTEND SON TOUR
             getData();
-            validTurnBtn.style.display = "none";
         } else { //C'EST AU TOUR DE L'UTILISATEUR
             clearInterval(waitTurnInterval);
-            validTurnBtn.style.display = "inline-block";
         }
-    }, 1500);
+    }, 700);
 
+    if (parseInt(game.playerTurn) !== userId) { // JOUEUR ATTEND SON TOUR
+        validTurnBtn.style.display = "none";
+    } else { //C'EST AU TOUR DE L'UTILISATEUR
+        //AJOUT CLICK LISTENER ON CARDS
+        detectClick();
+        validTurnBtn.style.display = "inline-block";
+    }
 
     debugCardsNumber();
-
-    //AJOUT CLICK LISTENER ON CARDS
-    detectClick();
-}
-
-function detectClick() {
-    let allCardsDom = document.querySelectorAll(".card");
-
-    // BOUCLE CLICK LISTENER ON ALL CARDS
-    for (let i = 0; i < allCardsDom.length; i++) {
-        allCardsDom[i].addEventListener('click', function() {
-
-            //FONCTION LORS DU CLICK
-            getSingleCard(this.id) //récupère les data de la carte (SingleCardContent + SingleCardParent)
-            defausseCard(); //envoie carte vers la fausse
-
-            // if (!confirm("Jeter cette carte ? " + this.id)) {
-            //     event.preventDefault();
-            // };
-
-        });
-    }
-}
-
-//ENVOIE CARTE DANS LA FAUSSE
-function defausseCard() {
-    if (game.defausse.length === 0) { //initialise le tableau json si tableau vide
-        game.defausse = {};
-    }
-
-    game.defausse[singleCardContent['id']] = singleCardContent //ajoute la carte dans la fausse
-    delete singleCardParent[singleCardContent['id']]; //supprime la carte de son container initial
-    gameDisplay(game); //reload les cards
 }
 
 //AFFICHAGE DES CARTES
 function displayCards(array, dom) {
-    let li;
+    let div;
     dom.innerHTML = '';
 
     Object.entries(array).forEach(([key, card]) => {
-        li = document.createElement("div", );
-        li.className = "card " +card.type;
-        li.setAttribute("id", key);
+        div = document.createElement("div", );
+        div.className = "card " +card.type;
+        div.setAttribute("id", key);
 
-        li.innerHTML = card.type + '('+card.id+')';
-        dom.appendChild(li);
+        div.innerHTML = card.type + '('+card.id+')';
+        dom.appendChild(div);
+    });
+}
+
+//AFFICHAGE DES CARTES
+function displayTokens(array, dom) {
+    let div;
+    dom.innerHTML = '';
+
+    Object.entries(array).forEach(([key, token]) => {
+        div = document.createElement("div", );
+        div.className = "token " +token.type;
+        div.setAttribute("id", key);
+        div.innerHTML = token.val;
+        dom.appendChild(div);
     });
 }
 
@@ -117,9 +106,9 @@ function getSingleCard(id) {
 }
 
 function finishTurn() {
-    if (parseInt(game.playerTurn) === parseInt(userId)) {
+    if (parseInt(game.playerTurn) === userId) {
 
-        if (parseInt(userId) === parseInt(game.player1.id)) { // le joueur est le player1
+        if (userId === parseInt(game.player1.id)) { // le joueur est le player1
             game.playerTurn = game.player2.id;
         } else { // le joueur est le player2
             game.playerTurn = game.player1.id;
@@ -139,6 +128,69 @@ function finishTurn() {
         //remets les infos du jeu à jour
         gameDisplay();
     }
+}
+
+
+function detectClick() {
+    let allCardsDom = document.querySelectorAll(".card");
+
+    // BOUCLE CLICK LISTENER ON ALL CARDS
+    for (let i = 0; i < allCardsDom.length; i++) {
+        allCardsDom[i].addEventListener('click', function() {
+            //FONCTION LORS DU CLICK
+
+            getSingleCard(this.id)
+
+            //LE JOUEUR CLICK SUR SES CARTES
+            if ( (singleCardParent === game.player1Cards && parseInt(game.player1.id) === userId) || (singleCardParent === game.player2Cards && parseInt(game.player2.id) === userId)) {
+                defausseCard();
+            }
+
+            if (singleCardParent === game.market) {
+                takeOneCard();
+            }
+        });
+    }
+}
+
+/************************
+ ************************
+ ACTION DE JEU FUNCTIONS
+ ************************
+ ************************/
+
+//ENVOIE CARTE DANS LA FAUSSE
+function defausseCard() {
+    if (game.defausse.length === 0) { //initialise le tableau json si tableau vide
+        game.defausse = {};
+    }
+
+    game.defausse[singleCardContent['id']] = singleCardContent; //ajoute la carte dans la fausse
+    delete singleCardParent[singleCardContent['id']]; //supprime la carte de son container initial
+    gameDisplay(); //reload les cards
+    console.log(game);
+}
+
+//ENVOIE CARTE DANS LA FAUSSE
+function takeOneCard() {
+
+    //JOUEUR 1
+    if (parseInt(game.player1.id) === userId) {
+
+        if (Object.keys(game.player1Cards).length < 5) {
+            game.player1Cards[singleCardContent['id']] = singleCardContent; //ajoute la carte dans les cartes du joueur
+            delete singleCardParent[singleCardContent['id']]; //supprime la carte de son container initial
+
+        } else {
+            alert('Vous ne pouvez pas avoir plus de 5 cartes');
+        }
+
+
+
+    }
+
+
+    gameDisplay(); //reload les cards
 }
 
 /************************
@@ -208,6 +260,4 @@ function debugCardsNumber() {
     document.querySelector('#fausseTotal').innerHTML = defausseTotal;
     document.querySelector('#totalTotal').innerHTML = totalTotal;
     document.querySelector('.playerTurn').innerHTML = game.playerTurn; //affiche le tour de l'utilisateur
-
-
 }

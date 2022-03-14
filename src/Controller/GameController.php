@@ -75,15 +75,39 @@ class GameController extends AbstractController
 
         $game = new Game();
 
+        //NOM DE LA PARTIE
         $game->setName('Partie du boss');
-        $game->setPlayer1($this->getUser());
 
-        //pour dev
+        //JOUEURS DE LA PARTIE
+        $game->setPlayer1($this->getUser());
         $player2 = $doctrine->getRepository(Player::class)->find(2);
         $game->setPlayer2($player2);
 
-        //crée les cartes dans un tableau
-        $cards = [] ;
+        //DETERMINE AU HASARD LE JOUEUR QUI JOUE EN PREMIER
+        $random = rand(1,2);
+        if ($random === 1) {
+            $game->setPlayerTurn($game->getPlayer1()->getId());
+        } else {
+            $game->setPlayerTurn($game->getPlayer2()->getId());
+        }
+
+        //INITIALISE LES POINTS
+        $game->setPlayer1Points(0);
+        $game->setPlayer2Points(0);
+
+        //INITIALISE ROUND
+        $game->setRound(1);
+
+        //DATE CREATION PARTIE
+        $now = new \DateTime();
+        $now->setTimezone(new \DateTimeZone('Europe/Paris'));
+        $now->format('Y-m-d H:i:s');
+        $game->setDateCreation($now);
+
+
+
+        //CARDS
+        $cards = [];
         $id = 1;
         $this->cardsInit($cards, $id, 'diamant', 6);
         $this->cardsInit($cards, $id, 'or', 6);
@@ -96,30 +120,59 @@ class GameController extends AbstractController
         //mélange les cartes
         $this->shuffleAssoc($cards);
 
+//        $chameau = array_search('chameau', array_column($cards, 'type'));
+
+        $market[$cards[55]['id']] = $cards[55];
+        unset($cards[55]);
+
+        $market[$cards[54]['id']] = $cards[54];
+        unset($cards[54]);
+
+        $market[$cards[53]['id']] = $cards[53];
+        unset($cards[53]);
+
+        $market += $this->cardsDistribute($cards, 2);
+        $game->setMarket($market);
+
         //distribue 5 cartes depuis les cartes déjà mélangées
-        $player1Cards = $this->cardsDistribute($cards);
+        $player1Cards = $this->cardsDistribute($cards, 5);
         $game->setPlayer1Cards($player1Cards);
 
-        $player2Cards = $this->cardsDistribute($cards);
+        $player2Cards = $this->cardsDistribute($cards, 5);
         $game->setPlayer2Cards($player2Cards);
-
-        $market = $this->cardsDistribute($cards);
-        $game->setMarket($market);
 
         $game->setStockCards($cards);
 
-        $game->setPlayerTurn($game->getPlayer1()->getId());
+        //TOKENS
+        $tokens = [];
+        $id = 1;
+        $this->tokenInit($tokens, $id, 'diamant', 2, 7);
+        $this->tokenInit($tokens, $id, 'diamant', 3, 5);
+        $this->tokenInit($tokens, $id, 'or', 2, 6);
+        $this->tokenInit($tokens, $id, 'or', 3, 5);
+        $this->tokenInit($tokens, $id, 'argent', 5, 5);
+        $this->tokenInit($tokens, $id, 'tissu', 1, 5);
+        $this->tokenInit($tokens, $id, 'tissu', 2, 3);
+        $this->tokenInit($tokens, $id, 'tissu', 2, 2);
+        $this->tokenInit($tokens, $id, 'tissu', 2, 1);
+        $this->tokenInit($tokens, $id, 'epice', 1, 5);
+        $this->tokenInit($tokens, $id, 'epice', 2, 3);
+        $this->tokenInit($tokens, $id, 'epice', 2, 2);
+        $this->tokenInit($tokens, $id, 'epice', 2, 1);
+        $this->tokenInit($tokens, $id, 'cuir', 1, 4);
+        $this->tokenInit($tokens, $id, 'cuir', 1, 3);
+        $this->tokenInit($tokens, $id, 'cuir', 1, 2);
+        $this->tokenInit($tokens, $id, 'cuir', 6, 1);
+        $game->setStockTokens($tokens);
 
-        $game->setPlayer1Points(0);
-        $game->setPlayer2Points(0);
-
+        //crée la partie dans bdd
         $entityManager->persist($game);
         $entityManager->flush();
 
         return $this->redirectToRoute('app_game', ['id' => $game->getId()]);
     }
 
-    // génère les cartes avec le type
+    // génère les cartes
     private function cardsInit(&$cards, &$id, $type, $nombre)
     {
         for ($i = 1; $i <= $nombre; $i++) {
@@ -128,10 +181,19 @@ class GameController extends AbstractController
         }
     }
 
-    // distribue cinq cartes en prenant les premières du tableau cards
-    private function cardsDistribute(&$cards): array
+    // génère les jetons
+    private function tokenInit(&$tokens, &$id, $type, $nombre, $val)
     {
-        for ($i = 1; $i <= 5; $i ++) {
+        for ($i = 1; $i <= $nombre; $i++) {
+            $tokens[$id] = ['id' => $id, 'type' => $type, 'val' => $val];
+            $id++;
+        }
+    }
+
+    // distribue cinq cartes en prenant les premières du tableau cards
+    private function cardsDistribute(&$cards, $nombre): array
+    {
+        for ($i = 1; $i <= $nombre; $i ++) {
             $randomCards = array_pop($cards);
             $array[$randomCards['id']] = $randomCards;
         }
