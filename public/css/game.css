@@ -1,4 +1,4 @@
-.cards-container {
+.container {
     position: relative;
     width: 100%;
 
@@ -29,35 +29,63 @@
     transition: all ease 0.2s;
 }
 
-.card:hover {
+.token {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+
+    color: white;
+    font-weight: 500;
+    text-align: center;
+    text-shadow: 0 3px 3px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all ease 0.2s;
+}
+
+.card:hover, .token:hover {
     transform: scale(1.1);
 }
 
-.card.diamant {
+.card.selectTake {
+    border: 4px solid lightgreen;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+.card.selectSell {
+    border: 4px solid red;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+.card.diamant, .token.diamant {
     background: lightskyblue;
 }
 
-.card.or {
+.card.or, .token.or {
     background: gold;
 }
 
-.card.argent {
+.card.argent, .token.argent {
     background: lightgrey;
 }
 
-.card.tissu {
+.card.tissu, .token.tissu {
     background: #4c1d95;
 }
 
-.card.epice {
+.card.epice, .token.epice {
     background: #d95b36;
 }
 
-.card.cuir {
+.card.cuir, .token.cuir {
     background: lightseagreen;
 }
 
-.card.chameau {
+.card.chameau, .token.chameau{
     background: sandybrown;
 }
 
@@ -78,6 +106,13 @@
     margin-top: -15px;
     margin-left: auto;
     margin-bottom: 30px;
+}
+
+.btn.fixed {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: none;
 }
 
 .btn:hover {
