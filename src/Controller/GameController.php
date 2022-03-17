@@ -136,10 +136,19 @@ class GameController extends AbstractController
 
         //distribue 5 cartes depuis les cartes déjà mélangées
         $player1Cards = $this->cardsDistribute($cards, 5);
-        $game->setPlayer1Cards($player1Cards);
+        $player1Enclos = [];
 
+        $this->chameauTest($player1Cards, $player1Enclos);
+        $game->setPlayer1Cards($player1Cards);
+        $game->setPlayer1Enclos($player1Enclos);
+
+        //distribue 5 cartes depuis les cartes déjà mélangées
         $player2Cards = $this->cardsDistribute($cards, 5);
+        $player2Enclos = [];
+
+        $this->chameauTest($player2Cards, $player2Enclos);
         $game->setPlayer2Cards($player2Cards);
+        $game->setPlayer2Enclos($player2Enclos);
 
         $game->setStockCards($cards);
 
@@ -171,6 +180,14 @@ class GameController extends AbstractController
 
         return $this->redirectToRoute('app_game', ['id' => $game->getId()]);
     }
+
+//    #[Route('/game/test', name: 'app_game_create')]
+//    public function test() : Response {
+//        $test = [
+//            'zboubi2' => 'zboubi'
+//        ];
+//        return $this->json($test);
+//    }
 
     // génère les cartes
     private function cardsInit(&$cards, &$id, $type, $nombre)
@@ -213,6 +230,17 @@ class GameController extends AbstractController
         }
 
         $array = $new;
+    }
+
+    // vérifie la présence de chameaux dans les cartes des joueurs pour les envoyer dans l'enclos
+    private function chameauTest(&$playerCards, &$playerEnclos): void
+    {
+        foreach ($playerCards as $singleCard) {
+            if ($singleCard['type'] === 'chameau') {
+                $playerEnclos[$singleCard['id']] = $singleCard;
+                unset($playerCards[$singleCard['id']]);
+            }
+        }
     }
 
 }

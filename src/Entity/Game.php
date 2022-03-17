@@ -54,8 +54,8 @@ class Game
     #[ORM\Column(type: 'json')]
     private $player1Cards = [];
 
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private $player1Camels;
+    #[ORM\Column(type: 'json', nullable: true)]
+    private $player1Enclos = [];
 
     #[ORM\Column(type: 'json', nullable: true)]
     private $player1Tokens = [];
@@ -69,8 +69,8 @@ class Game
     #[ORM\Column(type: 'json')]
     private $player2Cards = [];
 
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private $player2Camels;
+    #[ORM\Column(type: 'json', nullable: true)]
+    private $player2Enclos = [];
 
     #[ORM\Column(type: 'json', nullable: true)]
     private $player2Tokens = [];
@@ -185,14 +185,14 @@ class Game
         return $this;
     }
 
-    public function getPlayer1Camels(): ?int
+    public function getPlayer1Enclos(): ?array
     {
-        return $this->player1Camels;
+        return $this->player1Enclos;
     }
 
-    public function setPlayer1Camels(?int $player1Camels): self
+    public function setPlayer1Enclos(array $player1Enclos): self
     {
-        $this->player1Camels = $player1Camels;
+        $this->player1Enclos = $player1Enclos;
 
         return $this;
     }
@@ -245,14 +245,14 @@ class Game
         return $this;
     }
 
-    public function getPlayer2Camels(): ?int
+    public function getPlayer2Enclos(): ?array
     {
-        return $this->player2Camels;
+        return $this->player2Enclos;
     }
 
-    public function setPlayer2Camels(?int $player2Camels): self
+    public function setPlayer2Enclos(array $player2Enclos): self
     {
-        $this->player2Camels = $player2Camels;
+        $this->player2Enclos = $player2Enclos;
 
         return $this;
     }
