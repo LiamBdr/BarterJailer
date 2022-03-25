@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Game;
 use App\Entity\Player;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -36,10 +37,12 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToRoute('Retour à l\'accueil', 'fa fa-arrow-left', 'app_home'),
             MenuItem::linkToDashboard('Dashboard', 'fa fa-home'),
 
-            MenuItem::section('Users'),
+            MenuItem::section('Joueurs'),
             MenuItem::linkToCrud('Joueurs', 'fa fa-user', Player::class),
 
             MenuItem::section('Parties'),
+            MenuItem::linkToCrud('Parties', 'fa fa-gamepad', Game::class),
+
         ];
     }
 
