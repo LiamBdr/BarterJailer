@@ -5,8 +5,8 @@
     justify-content: space-between;
     align-items: center;
 
-    background: url("../images/mail-barreau.png");
-    background-size: contain;
+    background: url("../images/barreaux.png") bottom center;
+    background-size: 100% 95%;
     z-index: -5;
 }
 
@@ -17,8 +17,8 @@
     object-fit: contain;
 
     transform: rotate(-10deg);
-    filter: drop-shadow(0 5px 20px rgba(0,0,0,0.3));
-    -webkit-filter: drop-shadow(0 5px 20px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 5px 20px rgba(0,0,0,0.1));
+    -webkit-filter: drop-shadow(0 5px 20px rgba(0,0,0,0.1));
 }
 
 .home-intro > div {
@@ -28,18 +28,18 @@
 .home-intro h1 {
     position: relative;
     font-size: 4rem;
-    text-align: right;
-    color: white;
+    text-align: center;
+    color: var(--dark-blue);
     background: var(--tonic1);
-    padding: 5px 20px;
+    padding: 10px 20px;
 }
 
 .home-intro p {
     position: relative;
-    line-height: 150%;
+    line-height: 170%;
     font-size: 1.5rem;
     font-weight: 300;
-    padding: 30px 20px;
+    padding: 50px 40px;
     text-align: left;
     color: white;
     z-index: 10;
@@ -58,4 +58,200 @@
     z-index: -1;
 }
 
+.separator {
+    position: relative;
+    height: 70px;
+    width: 130%;
+    background: var(--dark-blue);
+    margin-left: -15%;
+}
 
+.home-description {
+    position: relative;
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 50px 0;
+}
+
+.home-description::before {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: -15%;
+    height: 100%;
+    width: 130%;
+    background: #F9F9F9;
+}
+
+.home-description > img {
+    position: relative;
+    width: 40%;
+    object-fit: contain;
+}
+
+.home-description > div {
+    position: relative;
+    width: 50%;
+}
+
+.home-description > div h2 {
+    font-family: 'krungthep', sans-serif;
+    font-size: 3.7rem;
+    line-height: 140%;
+    color: var(--dark-blue);
+    margin-bottom: 30px;
+}
+
+.home-description > div p {
+    font-size: 1.4rem;
+    line-height: 150%;
+    margin-bottom: 20px;
+    font-weight: 300;
+}
+
+.home-rules, .home-game {
+    position: relative;
+    width: 100%;
+    padding: 50px 0;
+}
+
+.home-rules > h2, .home-game > h2 {
+    position: relative;
+    display: block;
+    font-family: 'krungthep', sans-serif;
+    font-size: 3.7rem;
+    line-height: 140%;
+    color: var(--dark-blue);
+    margin-bottom: 90px;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
+
+.home-rules > h2::after {
+    position: absolute;
+    content: '';
+    top: 110%;
+    left: -5%;
+    width: 110%;
+    height: 10px;
+    background: var(--tonic1);
+}
+
+.home-rules .rules-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 30px 0;
+}
+
+.home-rules .rules-content div {
+    position: relative;
+    width: 55%;
+}
+
+.home-rules .rules-content img{
+    position: relative;
+    width: 40%;
+    max-height: 350px;
+    object-fit: contain;
+}
+
+.home-rules .rules-content p {
+    font-size: 1.4rem;
+    line-height: 150%;
+    margin-bottom: 20px;
+    font-weight: 300;
+}
+
+.home-rules .rules-content #more-button {
+    display: flex;
+    align-items: center;
+    color: var(--tonic1);
+    text-decoration: none;
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin: 70px 0;
+}
+
+#more-button svg {
+    height: 15px;
+    fill: var(--tonic1);
+    margin-bottom: 3px;
+    margin-right: 5px;
+    transition: all ease 0.4s;
+}
+
+#more-button.show svg {
+    transform: rotate(-180deg);
+}
+
+.rules-appear {
+    display: none;
+    transform: translateY(-70px);
+    transition: all ease 0.3s;
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.rules-appear.show {
+    transform: translateY(0);
+    max-height: 1000px;
+    opacity: 1;
+    visibility: visible;
+}
+
+.home-rules > h2::after {
+    width: 170%;
+    left: -35%;
+}
+
+.home-game {
+    background: url("../images/home-barreau.png") no-repeat bottom center;
+    background-size: 100% 101%;
+}
+
+.home-game > img {
+    position: relative;
+    display: block;
+    margin: auto;
+    width: 70%;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.home-game div {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px 0;
+}
+
+.home-game div img {
+    width: 200px
+}
+
+.home-game div a {
+    padding: 5px 30px;
+    font-family: 'krungthep', sans-serif;
+    font-size: 2.5rem;
+    color: white;
+    background: var(--tonic1);
+    text-decoration: none;
+    transition: all ease 0.2s;
+}
+
+.home-game div a:nth-of-type(1) {
+    background: var(--tonic2);
+}
+
+.home-game div a:hover {
+    transform: scale(1.1);
+}

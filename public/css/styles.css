@@ -25,6 +25,7 @@ body {
     position: relative;
     min-height: 100vh;
     overflow-x: hidden;
+    scroll-behavior: smooth;
 }
 
 h1 {
@@ -39,6 +40,7 @@ h1 {
     margin: auto;
     width: 80%;
     padding: 50px 0;
+    overflow: visible;
 }
 
 /******** HEADER ********/

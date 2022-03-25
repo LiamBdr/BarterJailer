@@ -1,6 +1,17 @@
+.main-container::before {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: url("../images/barreaux.png");
+    background-size: 100% 95%;
+}
+
 form {
     position: relative;
-    width: 100%;
+    width: 95%;
     max-width: 448px;
     background: white;
     border-radius: 4px;
@@ -8,6 +19,7 @@ form {
 
     box-shadow: rgba(60, 66, 87, 0.12) 0 7px 14px 0, rgba(0, 0, 0, 0.12) 0 3px 6px 0;
     margin: auto;
+    overflow: hidden;
 }
 
 form > div {
@@ -52,11 +64,14 @@ form .form-names div:nth-child(2) {
 }
 
 form .form-avatars {
+    position: relative;
+    width: auto;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
     align-items: center;
     flex-direction: row;
     padding-top: 10px;
+    overflow-x: scroll;
 }
 
 form .form-avatars div {
@@ -69,9 +84,10 @@ form .form-avatars div {
 
 form .form-avatars label {
     position: relative;
-    width: 100%;
+    width: 100px;
     font-weight: 300;
     font-size: 1.3rem;
+    padding: 5px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -85,12 +101,14 @@ form .form-avatars input {
 }
 
 form .form-avatars .avatar {
-    height: 70px;
+    height: 90px;
+    width: 50px;
     cursor: pointer;
     object-fit: contain;
     transition: all ease 0.3s;
     transform-origin: bottom;
     margin-bottom: 5px;
+    margin-top: 10px;
 }
 
 .form-avatars input:checked + label {
@@ -98,7 +116,7 @@ form .form-avatars .avatar {
 }
 
 .form-avatars input:checked + label .avatar {
-    transform: scale(1.2);
+    transform: scale(1.1);
     -webkit-filter: drop-shadow(0 0 10px rgba(238, 117, 77, 0.5));
     filter: drop-shadow(0 0 10px rgba(238, 117, 77, 0.5));
 }
@@ -221,10 +239,17 @@ form ul li {
 }
 
 .bellow-link {
+    position: relative;
+    display: block;
     text-align: center;
-    margin: 30px 0;
+    margin: 30px auto;
+    width: fit-content;
     font-size: 1.3rem;
     font-weight: 300;
+    background: white;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: rgba(60, 66, 87, 0.1) 0 3px 7px 0, rgba(0, 0, 0, 0.05) 0 3px 6px 0;
 }
 
 .bellow-link a {

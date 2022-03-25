@@ -104,8 +104,6 @@ class GameController extends AbstractController
         $now->format('Y-m-d H:i:s');
         $game->setDateCreation($now);
 
-
-
         //CARDS
         $cards = [];
         $id = 1;
@@ -119,8 +117,6 @@ class GameController extends AbstractController
 
         //mélange les cartes
         $this->shuffleAssoc($cards);
-
-//        $chameau = array_search('chameau', array_column($cards, 'type'));
 
         $market[$cards[55]['id']] = $cards[55];
         unset($cards[55]);
@@ -174,20 +170,32 @@ class GameController extends AbstractController
         $this->tokenInit($tokens, $id, 'cuir', 6, 1);
         $game->setStockTokens($tokens);
 
+
+        //BONUS TOKENS
+        $bonusTokens = [];
+        $id = 1;
+        //7 bonus token de type 3 (cartes vendues)
+        $this->bonusTokenInit($bonusTokens, $id, 3, 1, 2);
+        $this->bonusTokenInit($bonusTokens, $id, 3, 2, 3);
+        $this->bonusTokenInit($bonusTokens, $id, 3, 3, 2);
+
+        //7 bonus token de type 4 (cartes vendues)
+        $this->bonusTokenInit($bonusTokens, $id, 4, 4, 2);
+        $this->bonusTokenInit($bonusTokens, $id, 4, 5, 2);
+        $this->bonusTokenInit($bonusTokens, $id, 4, 6, 2);
+
+        //7 bonus token de type 5 (cartes vendues)
+        $this->bonusTokenInit($bonusTokens, $id, 5, 8, 2);
+        $this->bonusTokenInit($bonusTokens, $id, 5, 9, 1);
+        $this->bonusTokenInit($bonusTokens, $id, 5, 10, 2);
+        $game->setStockBonusTokens($bonusTokens);
+
         //crée la partie dans bdd
         $entityManager->persist($game);
         $entityManager->flush();
 
         return $this->redirectToRoute('app_game', ['id' => $game->getId()]);
     }
-
-//    #[Route('/game/test', name: 'app_game_create')]
-//    public function test() : Response {
-//        $test = [
-//            'zboubi2' => 'zboubi'
-//        ];
-//        return $this->json($test);
-//    }
 
     // génère les cartes
     private function cardsInit(&$cards, &$id, $type, $nombre)
@@ -203,6 +211,14 @@ class GameController extends AbstractController
     {
         for ($i = 1; $i <= $nombre; $i++) {
             $tokens[$id] = ['id' => $id, 'type' => $type, 'val' => $val];
+            $id++;
+        }
+    }
+
+    private function bonusTokenInit(&$bonusTokens, &$id, $type, $val, $nombre)
+    {
+        for ($i = 1; $i <= $nombre; $i++) {
+            $bonusTokens[$id] = ['id' => $id, 'type' => $type, 'val' => $val];
             $id++;
         }
     }
