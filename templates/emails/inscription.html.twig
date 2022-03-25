@@ -53,17 +53,31 @@
     }
 </style>
 
-<body marginheight="0" marginwidth="0" style="margin: 0; background-color: #f2f3f8;">
-<table>
+<body marginheight="0"
+      marginwidth="0"
+      style="margin: 0;
+      background-color: #f2f3f8;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;">
+<table style="margin: auto">
     <tr>
         <td>
             <table style="background-color: #f2f3f8; max-width:670px;  margin:0 auto;">
                 <tr>
                     <td style="height:80px;">&nbsp;</td>
                 </tr>
-                <tr id="barreau" style="height: 150px;">
+                <tr id="barreau" style="
+                    height: 150px;
+                    background-image: url('http://193.168.146.106/jeu/images/mail-barreau.png');
+                    background-size: cover;">
                     <td style="text-align:center;">
-                        <img id="logo" width="150" src="{{ absolute_url('images/svg/logo-white.svg') }}" title="Logo BarterJailer" alt="Logo BarterJailer">
+                        <img id="logo" width="150" src="http://193.168.146.106/jeu/images/logo-white.png" title="Logo BarterJailer" alt="Logo BarterJailer"
+                             style="background: #1F294E;
+                            padding: 20px;
+                            border-radius: 10px;
+                            -webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.05);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.05);box-shadow:0 6px 18px 0 rgba(0,0,0,.05);">
                     </td>
                 </tr>
                 <tr>
@@ -74,7 +88,7 @@
                             </tr>
                             <tr>
                                 <td style="padding:0 35px;">
-                                    <h1 style="color:#1e1e2d; font-weight:500; margin:0;font-size:32px;">
+                                    <h1 style="color:#1e1e2d; font-weight:500; margin:0;font-size:32px;font-family: 'krungthep', sans-serif !important;">
                                         Bienvenue en prison {{ player.username }} !
                                     </h1>
                                     <span style="display:inline-block; vertical-align:middle; margin:20px 0 26px; border-bottom:2px solid #1F294E; width:200px;"></span>
@@ -87,7 +101,18 @@
                                         <br><br>
                                         Mais attention, vous n'êtes pas le seul garde à avoir cet objectif...
                                     </p>
-                                    <a id="btn" href="{{ signedUrl }}">
+                                    <a id="btn" href="{{ signedUrl }}"
+                                        style="background:#FF6C40;
+                                                text-decoration:none !important;
+                                                font-weight:bold;
+                                                margin-top:35px;
+                                                color:#fff;
+                                                text-transform:uppercase;
+                                                font-size:14px;
+                                                padding:10px 24px;
+                                                display:inline-block;
+                                                border-radius:5px;
+                                                transition: all ease 0.2s;">
                                         CONFIRMER VOTRE EMAIL
                                     </a>
                                     <p>

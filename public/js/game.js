@@ -1,44 +1,48 @@
-//variables pour API
+//VARIABLES POUR API
 let gameId = document.querySelector('.gameId').value,
     userId = parseInt(document.querySelector('.userId').value),
     getUrl = window.location,
-    apiGetUrl = getUrl.protocol + "//" + getUrl.host + "/" + "api/games/" + gameId,
+    //baseUrl = getUrl.protocol + "//" + getUrl.host + "/jeu/",
+    baseUrl = getUrl.protocol + "//" + getUrl.host + "/",
+    apiGetUrl = baseUrl + "api/games/" + gameId,
     game = [];
 
-//variables pour cartes
+//VARIABLES POUR JEU
 let singleCardContent,
     singleCardParent,
-    selectedTakeCards = {},
-    selectedSellCards = {};
+    selectedCards = {},
+    selectedSellCards = {},
+    currentRound = 0;
 
 
-//éléments HTML
+//ÉLÉMENTS HTML
 let player1Cards = document.querySelector('.player1-cards'),
     player1Enclos = document.querySelector('.player1-enclos'),
+    player1BonusTokens = document.querySelector('.player1-bonus-tokens'),
     player1Tokens = document.querySelector('.player1-tokens'),
     player2Cards = document.querySelector('.player2-cards'),
     player2Enclos = document.querySelector('.player2-enclos'),
     player2Tokens = document.querySelector('.player2-tokens'),
+    player2BonusTokens = document.querySelector('.player2-bonus-tokens'),
     market = document.querySelector('.market'),
     pioche = document.querySelector('.pioche'),
     defausse = document.querySelector('.defausse'),
-    validTurnBtn =  document.querySelector('#validTurn'),
-    cancelTurnBtn =  document.querySelector('#cancelTurn'),
-    exchangeBtn =  document.querySelector('#exchangeCards'),
-    tokensPioche = document.querySelector('.pioche-tokens');
+    tokensPioche = document.querySelector('.pioche-tokens'),
+    bonusTokensPioche = document.querySelector('.pioche-bonus-tokens'),
+    gameRound = document.querySelector('.game-round')
+
+
+//BOUTONS HTML
+
+let validTurnBtn =  document.querySelector('#validTurn');
+
 
 
 window.onload = function() {
-    getData();
-
-    //finir le tour et passer au joueur suivant
-    validTurnBtn.addEventListener('click', finishTurn);
+    getAllData();
 
     //échange les cartes sélectionnées au préalable
-    exchangeBtn.addEventListener('click', exchangeCards)
-
-    //annule le tour du joueur et réinitialise le plateau
-    cancelTurnBtn.addEventListener('click', getData);
+    validTurnBtn.addEventListener('click', validTurn)
 };
 
 /************************
@@ -59,14 +63,33 @@ function gameDisplay() {
     displayCards(game.stockCards, pioche);
     displayCards(game.defausse, defausse);
     //affiche chaque conteneur avec des jetons
-    displayTokens(game.stockTokens, tokensPioche)
-    displayTokens(game.player1Tokens, player1Tokens)
-    displayTokens(game.player2Tokens, player2Tokens)
+    displayTokens(game.stockTokens, tokensPioche, 'token')
+    displayTokens(game.player1Tokens, player1Tokens, 'token')
+    displayTokens(game.player2Tokens, player2Tokens, 'token')
+    //affiche chaque conteneur avec des jetons bonus
+    displayTokens(game.stockBonusTokens, bonusTokensPioche, 'bonusToken')
+    displayTokens(game.player1BonusTokens, player1BonusTokens, 'bonusToken')
+    displayTokens(game.player2BonusTokens, player2BonusTokens, 'bonusToken')
+    //affichage des autres informations
+    gameRound.innerHTML = game.round;
+
+    selectedTakeCards = {};
+    selectedSellCards = {};
+
+    if (currentRound === 0) {
+        currentRound = game.round;
+    } else {
+        //CHANGEMENT DE MANCHE
+        if (currentRound !== game.round) {
+            alert('CHANGEMENT DE MANCHE');
+            roundFinish();
+        }
+    }
 
     //actualise les données toutes les secondes si ce n'est pas au tour de l'utilisateur
     const waitTurnInterval = setInterval(function (){
         if (parseInt(game.playerTurn) !== userId) { // le joueur attends son tour
-            getData();
+            getAllData();
         } else { //c'est au tour du joueur
             clearInterval(waitTurnInterval);
         }
@@ -75,14 +98,16 @@ function gameDisplay() {
     // affichage des boutons de jeu en fonction du tour
     if (parseInt(game.playerTurn) !== userId) { // le joueur attends son tour
 
-        validTurnBtn.style.display = "none";
-        cancelTurnBtn.style.display = "none";
+        validTurnBtn.classList.add('block');
+        validTurnBtn.innerHTML = 'C\'est à votre adversaire de jouer !';
 
-    } else { //c'est au tour du joueur
+    }
+    else { //c'est au tour du joueur
 
+        validTurnBtn.classList.add('block');
+        validTurnBtn.innerHTML = 'A votre tour !';
         detectClick(); //ajoute le click listener sur les cartes
-        validTurnBtn.style.display = "inline-block";
-        cancelTurnBtn.style.display = "inline-block";
+        // validTurnBtn.style.display = "fixed";
     }
 
     //affiche informations pour debug
@@ -105,14 +130,14 @@ function displayCards(array, dom) {
 }
 
 //AFFICHAGE LES JETONS D'UN TABLEAU DANS UN ELEMENT HTML
-function displayTokens(array, dom) {
+function displayTokens(array, dom, type) {
     let div;
     dom.innerHTML = '';
 
     Object.entries(array).forEach(([key, token]) => {
         div = document.createElement("div", );
-        div.className = "token " +token.type;
-        div.setAttribute("id", key);
+        div.className = 'token '+type+' '+token.type;
+        div.setAttribute("id", type+key);
         div.innerHTML = token.val;
         dom.appendChild(div);
     });
@@ -132,7 +157,7 @@ function getSingleCard(id) {
     singleCardContent = null;
 
     // liste de tous les container avec des cards
-    let parents = [game.player1Cards, game.player2Cards, game.stockCards, game.market, game.defausse];
+    let parents = [game.player1Cards, game.player1Enclos, game.player2Cards, game.player2Enclos, game.stockCards, game.market, game.defausse];
 
     //boucle dans chaque container contenant des cartes
     parents.forEach((parent) => {
@@ -152,39 +177,6 @@ function getSingleCard(id) {
 
 }
 
-//FINI LE TOUR DU JOUEUR EN RENVOYANT LES DONNÉES
-function finishTurn() {
-    //si c'est bien au tour du joueur
-    if (parseInt(game.playerTurn) === userId) {
-
-        //change le tour du joueur
-        if (userId === parseInt(game.player1.id)) { // le joueur est le player1
-            game.playerTurn = game.player2.id;
-        } else { // le joueur est le player2
-            game.playerTurn = game.player1.id;
-        }
-
-        //récupère les datas susceptible d'avoir changées
-        let gameData = {};
-        gameData['player1Cards'] = game.player1Cards;
-        gameData['player1Tokens'] = game.player1Tokens;
-        gameData['player1Enclos'] = game.player1Enclos;
-        gameData['player2Cards'] = game.player2Cards;
-        gameData['player2Tokens'] = game.player2Tokens;
-        gameData['player2Enclos'] = game.player2Enclos;
-        gameData['stockCards'] = game.stockCards;
-        gameData['stockTokens'] = game.stockTokens;
-        gameData['market'] = game.market;
-        gameData['defausse'] = game.defausse;
-        gameData['playerTurn'] = game.playerTurn;
-
-        //mets à jour les données de la partie via l'api
-        sendData(gameData);
-        //remets les infos du jeu à jour
-        gameDisplay();
-    }
-}
-
 //ÉCOUTE ET DÉFINIS L'ACTION A RÉALISER LORS DU CLICK
 function detectClick() {
     //récupère toutes les éléments html cartes
@@ -197,34 +189,205 @@ function detectClick() {
             //récupère le contenu de la carte
             getSingleCard(this.id)
 
-            //le joueur click sur ses cartes
-            if ( (singleCardParent === game.player1Cards && parseInt(game.player1.id) === userId) || (singleCardParent === game.player2Cards && parseInt(game.player2.id) === userId)) {
-
-                //le joueur a sélectionné des cartes à prendre pour échanger
-                if (Object.keys(selectedTakeCards).length > 0) {
-                    sellManyCards();
-                } else {
-                    //la carte n'est pas de type chameau
-                    if (singleCardContent.type !== 'chameau') {
-
-                        //vend la carte et récupère un jeton correspondant
-                        sellCards();
-                        gameDisplay();
-                    }
-                }
+            //le joueur click sur ses cartes (main + enclos)
+            if ( ( (singleCardParent === game.player1Cards || singleCardParent === game.player1Enclos) && parseInt(game.player1.id) === userId) || ( (singleCardParent === game.player2Cards || singleCardParent === game.player2Enclos) && parseInt(game.player2.id) === userId)) {
+                selectCards(selectedSellCards);
             }
 
             //le joueur click sur le marché
             if (singleCardParent === game.market) {
 
-                //si la carte est un chameau le joueur récupère tous les chameaux
                 if (singleCardContent.type === 'chameau') {
-                    takeAllCamels();
-                    gameDisplay();
-                } else { //si la carte n'est pas un chameau
-                    // takeOneCard();
-                    takeManyCards();
+                    //SÉLECTIONNE TOUS LES CHAMEAUX DU MARCHÉ
+                    Object.entries(game.market).forEach(([key, card]) => {
+                        if (card['type'] === 'chameau') {
+                            singleCardContent = card;
+                            selectCards(selectedTakeCards);
+                        }
+                    });
+                } else {
+                    selectCards(selectedTakeCards);
                 }
+            }
+
+
+            //DÉTECTION DE L'ACTION DU JOUEUR
+            validTurnBtn.classList.remove("block");
+
+            let sellCardsArray = Object.keys(selectedSellCards),
+                takeCardsArray = Object.keys(selectedTakeCards);
+
+
+            // il y a des cartes de sélectionnées
+            if (sellCardsArray.length > 0 || takeCardsArray.length > 0) {
+
+                //le joueur a sélectionnée des cartes à vendre
+                if (sellCardsArray.length > 0) {
+
+                    /******* ÉCHANGE DE CARTES *******/
+                    //le joueur a sélectionné des cartes à échanger
+                    if (takeCardsArray.length > 0) {
+
+                        let error = false;
+
+                        //vérifie qu'il y ai le même nombre de cartes à échanger et qu'il y ai au moins 2 cartes à échanger
+                        if ((takeCardsArray.length !== sellCardsArray.length) ||  sellCardsArray.length < 2 || takeCardsArray.length < 2) {
+                            error = true;
+                        }
+
+                        //vérifie qu'il n'y ai pas de chameaux dans les cartes à prendre
+                        Object.values(selectedTakeCards).forEach(function (card) {
+                            if (card['type'] === 'chameau') {
+                                error = true;
+                            }
+                        });
+
+                        //vérifie que le joueur ne dépasse pas 7 cartes
+                        let sellCount = 0,
+                            playerCardsCount;
+
+                        if (parseInt(game.player1.id) === userId) {
+                            playerCardsCount = Object.keys(game.player1Cards).length;
+                        }
+                        else {
+                            playerCardsCount = Object.keys(game.player2Cards).length;
+                        }
+
+                        //compter le nombre de carte à vendre chameau
+                        Object.values(selectedSellCards).forEach(function (card) {
+                            if (card['type'] === 'chameau') {
+                                sellCount++;
+                            }
+                        })
+                        //erreur si le joueur aura plus de 7 cartes
+                        if ((playerCardsCount+sellCount) > 7) {
+                            error = true;
+                        }
+
+                        let testArray = Object.values(selectedTakeCards);
+                        //vérifie que le joueur ne troc pas le même type de carte
+                        for (let i = 0; i < testArray.length; i++) {
+                            Object.values(selectedSellCards).forEach(function (card) {
+                                if (card['type'] === testArray[i]['type']) {
+                                    error = true;
+                                }
+                            })
+                        }
+
+
+
+                        if (error === false) {
+                            validTurnBtn.innerHTML = 'Échanger les marchandises';
+                        } else {
+                            validTurnBtn.innerHTML = 'A votre tour !';
+                            validTurnBtn.classList.add("block");
+                        }
+
+                    }
+                    /******* VENTE DE CARTES *******/
+                    //le joueur n'a pas sélectionné de carte à échanger
+                    else  {
+
+                        let error = false,
+                            rareTest = 0,
+                            typeTestArray = Object.values(selectedSellCards);
+
+                        //test la présence de marchandises rares
+                        Object.values(selectedSellCards).forEach(function (card) {
+                            if (card['type'] === 'diamant' || card['type'] === 'or' || card['type'] === 'argent') {
+                                rareTest++;
+                            }
+                        })
+
+                        if (rareTest > 0 && rareTest < 2) {
+                            error = true;
+                        }
+
+                        //test pour que les marchandises soient du même type et pas un chameau
+                        for (let i = 0; i < typeTestArray.length; i++) {
+                            typeTestArray.forEach(function (card) {
+                                if (typeTestArray[i]['type'] !== card['type']) {
+                                    error = true;
+                                }
+
+                                if (card['type'] === 'chameau') {
+                                    error = true;
+                                }
+                            })
+                        }
+
+                        //les marchandises ne sont pas du même type ou il y a un chameau
+                        if (error === true) {
+                            validTurnBtn.innerHTML = 'A votre tour !';
+                            validTurnBtn.classList.add("block");
+                        } else {
+                            if (sellCardsArray.length === 1) {
+                                validTurnBtn.innerHTML = 'Vendre cette marchandise';
+                            } else {
+                                validTurnBtn.innerHTML = 'Vendre ces marchandises';
+                            }
+                        }
+
+                    }
+
+                }
+                else { // le joueur n'a pas sélectionné de cartes à vendre ou échanger
+
+                    /******* PRENDRE UNE SEULE MARCHANDISE *******/
+                    //si le joueur a sélectionné une seule carte
+                    if (takeCardsArray.length === 1) {
+
+                        //vérifie que le joueur ne dépasse pas 7 cartes
+                        let error = false,
+                            playerCardsCount;
+
+                        if (parseInt(game.player1.id) === userId) {
+                            playerCardsCount = Object.keys(game.player1Cards).length;
+                        }
+                        else {
+                            playerCardsCount = Object.keys(game.player2Cards).length;
+                        }
+
+                        if ((playerCardsCount + 1) > 7) {
+                            error = true;
+                        }
+
+                        if (error === true) {
+                            validTurnBtn.innerHTML = 'A votre tour !';
+                            validTurnBtn.classList.add("block");
+                        } else {
+                            validTurnBtn.innerHTML = 'Prendre la marchandise';
+                        }
+
+                    }
+                    /******* PRENDRE TOUS LES CHAMEAUX *******/
+                    else { //le joueur a plusieurs cartes à prendre
+
+                        let error = false;
+                        Object.entries(selectedTakeCards).forEach(([key, card]) => {
+                            if (card['type'] !== 'chameau') {
+                                error = true;
+                            }
+                        });
+
+                        //si l'ensemble des cartes sont des chameaux
+                        if (error === false) {
+                            validTurnBtn.innerHTML = 'Prendre tous les chameaux';
+                        } else {
+                            validTurnBtn.innerHTML = 'A votre tour !';
+                            validTurnBtn.classList.add("block");
+                        }
+
+                    }
+
+
+                }
+
+            }
+            // aucune carte n'est sélectionnée
+            else {
+                validTurnBtn.innerHTML = 'A votre tour !';
+                validTurnBtn.classList.add("block");
             }
 
         });
@@ -237,274 +400,99 @@ function detectClick() {
  ************************
  ************************/
 
-//VENDRE UNE SEULE CARTE ET RÉCUPÈRE LES JETONS CORRESPONDANT
-function sellCards() {
-    if (game.defausse.length === 0) { //initialise le tableau json si tableau vide
-        game.defausse = {};
-    }
+//SÉLECTIONNE PLUSIEURS CARTES POUR L'ÉCHANGE
+function selectCards(selectedCards) {
 
-    game.defausse[singleCardContent['id']] = singleCardContent; //ajoute la carte dans la fausse
-    delete singleCardParent[singleCardContent['id']]; //supprime la carte de son container initial
+    let selected = ifCardSelected(selectedCards),
+        domSelectedCard = document.getElementById(singleCardContent['id']),
+        className;
 
-    let type = singleCardContent['type'],
-        tokenTest = null;
-
-    //JOUEUR 1
-    if (parseInt(game.player1.id) === userId) {
-        if (game.player1Tokens.length === 0) { //initialise le tableau json si tableau vide
-            game.player1Tokens = {};
-        }
-
-        //rajoute le token dans la main du joueur
-        Object.entries(game.stockTokens).forEach(([key, token]) => {
-            if (token.type === type && tokenTest === null) {
-                tokenTest = token;
-                game.player1Tokens[tokenTest.id] = tokenTest;
-                delete game.stockTokens[tokenTest.id];
-            }
-        });
-    }
-
-    //JOUEUR 2
-    if (parseInt(game.player2.id) === userId) {
-        if (game.player2Tokens.length === 0) { //initialise le tableau json si tableau vide
-            game.player2Tokens = {};
-        }
-
-        //rajoute le token dans la main du joueur
-        Object.entries(game.stockTokens).forEach(([key, token]) => {
-            if (token.type === type && tokenTest === null) {
-                tokenTest = token;
-                game.player2Tokens[tokenTest.id] = tokenTest;
-                delete game.stockTokens[tokenTest.id];
-            }
-        });
-    }
-}
-
-//PRENDRE UNE SEULE CARTE DU MARCHÉ ET LA REMPLACE AVEC LA PIOCHE
-function takeOneCard() {
-
-    //JOUEUR 1
-    if (parseInt(game.player1.id) === userId) {
-       if (Object.keys(game.player1Cards).length < 7) { // SI LE JOUEUR A MOINS DE 7 CARDS
-           game.player1Cards[singleCardContent['id']] = singleCardContent; //ajoute la carte dans les cartes du joueur
-           delete singleCardParent[singleCardContent['id']]; //supprime la carte de son container initial
-           piocheCard();
-       } else {
-           alert('Vous ne pouvez pas avoir plus de 7 cartes');
-       }
-    }
-
-    //JOUEUR 2
-    if (parseInt(game.player2.id) === userId) {
-        if (Object.keys(game.player2Cards).length < 7) { // SI LE JOUEUR A MOINS DE 7 CARDS
-            game.player2Cards[singleCardContent['id']] = singleCardContent; //ajoute la carte dans les cartes du joueur
-            delete singleCardParent[singleCardContent['id']]; //supprime la carte de son container initial
-            piocheCard();
-        } else {
-            alert('Vous ne pouvez pas avoir plus de 7 cartes');
-        }
-    }
-
-}
-
-//SÉLECTIONNE PLUSIEURS CARTES À PRENDRE POUR LES ÉCHANGER
-function takeManyCards() {
-
-    let selected = false;
-
-    //TEST SI LA CARTE N'EST PAS DÉJÀ SÉLECTIONNÉE
-    Object.entries(selectedTakeCards).forEach(([key, card]) => {
-        if (card === singleCardContent) {
-            selected = true;
-        }
-    });
-
-    //SI LA CARTE EST SÉLECTIONNÉE
-    if (selected === true) {
-
-        let domSelectedCard = document.getElementById(singleCardContent['id']);
-        domSelectedCard.classList.remove("selectTake");
-        delete selectedTakeCards[singleCardContent['id']];
-
+    if (selectedCards === selectedTakeCards) {
+        className = "selectTake";
     } else {
+        className = "selectSell";
+    }
 
-        if (Object.keys(game.player1Cards).length < 7) { // SI LE JOUEUR A MOINS DE 7 CARDS
-            //ajoute la classe
-            let domSelectedCard = document.getElementById(singleCardContent['id']);
-            domSelectedCard.classList.add("selectTake");
-            //ajoute la carte au tableau des cartes sélectionnées
-            selectedTakeCards[singleCardContent['id']] = singleCardContent;
-        } else {
-            alert('Vous ne pouvez pas avoir plus de 7 cartes');
+    //la carte est sélectionnée
+    if (selected === true) {
+
+        removeSelectedCard(selectedCards, domSelectedCard, className)
+
+    } else {// la carte n'est pas sélectionnée
+
+        if (selectedCards === selectedTakeCards) { //TAKE CARDS
+
+            addSelectedCard(selectedTakeCards, domSelectedCard, className)
+
+        } else { //SELL CARDS
+
+            addSelectedCard(selectedSellCards, domSelectedCard, className)
+
         }
 
     }
+
 }
 
-//SÉLECTIONNE PLUSIEURS CARTES À VENDRE POUR LES ÉCHANGER
-function sellManyCards() {
+/************************
+ ************************
+ FONCTIONS POUR SÉLECTIONS DES CARTES
+ ************************
+ ************************/
 
+//TEST SI LA CARTE N'EST PAS DÉJÀ SÉLECTIONNÉE
+function ifCardSelected(selectedCards) {
     let selected = false;
 
-    //TEST SI LA CARTE N'EST PAS DÉJÀ SÉLECTIONNÉE
-    Object.entries(selectedSellCards).forEach(([key, card]) => {
+    Object.entries(selectedCards).forEach(([key, card]) => {
         if (card === singleCardContent) {
             selected = true;
         }
     });
 
-    //SI LA CARTE EST SÉLECTIONNÉE
-    if (selected === true) {
-
-        let domSelectedCard = document.getElementById(singleCardContent['id']);
-        domSelectedCard.classList.remove("selectSell");
-        delete selectedSellCards[singleCardContent['id']];
-
-    } else { //SI LA CARTE N'EST PAS SÉLECTIONNÉE
-
-        // SI LE NOMBRE DE CARTES VENDUES N'EST PAS SUPÉRIEUR AU CARTES PRISES
-        if ((Object.keys(selectedSellCards).length) + 1 <= (Object.keys(selectedTakeCards).length)) {
-            //ajoute la classe
-            let domSelectedCard = document.getElementById(singleCardContent['id']);
-            domSelectedCard.classList.add("selectSell");
-            //ajoute la carte au tableau des cartes sélectionnées
-            selectedSellCards[singleCardContent['id']] = singleCardContent;
-        } else {
-            alert('Vous ne pouvez pas vendre plus de cartes que vous prenez');
-        }
-
-    }
-
+    return selected;
 }
+
+//AJOUTE CARTE DANS LA SÉLECTION
+function addSelectedCard(selectedCards, domSelectedCard, className) {
+    domSelectedCard.classList.add(className);
+    //ajoute la carte au tableau des cartes sélectionnées
+    selectedCards[singleCardContent['id']] = singleCardContent;
+}
+
+//SUPPRIME CARTE DE LA SÉLECTION
+function removeSelectedCard(selectedCards, domSelectedCard, className) {
+    domSelectedCard.classList.remove(className);
+    delete selectedCards[singleCardContent['id']];
+}
+
+/************************
+ ************************
+ FONCTIONS FETCH POUR API CUSTOM
+ ************************
+ ************************/
 
 //ÉCHANGE LES CARTES ENTRE CELLES DU JOUEUR ET CELLES DU MARCHÉ
-function exchangeCards() {
-
-    //JOUEUR 1
-    if (parseInt(game.player1.id) === userId) {
-
-        // VÉRIFIE QU'IL Y A AUTANT DE CARDE A ÉCHANGER
-        if (Object.keys(selectedSellCards).length === Object.keys(selectedTakeCards).length) {
-
-            Object.entries(selectedSellCards).forEach(([key, card]) => {
-                game.market[card['id']] = card; //ajoute la carte dans le marché
-                delete game.player1Cards[card['id']]; //supprime la carte de son container initial
-            });
-
-            Object.entries(selectedTakeCards).forEach(([key, card]) => {
-                game.player1Cards[card['id']] = card; //ajoute la carte dans le marché
-                delete game.market[card['id']]; //supprime la carte de son container initial
-            });
-
-            gameDisplay();
-
-        } else {
-            alert('Vous devez prendre autant de cartes que vous en échangez');
-        }
-
-    }
-
-    //JOUEUR 2
-    if (parseInt(game.player2.id) === userId) {
-
-        // VÉRIFIE QU'IL Y A AUTANT DE CARDE A ÉCHANGER
-        if (Object.keys(selectedSellCards).length === Object.keys(selectedTakeCards).length) {
-
-            Object.entries(selectedSellCards).forEach(([key, card]) => {
-                game.market[card['id']] = card; //ajoute la carte dans le marché
-                delete game.player2Cards[card['id']]; //supprime la carte de son container initial
-            });
-
-            Object.entries(selectedTakeCards).forEach(([key, card]) => {
-                game.player2Cards[card['id']] = card; //ajoute la carte dans le marché
-                delete game.market[card['id']]; //supprime la carte de son container initial
-            });
-
-            gameDisplay();
-
-        } else {
-            alert('Vous devez prendre autant de cartes que vous en échangez');
-        }
-
-    }
-
-}
-
-//RÉCUPÈRE TOUS LES CHAMEAUX DE LA PIOCHE ET LES REMPLACES AVEC LA PIOCHE
-function takeAllCamels() {
-
-    let nb = 0; //nombre de chameaux récupérés
-
-    if (game.player1Enclos.length === 0) { //initialise le tableau json si tableau vide
-        game.player1Enclos = {};
-    }
-
-    if (game.player2Enclos.length === 0) { //initialise le tableau json si tableau vide
-        game.player2Enclos = {};
-    }
-
-    //JOUEUR 1
-    if (parseInt(game.player1.id) === userId) {
-        //récupère tous les chameaux dans la mains du joueur
-        Object.entries(game.market).forEach(([key, card]) => {
-            if (card.type === 'chameau') {
-                game.player1Enclos[card.id] = card;
-                delete game.market[card.id];
-                nb++;
-            }
-        });
-    }
-
-    //JOUEUR 2
-    if (parseInt(game.player2.id) === userId) {
-        //récupère tous les chameaux dans la mains du joueur
-        Object.entries(game.market).forEach(([key, card]) => {
-            if (card.type === 'chameau') {
-                game.player2Enclos[card.id] = card;
-                delete game.market[card.id];
-                nb++;
-            }
-        });
-    }
+function validTurn() {
+    let sendData = {};
+    sendData["selectedTakeCards"] = selectedTakeCards;
+    sendData["selectedSellCards"] = selectedSellCards;
 
 
-    for (let i = 1; i <= nb; i++) { // pioche nb fois
-        piocheCard();
-    }
-
-}
-
-//PIOCHE UNE CARTE
-function piocheCard() {
-    // récupère l'ensemble des id de la pioche
-    let keys = Object.keys(game.stockCards);
-    // récupère l'id max dans la pioche
-    let highest = Math.max.apply(null, keys);
-
-    //piocher une carte aléatoire dans la pioche
-    let randomKeys = Math.floor(Math.random()*highest);
-    let randomCards = game.stockCards[randomKeys];
-
-    // vérifie que la carte existe bien
-    if (randomCards) {
-        delete game.stockCards[randomCards['id']]; //supprime la carte de la pioche
-        game.market[randomCards['id']] = randomCards; //ajoute la carte dans le marché
-    } else { // SI CARTE INCORRECT RE-PIOCHER
-        piocheCard()
+    if (Object.keys(sendData["selectedTakeCards"]).length > 0 || Object.keys(sendData["selectedSellCards"]).length > 0) {
+        sendRequest('validTurn', gameId, sendData);
     }
 }
 
 /************************
  ************************
- FONCTIONS FETCH POUR API
+ FONCTIONS FETCH POUR API REST
  ************************
  ************************/
 
-function sendData(gameData) {
-    fetch(apiGetUrl,{
-        method:'PATCH',
+function sendRequest(apiMethod, gameId, gameData) {
+    fetch(baseUrl+'game/api/'+apiMethod+'/'+gameId,{
+        method:'POST',
         headers:{
             'Content-Type':'application/merge-patch+json'
         },
@@ -512,12 +500,16 @@ function sendData(gameData) {
     }).then(response=>{
         return response.json()
     }).then(function (data) {
-        console.log( 'POST DATA SUCCESS' );
-        console.log(data)
+        if (typeof data === 'string' ) {
+            console.error(data)
+        } else {
+            console.warn(data);
+            getAllData();
+        }
     });
 }
 
-function getData() {
+function getAllData() {
     fetch(apiGetUrl,{
         method: 'GET',
         headers: {
@@ -529,7 +521,6 @@ function getData() {
             return response.json();
         })
         .then(function(data) {
-            console.log( 'GET DATA SUCCESS' );
             if (JSON.stringify(data) !== JSON.stringify(game)) {
                 game = data;
                 console.log(game);
@@ -537,8 +528,110 @@ function getData() {
             }
         })
         .catch(function(error) {
-            console.log('DATA API ERROR : '+ error );
+            console.error('DATA API ERROR : '+ error );
         });
+}
+
+/************************
+ ************************
+  ANIMATIONS FONCTIONS
+ ************************
+ ************************/
+
+function roundFinish() {
+
+    let gamePop = document.querySelector('#game-pop');
+    let gamePopContainer = document.querySelector('#game-pop .pop--container');
+
+    gamePopContainer.innerHTML = '';
+
+    let tokenPointsPlayer1 = 0;
+    Object.entries(game.player1Tokens).forEach(function (token) {
+        tokenPointsPlayer1 += parseInt(token['val']);
+    })
+
+    let bonusTokenPointsPlayer1 = 0;
+    Object.entries(game.player1BonusTokens).forEach(function (token) {
+        bonusTokenPointsPlayer1 += parseInt(token['val']);
+    })
+
+    let tokenPointsPlayer2 = 0;
+    Object.entries(game.player2Tokens).forEach(function (token) {
+        tokenPointsPlayer2 += parseInt(token['val']);
+    })
+
+    let bonusTokenPointsPlayer2 = 0;
+    Object.entries(game.player2BonusTokens).forEach(function (token) {
+        bonusTokenPointsPlayer2 += parseInt(token['val']);
+    })
+
+    //vérifie qui a le plus de chameaux
+    let moreBonusPlayer1 = 0,
+        moreBonusPlayer2 = 0;
+    if (Object.keys(game.player1Enclos).length > Object.keys(game.player2Enclos).length ) {
+        moreBonusPlayer1 = 5;
+    }
+    else if (Object.keys(game.player2Enclos).length > Object.keys(game.player1Enclos).length ) {
+        moreBonusPlayer2 = 5;
+    }
+
+    let resultatPlayer1 = 'Perdant',
+        resultatPlayer2 = 'Perdant';
+
+    if ((tokenPointsPlayer1 + bonusTokenPointsPlayer1 + moreBonusPlayer1) > (tokenPointsPlayer2 + bonusTokenPointsPlayer2 + moreBonusPlayer2)) {
+        resultatPlayer1 = 'Vainqueur';
+    }
+    else if ((tokenPointsPlayer1 + bonusTokenPointsPlayer1 + moreBonusPlayer1) < (tokenPointsPlayer2 + bonusTokenPointsPlayer2 + moreBonusPlayer2)) {
+        resultatPlayer2 = 'Vainqueur';
+    }
+    else {
+
+        //égalité -> vérifie le nombre de token bonus
+        if (Object.keys(game.player1BonusTokens).length > Object.keys(game.player2BonusTokens).length ) {
+            resultatPlayer1 = 'Vainqueur';
+        } else if (Object.keys(game.player2BonusTokens).length > Object.keys(game.player1BonusTokens).length ) {
+            resultatPlayer2 = 'Vainqueur';
+        } else {
+
+            //égalité -> vérifie le nombre de token
+            if (Object.keys(game.player1Tokens).length > Object.keys(game.player2Tokens).length ) {
+                resultatPlayer1 = 'Vainqueur';
+            } else {
+                resultatPlayer2 = 'Vainqueur';
+            }
+        }
+    }
+
+    let div = document.createElement("div");
+    div.innerHTML =
+        `<strong>`+resultatPlayer1+`</strong>
+        <p>`+game.player1.username+`</p>
+        <img class="avatar" src="`+baseUrl+'avatars/'+game.player1.avatar+`.png" alt="Avatar de `+game.player1.username+`">
+        <ul>
+            <li>Jetons : `+tokenPointsPlayer1+` dollars</li>
+            <li>Jetons bonus : `+bonusTokenPointsPlayer1+` dollars</li>
+            <li>Jeton chameau : `+moreBonusPlayer1+` dollars</li>
+            <li><b>Total : `+(tokenPointsPlayer1 + bonusTokenPointsPlayer1 + moreBonusPlayer1)+` Points</b></li>
+         </ul>`;
+
+    gamePopContainer.append(div);
+
+    let div2 = document.createElement("div");
+    div2.innerHTML =
+        `<strong>`+resultatPlayer2+`</strong>
+        <p>`+game.player2.username+`</p>
+        <img class="avatar" src="`+baseUrl+'avatars/'+game.player2.avatar+`.png" alt="Avatar de `+game.player2.username+`">
+        <ul>
+            <li>Jetons : `+tokenPointsPlayer2+` dollars</li>
+            <li>Jetons bonus : `+bonusTokenPointsPlayer2+` dollars</li>
+            <li>Jeton chameau : `+moreBonusPlayer2+` dollars</li>
+            <li><b>Total : `+(tokenPointsPlayer2 + bonusTokenPointsPlayer2 + moreBonusPlayer2)+` Points</b></li>
+         </ul>`;
+
+    gamePopContainer.append(div2);
+
+    gamePop.classList.add('show');
+
 }
 
 /************************
@@ -555,14 +648,17 @@ function debugCardsNumber() {
         marketTotal = Object.keys(game.market).length,
         piocheTotal = Object.keys(game.stockCards).length,
         defausseTotal = Object.keys(game.defausse).length,
+        totalTokens = parseInt(Object.keys(game.player1Tokens).length) + parseInt(Object.keys(game.player2Tokens).length) + parseInt(Object.keys(game.stockTokens).length),
         totalCards = parseInt(p1Total) + parseInt(p2Total) + parseInt(marketTotal) + parseInt(piocheTotal) + parseInt(defausseTotal) + parseInt(p1Enclos) + parseInt(p2Enclos);
 
-
     document.querySelector('#p1Total').innerHTML = p1Total;
+    document.querySelector('#p1Points').innerHTML = game.player1Points;
     document.querySelector('#p2Total').innerHTML = p2Total;
+    document.querySelector('#p2Points').innerHTML = game.player2Points;
     document.querySelector('#marketTotal').innerHTML = marketTotal;
     document.querySelector('#piocheTotal').innerHTML = piocheTotal;
     document.querySelector('#fausseTotal').innerHTML = defausseTotal;
     document.querySelector('#totalCards').innerHTML = totalCards;
+    document.querySelector('#totalTotal').innerHTML = totalTokens;
     document.querySelector('.playerTurn').innerHTML = game.playerTurn; //affiche le tour de l'utilisateur
 }

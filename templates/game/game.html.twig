@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Jouer{% endblock %}
+{% block title %}{{ game.name }}{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/game.css') }}">
@@ -8,27 +8,68 @@
 
 {% block body %}
 
+    <div id="game-pop">
+        <h3>MANCHE <span>1</span> TERMINÉE</h3>
+        <div class="pop--container">
+            <div>
+                <strong>Perdant</strong>
+                <p>Liambdr</p>
+                <img class="avatar" src="{{ asset('avatars/' ~ game.player1.avatar ~ '.png') }}" alt="Avatar de {{ game.player1.username  }}">
+                <ul>
+                    <li>Jetons : 23 dollars</li>
+                    <li>Jetons bonus : 150 dollars</li>
+                    <li>Jeton chameau : 5 dollars</li>
+                    <li><b>Total : 190 Points</b></li>
+                </ul>
+            </div>
+            <div>
+                <strong class="winner">Vainqueur</strong>
+                <p>{{ game.player2.username }}</p>
+                <img class="avatar" src="{{ asset('avatars/' ~ game.player2.avatar ~ '.png') }}" alt="Avatar de {{ game.player2.username  }}">
+                <ul>
+                    <li>Jetons : 23 dollars</li>
+                    <li>Jetons bonus : 150 dollars</li>
+                    <li>Jeton chameau : 5 dollars</li>
+                    <li><b>Total : 190 Points</b></li>
+                </ul>
+            </div>
+        </div>
+        <img class="background" src="{{ asset('images/mail-barreau.png') }}" alt="Barreaux de prison">
+    </div>
+
     <h1>P1 : {{ game.player1.username }} VS P2 : {{ game.player2.username }}</h1>
+    <p>{{ game.name }}</p>
 
     <h2>Nombre de cartes total : <i>(<span id="totalCards"></span>)</i> </h2>
     <h2>Nombre de jetons total : <i>(<span id="totalTotal"></span>)</i> </h2>
     <br><br>
 
-    <h2>Tour du joueur id n°<span class="playerTurn"></span></h2>
+    <h2>Manche n°<span class="game-round">{{ game.round }}</span></h2>
+    <h2>Tour du joueur id n°<span class="playerTurn">{{ game.playerTurn }}</span></h2>
     <br><br>
 
     <input class="gameId" type="hidden" value="{{ game.id }}">
     <input class="userId" type="hidden" value="{{ app.user.id }}">
 
-    <h2>CARTES JOUEUR 1 <i>(<span id="p1Total"></span>)</i></h2>
-    <div class="container player1-cards"></div>
-    <div class="container player1-enclos"></div>
-    <div class="container player1-tokens"></div>
+    <div class="row">
+        <div>
+            <h2>CARTES JOUEUR 1 <i>(<span id="p1Total"></span>)</i></h2>
+            <h3>Points <i>(<span id="p1Points"></span>)</i></h3>
+            <div class="container player1-cards"></div>
+            <div class="container player1-enclos"></div>
+            <div class="container player1-tokens"></div>
+            <div class="container player1-bonus-tokens"></div>
+        </div>
 
-    <h2>CARTES JOUEUR 2 <i>(<span id="p2Total"></span>)</i></h2>
-    <div class="container player2-cards"></div>
-    <div class="container player2-enclos"></div>
-    <div class="container player2-tokens"></div>
+        <div>
+            <h2>CARTES JOUEUR 2 <i>(<span id="p2Total"></span>)</i></h2>
+            <h3>Points <i>(<span id="p2Points"></span>)</i></h3>
+            <div class="container player2-cards"></div>
+            <div class="container player2-enclos"></div>
+            <div class="container player2-tokens"></div>
+            <div class="container player2-bonus-tokens"></div>
+        </div>
+    </div>
 
     <h2>MARCHÉ <i>(<span id="marketTotal"></span>)</i></h2>
     <div class="container market"></div>
@@ -36,14 +77,13 @@
     <h2>PIOCHE <i>(<span id="piocheTotal"></span>)</i></h2>
     <div class="container pioche"></div>
     <div class="container pioche-tokens"></div>
+    <div class="container pioche-bonus-tokens"></div>
 
     <h2>DÉFAUSSE <i>(<span id="fausseTotal"></span>)</i></h2>
     <div class="container defausse">
     </div>
 
-    <button id="cancelTurn" class="btn valid-btn">ANNULER TOUR</button>
-    <button id="exchangeCards" class="btn valid-btn">ÉCHANGER LES CARTES</button>
-    <button id="validTurn" class="btn fixed valid-btn">VALIDER TOUR</button>
+    <button id="validTurn" class="btn fixed block valid-btn">A votre tour !</button>
 
 {% endblock %}
 

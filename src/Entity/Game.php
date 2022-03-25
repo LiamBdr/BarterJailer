@@ -13,10 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
         'get'  => [
             "security" => "object.player1 == user or object.player2 == user",
             "security_message" => "Vous devez être joueur de la partie",
-        ],
-        'patch' => [
-            "security" => "object.player1 == user or object.player2 == user",
-            "security_message" => "Vous devez être joueur de la partie",
         ]
     ]
 )]
@@ -46,10 +42,16 @@ class Game
     private $market = [];
 
     #[ORM\Column(type: 'json', nullable: true)]
+    private $defausse = [];
+
+    #[ORM\Column(type: 'json', nullable: true)]
     private $stockCards = [];
 
     #[ORM\Column(type: 'json')]
     private $stockTokens = [];
+
+    #[ORM\Column(type: 'json', nullable: true)]
+    private $stockBonusTokens = [];
 
     #[ORM\Column(type: 'json')]
     private $player1Cards = [];
@@ -59,6 +61,9 @@ class Game
 
     #[ORM\Column(type: 'json', nullable: true)]
     private $player1Tokens = [];
+
+    #[ORM\Column(type: 'json', nullable: true)]
+    private $player1BonusTokens = [];
 
     #[ORM\Column(type: 'integer', nullable: true)]
     private $player1Points;
@@ -74,6 +79,9 @@ class Game
 
     #[ORM\Column(type: 'json', nullable: true)]
     private $player2Tokens = [];
+
+    #[ORM\Column(type: 'json', nullable: true)]
+    private $player2BonusTokens = [];
 
     #[ORM\Column(type: 'integer')]
     private $player2Points;
@@ -92,9 +100,6 @@ class Game
 
     #[ORM\Column(type: 'integer', nullable: true)]
     private $round;
-
-    #[ORM\Column(type: 'json', nullable: true)]
-    private $defausse = [];
 
     public function getId(): ?int
     {
@@ -361,6 +366,42 @@ class Game
     public function setDefausse(?array $defausse): self
     {
         $this->defausse = $defausse;
+
+        return $this;
+    }
+
+    public function getStockBonusTokens(): ?array
+    {
+        return $this->stockBonusTokens;
+    }
+
+    public function setStockBonusTokens(?array $stockBonusTokens): self
+    {
+        $this->stockBonusTokens = $stockBonusTokens;
+
+        return $this;
+    }
+
+    public function getPlayer1BonusTokens(): ?array
+    {
+        return $this->player1BonusTokens;
+    }
+
+    public function setPlayer1BonusTokens(?array $player1BonusTokens): self
+    {
+        $this->player1BonusTokens = $player1BonusTokens;
+
+        return $this;
+    }
+
+    public function getPlayer2BonusTokens(): ?array
+    {
+        return $this->player2BonusTokens;
+    }
+
+    public function setPlayer2BonusTokens(?array $player2BonusTokens): self
+    {
+        $this->player2BonusTokens = $player2BonusTokens;
 
         return $this;
     }

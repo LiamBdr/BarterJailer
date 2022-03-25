@@ -56,4 +56,9 @@ class AdminAuthenticator extends AbstractLoginFormAuthenticator
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
+
+    public function supports(Request $request): bool
+    {
+        return 'app_admin_login' === $request->attributes->get('_route') && $request->isMethod('POST');
+    }
 }

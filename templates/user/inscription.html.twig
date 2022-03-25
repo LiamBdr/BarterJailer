@@ -61,9 +61,11 @@
             {{ form_errors(registrationForm) }}
         </div>
 
-        <button type="submit" class="btn">S'inscrire</button>
+        <button type="submit" class="btn">Inscription</button>
 
         <a href="{{ path('app_home') }}">Retour à l'accueil</a>
+        {{ form_end(registrationForm) }}
+        <p class="bellow-link">Vous avez déjà un compte ? <a href="{{ path('app_connexion') }}">Connectez vous</a></p>
 {% endblock %}
 
 {% block additional_scripts %}

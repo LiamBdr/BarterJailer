@@ -10,6 +10,17 @@
     margin: 50px 0;
 }
 
+.row {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.row > div {
+    width: 50%;
+}
+
 .card {
     height: 100px;
     width: 60px;
@@ -45,6 +56,10 @@
     text-shadow: 0 3px 3px rgba(0,0,0,0.1);
     cursor: pointer;
     transition: all ease 0.2s;
+}
+
+.token.bonusToken {
+    background: #272727;
 }
 
 .card:hover, .token:hover {
@@ -111,10 +126,105 @@
 .btn.fixed {
     position: fixed;
     bottom: 20px;
-    right: 20px;
+    right: 0;
+    left: 0;
+    min-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+.btn.block {
+    background: lightslategray;
+    /*cursor: not-allowed;*/
+    /*pointer-events: none;*/
+}
+
+.btn:not(.block):hover {
+    background: #486097;
+}
+
+#game-pop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    padding: 30px;
+
+    height: 300px;
+    width: 400px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    box-shadow: inset 0 0 .5px 1px hsla(0, 0%, 100%, 0.075), 0 5px 15px rgba(0,0,0,0.2) ;
+    border-radius: 5px;
+    background: white;
+    overflow: hidden;
+
+    z-index: 1000;
     display: none;
 }
 
-.btn:hover {
-    background: #486097;
+#game-pop.show {
+    display: flex;
+}
+
+#game-pop .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    z-index: -1;
+    opacity: 0.7;
+}
+
+#game-pop h3 {
+    font-size: 3rem;
+    font-family: 'krungthep', sans-serif;
+    text-align: center;
+    color: var(--secondary);
+    text-shadow: 0 0 10px rgba(0,0,0,0.2);
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+#game-pop .pop--container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#game-pop img {
+    height: 100px;
+}
+
+.pop--container div {
+    position: relative;
+    width: 45%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background: white;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 1.2rem;
+}
+
+.pop--container ul {
+    list-style: none;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.pop--container .winner {
+    font-size: 1.4rem;
+    color: var(--tonic1);
 }

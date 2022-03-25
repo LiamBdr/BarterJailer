@@ -42,8 +42,12 @@ class InscriptionFormType extends AbstractType
                 'expanded' => true,
                 'required' => true,
                 'choices' => [
-                    'Armand' => 'armand',
-                    'Roberto' => 'roberto'
+                    'Jean-greg' => 'jean-greg',
+                    'Joy' => 'joy',
+                    'Jules' => 'jules',
+                    'Kim' => 'kim',
+                    'Marcel' => 'marcel',
+                    'Mathis' => 'mathis'
                 ],
                 'choice_attr' => function($choice, $key) {
                     if ($key == 'Armand') {

@@ -5,4 +5,3 @@ framework:
             sender: 'noreply@barterjailer.fr'
         headers:
             From: 'BarterJailer <noreply@barterjailer.fr>'
-            Bcc: 'baz@example.com'
