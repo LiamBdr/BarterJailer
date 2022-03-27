@@ -215,6 +215,7 @@
 .home-game {
     background: url("../images/home-barreau.png") no-repeat bottom center;
     background-size: 100% 101%;
+    margin-bottom: -50px;
 }
 
 .home-game > img {
