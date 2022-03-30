@@ -1,0 +1,457 @@
+.main-menu {
+    display: none !important;
+}
+
+footer {
+    display: none !important;
+}
+
+
+.main-container {
+    width: 100%;
+    padding: 0;
+}
+
+/********** GAME DISPLAY **********/
+
+.game-display {
+    position: relative;
+    min-height: 100vh;
+    height: 100%;
+    width: 100%;
+    background: url("../images/board-background.png") center no-repeat;
+    background-size: 101% 100%;
+
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+.game-display .top-row {
+    position: relative;
+    height: 150px;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+}
+
+.top-row .opponent-cards {
+    position: relative;
+    height: 100%;
+    width: 40%;
+    padding: 0 40px;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.opponent-cards .card {
+    transform: scaleY(-1) scaleX(-1);
+    margin: -40px -25px 0 -25px;
+    cursor: not-allowed;
+}
+
+.top-row .opponent-chameaux {
+    position: relative;
+    height: 100%;
+    width: 30%;
+    padding: 0 40px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-end;
+}
+
+.opponent-chameaux .card {
+    position: absolute;
+    top: -30px;
+}
+
+.top-row .opponent-tokens {
+    position: relative;
+    height: 100%;
+    width: 30%;
+    padding: 0 40px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-end;
+}
+
+.opponent-tokens .token {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    bottom: 0;
+    margin: auto;
+}
+
+/********** TOP ROW **********/
+
+.game-display .middle-row {
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+    height: 200px;
+    width: 85%;
+}
+
+.middle-row .cards-market {
+    position: relative;
+    width: 65%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.cards-market .card:hover {
+    transform: scale(1.08);
+    cursor: pointer;
+}
+
+.middle-row .cards-stock {
+    position: relative;
+    width: 15%;
+    height: 100%;
+}
+
+.cards-stock .card {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    filter: unset;
+}
+
+.middle-row .tokens-stock {
+    position: relative;
+    width: 20%;
+    height: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    padding: 10px 0;
+}
+
+.tokens-stock > div {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 15px;
+}
+
+.tokens-stock > div .token {
+    position: relative;
+    margin: 0 -17px;
+}
+
+    /********** BOTTOM ROW **********/
+
+.game-display .bottom-row {
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+    height: 240px;
+    width: 85%;
+}
+
+.bottom-row .tokens-player{
+    position: relative;
+    height: 100%;
+    width: 15%;
+
+    display: inline-block;
+    padding: 20px;
+}
+
+.tokens-player .token {
+    position: relative;
+    margin: 3px -10px;
+}
+
+.bottom-row .middle {
+    position: relative;
+    height: 100%;
+    width: 70%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.middle .cards-player {
+    position: relative;
+    height: 70%;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.cards-player .card {
+    margin: 0 -20px 0 -20px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.middle .tokens-bonus-stock {
+    position: relative;
+    height: 30%;
+    width: 100%;
+    background: lightsteelblue;
+}
+
+/********** CARDS **********/
+
+.card {
+    position: relative;
+    height: 175px;
+    min-height: 175px;
+    width: 125px;
+    min-width: 125px;
+    background: center center no-repeat;
+    background-size: contain;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+    transition: all ease 0.2s;
+}
+
+.card.selectTake {
+    filter: drop-shadow(0 5px 0 green);
+}
+
+.card.selectSell {
+    filter: drop-shadow(0 5px 0 red);
+}
+
+.card.diamant {
+    background-image: url("../images/cards/couteau.png");
+}
+
+.card.or {
+    background-image: url("../images/cards/cles.png");
+}
+
+.card.argent {
+    background-image: url("../images/cards/tel.png") ;
+}
+
+.card.tissu {
+    background-image: url("../images/cards/cocaine.png") ;
+}
+
+.card.epice {
+    background-image: url("../images/cards/alcool.png") ;
+}
+
+.card.cuir {
+    background-image: url("../images/cards/cigarette.png") ;
+}
+
+.card.reverse {
+    background-image: url("../images/cards/verso.png") ;
+}
+
+.card.chameau{
+    background-image: url("../images/cards/plateau.png") ;
+}
+
+/********** TOKENS **********/
+
+.token {
+    position: relative;
+    display: inline-block;
+    height: 45px;
+    min-height: 45px;
+    width: 45px;
+    min-width: 45px;
+    background: center center no-repeat;
+    background-size: contain;
+    filter: drop-shadow(0 0px 2px rgba(0,0,0,0.2));
+    transition: all ease 0.2s;
+}
+
+.token.diamant7 {
+    background-image: url("../images/tokens/couteau7.png");
+}
+
+.token.diamant5 {
+    background-image: url("../images/tokens/couteau5.png");
+}
+
+.token.or6 {
+    background-image: url("../images/tokens/cles6.png");
+}
+
+.token.or5 {
+    background-image: url("../images/tokens/cles5.png");
+}
+
+.token.argent5 {
+    background-image: url("../images/tokens/tel5.png") ;
+}
+
+.token.tissu5 {
+    background-image: url("../images/tokens/cocaine5.png") ;
+}
+
+.token.tissu3 {
+    background-image: url("../images/tokens/cocaine3.png") ;
+}
+
+.token.tissu2 {
+    background-image: url("../images/tokens/cocaine2.png") ;
+}
+
+.token.tissu1 {
+    background-image: url("../images/tokens/cocaine1.png") ;
+}
+
+.token.epice5 {
+    background-image: url("../images/tokens/alcool5.png") ;
+}
+
+.token.epice3 {
+    background-image: url("../images/tokens/alcool3.png") ;
+}
+
+.token.epice2 {
+    background-image: url("../images/tokens/alcool2.png") ;
+}
+
+.token.epice1 {
+    background-image: url("../images/tokens/alcool1.png") ;
+}
+
+.token.cuir4 {
+    background-image: url("../images/tokens/cigarette4.png") ;
+}
+
+.token.cuir3 {
+    background-image: url("../images/tokens/cigarette3.png") ;
+}
+
+.token.cuir2 {
+    background-image: url("../images/tokens/cigarette2.png") ;
+}
+
+.token.cuir1 {
+    background-image: url("../images/tokens/cigarette1.png") ;
+}
+
+.token.chameau{
+    background-image: url("../images/tokens/plateau.png") ;
+}
+
+.token.bonus3 {
+    background-image: url("../images/tokens/bonus3.png");
+}
+
+.token.bonus4 {
+    background-image: url("../images/tokens/bonus4.png");
+}
+
+.token.bonus5 {
+    background-image: url("../images/tokens/bonus5.png");
+}
+
+/********** AVATARS **********/
+
+.avatar {
+    position: absolute;
+    bottom: -30px;
+    left: -40px;
+    height: 400px;
+    z-index: 50;
+}
+
+.avatar.opposite {
+    left: auto;
+    right: -40px;
+    transform: scaleX(-1);
+}
+
+/********** UI **********/
+
+.logo, .exit {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+
+    border-radius: 10px;
+    height: 70px;
+    background: var(--dark-blue);
+    padding: 10px;
+    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.exit {
+    top: 25px;
+    left: 150px;
+    background: none;
+    box-shadow: none;
+    transition: all ease 0.2s;
+}
+
+.exit img {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.exit:hover {
+    transform: scale(1.1);
+}
+
+.valid {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: 1000;
+    border: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 50px;
+    min-width: 200px;
+    width: 200px;
+    padding: 20px;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 -3px 5px rgba(0,0,0,0.2);
+
+    background: var(--dark-blue);
+    font-family: krungthep, sans-serif;
+    color: white;
+    font-size: 2rem;
+
+    cursor: pointer;
+    transition: all ease 0.1s;
+}
+
+.valid:hover {
+    height: 60px;
+}
+
+.valid.block {
+    background: lightslategray;
+    cursor: not-allowed;
+    pointer-events: none;
+    color: #fffffeb3;;
+}

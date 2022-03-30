@@ -1,0 +1,271 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ game.name }}{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/plateau.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <input class="gameId" type="hidden" value="{{ game.id }}">
+    <input class="userId" type="hidden" value="{{ app.user.id }}">
+
+    <div class="game-display">
+
+        {# UI #}
+        <img src="{{ asset('/images/logo-white.png') }}" alt="Logo BarterJailer" class="logo">
+        <a class="exit" href="{{ path('app_game_home') }}"><img src="{{ asset('/images/svg/exit.svg') }}" alt="Logo Exit"></a>
+        <button id="validTurn" class="valid">A votre tour !</button>
+
+        {# AVATARS #}
+        {% if app.user.id == game.player1.id %}
+            <img src="{{ asset('avatars/' ~ game.player1.avatar ~ '.png') }}" alt="Avatar du joueur" class="avatar player">
+            <img src="{{ asset('avatars/' ~ game.player2.avatar ~ '.png') }}" alt="Avatar de l'adversaire" class="avatar opposite">
+        {% elseif app.user.id == game.player2.id %}
+            <img src="{{ asset('avatars/' ~ game.player2.avatar ~ '.png') }}" alt="Avatar du joueur" class="avatar player">
+            <img src="{{ asset('avatars/' ~ game.player1.avatar ~ '.png') }}" alt="Avatar de l'adversaire" class="avatar opposite">
+        {% endif %}
+
+        <div class="top-row">
+
+            <div class="opponent-chameaux">
+                {% if app.user.id == game.player1.id %}
+                    {#CACHE LES CARTES DU JOUEUR2#}
+                    {% for card in game.player2Enclos %}
+                        <div class="card {{ card.type}} reverse"></div>
+                    {% endfor %}
+                {% elseif app.user.id == game.player2.id %}
+                    {#CACHE LES CARTES DU JOUEUR1#}
+                    {% for card in game.player1Enclos %}
+                        <div class="card {{ card.type}}  reverse"></div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="opponent-cards">
+                {% if app.user.id == game.player1.id %}
+                    {% for card in game.player2Cards %}
+                        <div class="card reverse"></div>
+                    {% endfor %}
+                {% elseif app.user.id == game.player2.id %}
+                    {% for card in game.player1Cards %}
+                        <div class="card reverse"></div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="opponent-tokens">
+                {% if app.user.id == game.player1.id %}
+                    {% for token in game.player2Tokens %}
+                        <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                    {% endfor %}
+                    {% for token in game.player2BonusTokens %}
+                        <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                    {% endfor %}
+                {% elseif app.user.id == game.player2.id %}
+                    {% for token in game.player1Tokens %}
+                        <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                    {% endfor %}
+                    {% for token in game.player1BonusTokens %}
+                        <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="middle-row">
+            {#MARCHÉ#}
+            <div class="cards-market">
+                {% for card in game.market %}
+                    <div id="{{ card.id }}" class="card {{ card.type }}"></div>
+                {% endfor %}
+            </div>
+
+            {#CARDS STOCK#}
+            <div class="cards-stock">
+                {% for card in game.stockCards %}
+                    <div class="card reverse"></div>
+                {% endfor %}
+            </div>
+
+            {#TOKENS STOCK#}
+            <div class="tokens-stock">
+                <div>
+                    {% for token in game.stockTokens|reverse %}
+                        {% if token.type == 'diamant'  %}
+                            <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div>
+                    {% for token in game.stockTokens|reverse %}
+                        {% if token.type == 'or' %}
+                            <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div>
+                    {% for token in game.stockTokens|reverse %}
+                        {% if token.type == 'argent'  %}
+                            <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div>
+                    {% for token in game.stockTokens|reverse %}
+                        {% if token.type == 'tissu' %}
+                            <div id="token{{ token.id }}" class="token  {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div>
+                    {% for token in game.stockTokens|reverse %}
+                        {% if token.type == 'epice' %}
+                            <div id="token{{ token.id }}" class="token  {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div>
+                    {% for token in game.stockTokens|reverse %}
+                        {% if token.type == 'cuir'  %}
+                            <div id="token{{ token.id }}" class="token  {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-row">
+
+            {#JETONS DU JOUEUR GAUCHE#}
+            <div class="tokens-player left">
+                {% if app.user.id == game.player1.id %}
+                    <div>
+                        {% for token in game.player1Tokens %}
+                            {% if token.type == 'diamant'  %}
+                                <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div>
+                        {% for token in game.player1Tokens %}
+                            {% if token.type == 'or'  %}
+                                <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div>
+                        {% for token in game.player1Tokens %}
+                            {% if token.type == 'argent'  %}
+                                <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% elseif app.user.id == game.player2.id %}
+                    <div>
+                        {% for token in game.player2Tokens %}
+                            {% if token.type == 'diamant'  %}
+                                <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div>
+                        {% for token in game.player2Tokens %}
+                            {% if token.type == 'or'  %}
+                                <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div>
+                        {% for token in game.player2Tokens %}
+                            {% if token.type == 'argent'  %}
+                                <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            {#CARTES DU JOUEUR#}
+            <div class="middle">
+
+                <div class="cards-player">
+                    {% if app.user.id == game.player1.id %}
+                        {% for card in game.player1Cards %}
+                            <div id="{{ card.id }}" class="card {{ card.type }}"></div>
+                        {% endfor %}
+                        {% for card in game.player1Enclos %}
+                            <div id="{{ card.id }}" class="card {{ card.type }}"></div>
+                        {% endfor %}
+                    {% elseif app.user.id == game.player2.id %}
+-                        {% for card in game.player2Cards %}
+                            <div id="{{ card.id }}" class="card {{ card.type }}"></div>
+                        {% endfor %}
+                        {% for card in game.player2Enclos %}
+                            <div id="{{ card.id }}" class="card {{ card.type }}"></div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            {#JETONS DU JOUEUR DROITE#}
+            <div class="tokens-player right">
+                {% if app.user.id == game.player1.id %}
+                    <div>
+                        {% for token in game.player1Tokens %}
+                            {% if token.type == 'tissu'  %}
+                                <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div>
+                        {% for token in game.player1Tokens %}
+                            {% if token.type == 'epice'  %}
+                                <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div>
+                        {% for token in game.player1Tokens %}
+                            {% if token.type == 'cuir'  %}
+                                <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% elseif app.user.id == game.player2.id %}
+                    <div>
+                        {% for token in game.player2Tokens %}
+                            {% if token.type == 'tissu'  %}
+                                <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div>
+                        {% for token in game.player2Tokens %}
+                            {% if token.type == 'epice'  %}
+                                <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div>
+                        {% for token in game.player2Tokens %}
+                            {% if token.type == 'cuir'  %}
+                                <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block additional_scripts %}
+    <script src={{ asset('js/game.js') }}></script>
+    <script src={{ asset('js/animation.js') }}></script>
+{% endblock %}

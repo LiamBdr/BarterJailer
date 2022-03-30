@@ -136,8 +136,8 @@
 
 .btn.block {
     background: lightslategray;
-    /*cursor: not-allowed;*/
-    /*pointer-events: none;*/
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 .btn:not(.block):hover {
