@@ -14,9 +14,10 @@
     <div class="game-display">
 
         {# UI #}
-        <img src="{{ asset('/images/logo-white.png') }}" alt="Logo BarterJailer" class="logo">
-        <a class="exit" href="{{ path('app_game_home') }}"><img src="{{ asset('/images/svg/exit.svg') }}" alt="Logo Exit"></a>
+        <img src="{{ asset('images/logo-white.png') }}" alt="Logo BarterJailer" class="logo">
+        <a class="exit" href="{{ path('app_game_home') }}"><img src="{{ asset('images/svg/exit.svg') }}" alt="Logo Exit"></a>
         <button id="validTurn" class="valid">A votre tour !</button>
+        <div id="debug" style="position: fixed; top: 10px; right: 10px; background: red; color: white"></div>
 
         {# AVATARS #}
         {% if app.user.id == game.player1.id %}
@@ -163,6 +164,11 @@
                             {% endif %}
                         {% endfor %}
                     </div>
+                    <div>
+                        {% for token in game.player1BonusTokens %}
+                                <div id="token{{ token.id }}" class="token bonus{{ token.type }}"></div>
+                        {% endfor %}
+                    </div>
                 {% elseif app.user.id == game.player2.id %}
                     <div>
                         {% for token in game.player2Tokens %}
@@ -183,6 +189,11 @@
                             {% if token.type == 'argent'  %}
                                 <div id="token{{ token.id }}" class="token {{ token.type }} {{ token.type }}{{ token.val }}"></div>
                             {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div>
+                        {% for token in game.player2BonusTokens %}
+                            <div id="token{{ token.id }}" class="token bonus{{ token.type }}"></div>
                         {% endfor %}
                     </div>
                 {% endif %}
@@ -267,5 +278,4 @@
 
 {% block additional_scripts %}
     <script src={{ asset('js/game.js') }}></script>
-    <script src={{ asset('js/animation.js') }}></script>
 {% endblock %}

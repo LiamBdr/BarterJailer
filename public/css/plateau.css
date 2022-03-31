@@ -22,9 +22,20 @@ footer {
     background: url("../images/board-background.png") center no-repeat;
     background-size: 101% 100%;
 
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
     display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
     justify-content: space-between;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
 
     overflow: hidden;
@@ -35,7 +46,13 @@ footer {
     height: 150px;
     width: 100%;
 
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
     display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
 }
 
@@ -45,26 +62,46 @@ footer {
     width: 40%;
     padding: 0 40px;
 
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
     display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
     align-items: flex-start;
 }
 
 .opponent-cards .card {
+    -webkit-transform: scaleY(-1) scaleX(-1);
+    -ms-transform: scaleY(-1) scaleX(-1);
     transform: scaleY(-1) scaleX(-1);
     margin: -40px -25px 0 -25px;
     cursor: not-allowed;
 }
 
-.top-row .opponent-chameaux {
+.top-row .opponent-chameaux, .top-row .opponent-tokens {
     position: relative;
     height: 100%;
     width: 30%;
     padding: 0 40px;
 
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
+    -ms-flex-pack: distribute;
     justify-content: space-around;
+    -webkit-box-align: end;
+    -ms-flex-align: end;
     align-items: flex-end;
 }
 
@@ -73,22 +110,11 @@ footer {
     top: -30px;
 }
 
-.top-row .opponent-tokens {
-    position: relative;
-    height: 100%;
-    width: 30%;
-    padding: 0 40px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: flex-end;
-}
-
 .opponent-tokens .token {
     position: absolute;
     top: 0;
-    left: 20px;
+    left: 0;
+    right: 60px;
     bottom: 0;
     margin: auto;
 }
@@ -97,10 +123,14 @@ footer {
 
 .game-display .middle-row {
     position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -ms-flex-wrap: nowrap;
     flex-wrap: nowrap;
     height: 200px;
     width: 85%;
+    margin-top: -70px;
 }
 
 .middle-row .cards-market {
@@ -108,12 +138,20 @@ footer {
     width: 65%;
     height: 100%;
 
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     justify-content: space-evenly;
 }
 
 .cards-market .card:hover {
+    -webkit-transform: scale(1.08);
+    -ms-transform: scale(1.08);
     transform: scale(1.08);
     cursor: pointer;
 }
@@ -131,6 +169,7 @@ footer {
     bottom: 0;
     left: 0;
     margin: auto;
+    -webkit-filter: unset;
     filter: unset;
 }
 
@@ -139,16 +178,35 @@ footer {
     width: 20%;
     height: 100%;
 
+    display: -ms-grid;
+
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    -ms-grid-rows: auto;
     grid-template-rows: auto;
     padding: 10px 0;
 }
 
+.middle-row .tokens-stock > *:nth-child(1) {
+    -ms-grid-row: 1;
+    -ms-grid-column: 1;
+}
+
+.middle-row .tokens-stock > *:nth-child(2) {
+    -ms-grid-row: 1;
+    -ms-grid-column: 2;
+}
+
 .tokens-stock > div {
     position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
     justify-content: flex-start;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     padding-left: 15px;
 }
@@ -158,11 +216,14 @@ footer {
     margin: 0 -17px;
 }
 
-    /********** BOTTOM ROW **********/
+/********** BOTTOM ROW **********/
 
 .game-display .bottom-row {
     position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -ms-flex-wrap: nowrap;
     flex-wrap: nowrap;
     height: 240px;
     width: 85%;
@@ -173,8 +234,10 @@ footer {
     height: 100%;
     width: 15%;
 
-    display: inline-block;
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 15px;
 }
 
 .tokens-player .token {
@@ -187,7 +250,14 @@ footer {
     height: 100%;
     width: 70%;
 
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
 }
 
@@ -196,13 +266,22 @@ footer {
     height: 70%;
     width: 100%;
 
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
     display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
     align-items: flex-start;
 }
 
 .cards-player .card {
-    margin: 0 -20px 0 -20px;
+    position: absolute;
+    /*margin: 0 -20px 0 -20px;*/
     cursor: pointer;
     z-index: 10;
 }
@@ -224,16 +303,54 @@ footer {
     min-width: 125px;
     background: center center no-repeat;
     background-size: contain;
+    -webkit-filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
     filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+    -webkit-transition: all ease 0.2s;
+    -o-transition: all ease 0.2s;
     transition: all ease 0.2s;
+    z-index: 5;
 }
 
 .card.selectTake {
-    filter: drop-shadow(0 5px 0 green);
+    -webkit-filter: drop-shadow(0 0 5px #90EE90FF);
+    filter: drop-shadow(0 0 5px #90EE90FF);
+}
+
+.card.selectTake::before {
+    position: absolute;
+    content: '';
+
+    top: 10px;
+    right: 10px;
+
+    height: 20px;
+    width: 20px;
+    background: #90EE90FF;
+    z-index: -10;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all ease 0.2s;
 }
 
 .card.selectSell {
-    filter: drop-shadow(0 5px 0 red);
+    -webkit-filter: drop-shadow(0 0 5px #ff1e00);
+    filter: drop-shadow(0 0 5px #ff1e00);
+}
+
+.card.selectSell::before {
+    position: absolute;
+    content: '';
+
+    top: 10px;
+    right: 10px;
+
+    height: 20px;
+    width: 20px;
+    background: #ff1e00;
+    z-index: -10;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all ease 0.2s;
 }
 
 .card.diamant {
@@ -260,12 +377,12 @@ footer {
     background-image: url("../images/cards/cigarette.png") ;
 }
 
-.card.reverse {
-    background-image: url("../images/cards/verso.png") ;
-}
-
 .card.chameau{
     background-image: url("../images/cards/plateau.png") ;
+}
+
+.card.reverse {
+    background-image: url("../images/cards/verso.png") ;
 }
 
 /********** TOKENS **********/
@@ -279,7 +396,10 @@ footer {
     min-width: 45px;
     background: center center no-repeat;
     background-size: contain;
+    -webkit-filter: drop-shadow(0 0px 2px rgba(0,0,0,0.2));
     filter: drop-shadow(0 0px 2px rgba(0,0,0,0.2));
+    -webkit-transition: all ease 0.2s;
+    -o-transition: all ease 0.2s;
     transition: all ease 0.2s;
 }
 
@@ -380,6 +500,7 @@ footer {
 .avatar.opposite {
     left: auto;
     right: -40px;
+    -ms-transform: scaleX(-1);
     transform: scaleX(-1);
 }
 
@@ -395,6 +516,7 @@ footer {
     background: var(--dark-blue);
     padding: 10px;
     z-index: 100;
+    -webkit-box-shadow: 0 2px 5px rgba(0,0,0,0.5);
     box-shadow: 0 2px 5px rgba(0,0,0,0.5);
 }
 
@@ -402,7 +524,10 @@ footer {
     top: 25px;
     left: 150px;
     background: none;
+    -webkit-box-shadow: none;
     box-shadow: none;
+    -webkit-transition: all ease 0.2s;
+    -o-transition: all ease 0.2s;
     transition: all ease 0.2s;
 }
 
@@ -413,6 +538,7 @@ footer {
 }
 
 .exit:hover {
+    -ms-transform: scale(1.1);
     transform: scale(1.1);
 }
 
@@ -425,15 +551,26 @@ footer {
     z-index: 1000;
     border: none;
 
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
     display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
 
     height: 50px;
     min-width: 200px;
-    width: 200px;
+    width: fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
     padding: 20px;
     border-radius: 10px 10px 0 0;
+    -webkit-box-shadow: 0 -3px 5px rgba(0,0,0,0.2);
     box-shadow: 0 -3px 5px rgba(0,0,0,0.2);
 
     background: var(--dark-blue);
@@ -442,6 +579,8 @@ footer {
     font-size: 2rem;
 
     cursor: pointer;
+    -webkit-transition: all ease 0.1s;
+    -o-transition: all ease 0.1s;
     transition: all ease 0.1s;
 }
 

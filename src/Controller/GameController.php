@@ -64,7 +64,7 @@ class GameController extends AbstractController
             return $this->redirectToRoute('app_game_home');
         }
 
-        return $this->render('game/game.html.twig', [
+        return $this->render('game/plateau.html.twig', [
             'game' => $game
         ]);
     }
