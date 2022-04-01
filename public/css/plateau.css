@@ -1,0 +1,825 @@
+.main-menu {
+    display: none !important;
+}
+
+footer {
+    display: none !important;
+}
+
+
+.main-container {
+    width: 100%;
+    padding: 0;
+}
+
+/********** GAME DISPLAY **********/
+
+.game-display {
+    position: relative;
+    min-height: 100vh;
+    height: 100%;
+    width: 100%;
+    background: url("../images/board-background.png") center no-repeat;
+    background-size: 101% 100%;
+
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+.game-display .top-row {
+    position: relative;
+    height: 150px;
+    width: 100%;
+
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.top-row .opponent-cards {
+    position: relative;
+    height: 100%;
+    width: 40%;
+    padding: 0 40px;
+
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+}
+
+.opponent-cards .card {
+    -webkit-transform: scaleY(-1) scaleX(-1);
+    -ms-transform: scaleY(-1) scaleX(-1);
+    transform: scaleY(-1) scaleX(-1);
+    margin: -40px -25px 0 -25px;
+    cursor: not-allowed;
+}
+
+.top-row .opponent-chameaux, .top-row .opponent-tokens {
+    position: relative;
+    height: 100%;
+    width: 30%;
+    padding: 0 40px;
+
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+    -webkit-box-align: end;
+    -ms-flex-align: end;
+    align-items: flex-end;
+}
+
+.opponent-chameaux .card {
+    position: absolute;
+    top: -30px;
+}
+
+.opponent-tokens .token {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 60px;
+    bottom: 0;
+    margin: auto;
+}
+
+/********** TOP ROW **********/
+
+.game-display .middle-row {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    height: 200px;
+    width: 85%;
+    margin-top: -70px;
+}
+
+.middle-row .cards-market {
+    position: relative;
+    width: 65%;
+    height: 100%;
+
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.cards-market .card:hover {
+    -webkit-transform: scale(1.08);
+    -ms-transform: scale(1.08);
+    transform: scale(1.08);
+    cursor: pointer;
+}
+
+.middle-row .cards-stock {
+    position: relative;
+    width: 15%;
+    height: 100%;
+}
+
+.cards-stock .card {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    -webkit-filter: unset;
+    filter: unset;
+}
+
+.middle-row .tokens-stock {
+    position: relative;
+    width: 20%;
+    height: 100%;
+
+    display: -ms-grid;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    -ms-grid-rows: auto;
+    grid-template-rows: auto;
+    padding: 10px 0;
+}
+
+.middle-row .tokens-stock > *:nth-child(1) {
+    -ms-grid-row: 1;
+    -ms-grid-column: 1;
+}
+
+.middle-row .tokens-stock > *:nth-child(2) {
+    -ms-grid-row: 1;
+    -ms-grid-column: 2;
+}
+
+.tokens-stock > div {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-left: 15px;
+}
+
+.tokens-stock > div .token {
+    position: relative;
+    margin: 0 -17px;
+}
+
+/********** BOTTOM ROW **********/
+
+.game-display .bottom-row {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    height: 240px;
+    width: 85%;
+}
+
+.bottom-row .tokens-player{
+    position: relative;
+    height: 100%;
+    width: 15%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 15px;
+}
+
+.tokens-player .token {
+    position: relative;
+    margin: 3px -10px;
+}
+
+.bottom-row .middle {
+    position: relative;
+    height: 100%;
+    width: 70%;
+
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.middle .cards-player {
+    position: relative;
+    height: 70%;
+    width: 100%;
+
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+}
+
+.cards-player .card {
+    position: absolute;
+    /*margin: 0 -20px 0 -20px;*/
+    cursor: pointer;
+    z-index: 10;
+}
+
+.middle .tokens-bonus-stock {
+    position: relative;
+    height: 30%;
+    width: 100%;
+    background: lightsteelblue;
+}
+
+/********** CARDS **********/
+
+.card {
+    position: relative;
+    height: 175px;
+    min-height: 175px;
+    width: 125px;
+    min-width: 125px;
+    background: center center no-repeat;
+    background-size: contain;
+    -webkit-filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+    -webkit-transition: all ease 0.2s;
+    -o-transition: all ease 0.2s;
+    transition: all ease 0.2s;
+    z-index: 5;
+}
+
+.card.selectTake {
+    -webkit-filter: drop-shadow(0 0 5px #90EE90FF);
+    filter: drop-shadow(0 0 5px #90EE90FF);
+}
+
+.card.selectTake::before {
+    position: absolute;
+    content: '';
+
+    top: 10px;
+    right: 10px;
+
+    height: 20px;
+    width: 20px;
+    background: #90EE90FF;
+    z-index: -10;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all ease 0.2s;
+}
+
+.card.selectSell {
+    -webkit-filter: drop-shadow(0 0 5px #ff1e00);
+    filter: drop-shadow(0 0 5px #ff1e00);
+}
+
+.card.selectSell::before {
+    position: absolute;
+    content: '';
+
+    top: 10px;
+    right: 10px;
+
+    height: 20px;
+    width: 20px;
+    background: #ff1e00;
+    z-index: -10;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all ease 0.2s;
+}
+
+.card.diamant {
+    background-image: url("../images/cards/couteau.png");
+}
+
+.card.or {
+    background-image: url("../images/cards/cles.png");
+}
+
+.card.argent {
+    background-image: url("../images/cards/tel.png") ;
+}
+
+.card.tissu {
+    background-image: url("../images/cards/cocaine.png") ;
+}
+
+.card.epice {
+    background-image: url("../images/cards/alcool.png") ;
+}
+
+.card.cuir {
+    background-image: url("../images/cards/cigarette.png") ;
+}
+
+.card.chameau{
+    background-image: url("../images/cards/plateau.png") ;
+}
+
+.card.reverse {
+    background-image: url("../images/cards/verso.png") ;
+}
+
+/********** TOKENS **********/
+
+.token {
+    position: relative;
+    display: inline-block;
+    height: 45px;
+    min-height: 45px;
+    width: 45px;
+    min-width: 45px;
+    background: center center no-repeat;
+    background-size: contain;
+    -webkit-filter: drop-shadow(0 0px 2px rgba(0,0,0,0.2));
+    filter: drop-shadow(0 0px 2px rgba(0,0,0,0.2));
+    -webkit-transition: all ease 0.2s;
+    -o-transition: all ease 0.2s;
+    transition: all ease 0.2s;
+}
+
+.token.diamant7 {
+    background-image: url("../images/tokens/couteau7.png");
+}
+
+.token.diamant5 {
+    background-image: url("../images/tokens/couteau5.png");
+}
+
+.token.or6 {
+    background-image: url("../images/tokens/cles6.png");
+}
+
+.token.or5 {
+    background-image: url("../images/tokens/cles5.png");
+}
+
+.token.argent5 {
+    background-image: url("../images/tokens/tel5.png") ;
+}
+
+.token.tissu5 {
+    background-image: url("../images/tokens/cocaine5.png") ;
+}
+
+.token.tissu3 {
+    background-image: url("../images/tokens/cocaine3.png") ;
+}
+
+.token.tissu2 {
+    background-image: url("../images/tokens/cocaine2.png") ;
+}
+
+.token.tissu1 {
+    background-image: url("../images/tokens/cocaine1.png") ;
+}
+
+.token.epice5 {
+    background-image: url("../images/tokens/alcool5.png") ;
+}
+
+.token.epice3 {
+    background-image: url("../images/tokens/alcool3.png") ;
+}
+
+.token.epice2 {
+    background-image: url("../images/tokens/alcool2.png") ;
+}
+
+.token.epice1 {
+    background-image: url("../images/tokens/alcool1.png") ;
+}
+
+.token.cuir4 {
+    background-image: url("../images/tokens/cigarette4.png") ;
+}
+
+.token.cuir3 {
+    background-image: url("../images/tokens/cigarette3.png") ;
+}
+
+.token.cuir2 {
+    background-image: url("../images/tokens/cigarette2.png") ;
+}
+
+.token.cuir1 {
+    background-image: url("../images/tokens/cigarette1.png") ;
+}
+
+.token.chameau{
+    background-image: url("../images/tokens/plateau.png") ;
+}
+
+.token.bonus3 {
+    background-image: url("../images/tokens/bonus3.png");
+}
+
+.token.bonus4 {
+    background-image: url("../images/tokens/bonus4.png");
+}
+
+.token.bonus5 {
+    background-image: url("../images/tokens/bonus5.png");
+}
+
+/********** AVATARS **********/
+
+.avatar {
+    position: absolute;
+    bottom: -30px;
+    left: -40px;
+    height: 400px;
+    z-index: 500;
+}
+
+.avatar.opposite {
+    left: auto;
+    right: -40px;
+    -ms-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+
+/********** UI **********/
+
+.logo, .exit, .chatBtn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+
+    border-radius: 10px;
+    height: 70px;
+    background: var(--dark-blue);
+    padding: 10px;
+    z-index: 500;
+    -webkit-box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.exit {
+    top: 25px;
+    left: 150px;
+    background: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    -webkit-transition: all ease 0.2s;
+    -o-transition: all ease 0.2s;
+    transition: all ease 0.2s;
+}
+
+.exit img {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.exit:hover {
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.valid {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: 300;
+    border: none;
+
+    display: -webkit-box;
+
+    display: -ms-flexbox;
+
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+
+    height: 50px;
+    min-width: 200px;
+    width: fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    padding: 20px;
+    border-radius: 10px 10px 0 0;
+    -webkit-box-shadow: 0 -3px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 -3px 5px rgba(0,0,0,0.2);
+
+    background: var(--dark-blue);
+    font-family: krungthep, sans-serif;
+    color: white;
+    font-size: 2rem;
+
+    cursor: pointer;
+    -webkit-transition: all ease 0.1s;
+    -o-transition: all ease 0.1s;
+    transition: all ease 0.1s;
+}
+
+.valid:hover {
+    height: 60px;
+}
+
+.valid.block {
+    background: lightslategray;
+    cursor: not-allowed;
+    pointer-events: none;
+    color: #fffffeb3;;
+}
+
+.chatBtn {
+    left: auto;
+    right: 20px;
+    height: 50px;
+    width: 50px;
+
+    background: var(--secondary);
+
+    cursor: pointer;
+    transition: all ease 0.2s;
+    z-index: 502;
+}
+
+.chatBtn svg {
+    position: relative;
+    height: 100%;
+    fill: white;
+}
+
+.chatBtn:hover {
+    transform: scale(1.05);
+}
+
+.chatContainer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 350px;
+    height: 100%;
+
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(3px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 501;
+
+    border-left: 20px #d3d3d3 solid;
+    border-right: 20px #d3d3d3 solid;
+
+    transform: translateX(350px);
+
+    transition: all ease 0.2s;
+}
+
+.chatContainer::before, .chatContainer::after {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 85px;
+
+    height: 100%;
+    width: 20px;
+    background: #d3d3d3;
+}
+
+.chatContainer::after {
+    left: auto;
+    right: 85px;
+}
+
+.chatMessages {
+    position: relative;
+    height: 75%;
+    width: 100%;
+    padding: 10px;
+    background: var(--dark-blue);
+
+    outline: 20px #d3d3d3 solid;
+    z-index: 1;
+}
+
+.chatMessages::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+
+    height: 98%;
+    width: calc(100% - 10px);
+
+    border: 5px solid #7d7d7d;
+}
+
+#chat {
+    position: relative;
+    height: calc(100% - 100px);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+#chat .message {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin-top: 5px;
+    padding: 5px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.message strong {
+    color: white;
+    font-size: 1.5rem;
+    font-style: italic;
+    margin-bottom: 3px;
+}
+
+.message p {
+    color: white;
+    font-weight: 300;
+    font-size: 1.2rem;
+}
+
+.chatForm {
+    position: absolute;
+    bottom: 0;
+    left: 5%;
+
+    height: 100px;
+    width: 90%;
+    border-top: 1px solid white;
+
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    padding-top: 20px;
+}
+
+.chatForm input[type="text"] {
+    position: relative;
+    width: 80%;
+    padding: 15px 10px;
+    border: 1px solid white;
+    background: none;
+
+    font-weight: 500;
+    color: white;
+    font-family: 'Ubuntu', sans-serif !important;
+    font-style: italic;
+    outline: none;
+}
+
+.chatForm input[type="text"]:focus, .chatForm input[type="text"]:focus-within {
+    outline: none;
+    border: 1px solid var(--tonic1);
+}
+
+.chatSend {
+    height: 30px;
+    transition: all ease-in 0.15s;
+    cursor: pointer;
+}
+
+.chatSend:hover {
+    transform: translateX(5px);
+}
+/********** PRELOADER **********/
+
+#preloader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #FFFFFF;
+    z-index: 400;
+    transition: all ease 0.8s;
+    transform-origin: bottom;
+}
+
+#preloader span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    height: 100px;
+    width: 10px;
+    background: var(--dark-blue);
+    border-radius: 0px;
+    transform-origin: bottom;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+
+    animation: preloading 2s ease infinite;
+}
+
+#preloader span:nth-child(1) {
+    left: -75px;
+    animation-delay: 0s;
+}
+
+#preloader span:nth-child(2) {
+    left: -25px;
+    animation-delay: 0.2s;
+}
+
+#preloader span:nth-child(3) {
+    right: -25px;
+    animation-delay: 0.4s;
+}
+
+#preloader span:nth-child(4) {
+    right: -75px;
+    animation-delay: 0.6s;
+}
+
+@keyframes preloading {
+    0%,5%,100% {
+        transform: scaleY(0);
+    }
+    50%,95% {
+        transform: scaleY(1);
+    }
+}

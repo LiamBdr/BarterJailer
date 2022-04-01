@@ -215,16 +215,19 @@
 .home-game {
     background: url("../images/home-barreau.png") no-repeat bottom center;
     background-size: 100% 101%;
+    margin-bottom: -50px;
 }
 
-.home-game > img {
+.home-game > iframe {
     position: relative;
-    display: block;
-    margin: auto;
     width: 70%;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    height: 500px;
+    left: 15%;
+    margin-top: -30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 10px rgb(0 0 0 / 30%);
 }
+
 
 .home-game div {
     position: relative;

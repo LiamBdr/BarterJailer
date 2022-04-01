@@ -22,6 +22,16 @@ class GameController extends AbstractController
         ]);
     }
 
+    #[Route('/game/plateau', name: 'app_game_test')]
+    public function plateau(ManagerRegistry $doctrine): Response
+    {
+        $games = $doctrine->getRepository(Game::class)->find(71);
+
+        return $this->render('game/plateau.html.twig', [
+            'game' => $games,
+        ]);
+    }
+
     #[Route('/game/{id<\d+>}', name: 'app_game')]
     public function gameDisplay(ManagerRegistry $doctrine, int $id): Response
     {
@@ -54,7 +64,7 @@ class GameController extends AbstractController
             return $this->redirectToRoute('app_game_home');
         }
 
-        return $this->render('game/game.html.twig', [
+        return $this->render('game/plateau.html.twig', [
             'game' => $game
         ]);
     }

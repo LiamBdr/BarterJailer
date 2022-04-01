@@ -2,7 +2,7 @@
 let gameId = document.querySelector('.gameId').value,
     userId = parseInt(document.querySelector('.userId').value),
     getUrl = window.location,
-    //baseUrl = getUrl.protocol + "//" + getUrl.host + "/jeu/",
+    // baseUrl = getUrl.protocol + "//" + getUrl.host + "/jeu/",
     baseUrl = getUrl.protocol + "//" + getUrl.host + "/",
     apiGetUrl = baseUrl + "api/games/" + gameId,
     game = [];
@@ -12,30 +12,25 @@ let singleCardContent,
     singleCardParent,
     selectedCards = {},
     selectedSellCards = {},
-    currentRound = 0;
-
+    currentRound = 0,
+    turnSent = false;
 
 //ÉLÉMENTS HTML
-let player1Cards = document.querySelector('.player1-cards'),
-    player1Enclos = document.querySelector('.player1-enclos'),
-    player1BonusTokens = document.querySelector('.player1-bonus-tokens'),
-    player1Tokens = document.querySelector('.player1-tokens'),
-    player2Cards = document.querySelector('.player2-cards'),
-    player2Enclos = document.querySelector('.player2-enclos'),
-    player2Tokens = document.querySelector('.player2-tokens'),
-    player2BonusTokens = document.querySelector('.player2-bonus-tokens'),
-    market = document.querySelector('.market'),
-    pioche = document.querySelector('.pioche'),
-    defausse = document.querySelector('.defausse'),
-    tokensPioche = document.querySelector('.pioche-tokens'),
+let playerCards = document.querySelector('.cards-player'),
+    opponentCards = document.querySelector('.opponent-cards'),
+    opponentEnclos = document.querySelector('.opponent-chameaux'),
+    opponentTokens = document.querySelector('.opponent-tokens'),
+    market = document.querySelector('.cards-market'),
+    pioche = document.querySelector('.cards-stock'),
+    tokensPioche = document.querySelector('.tokens-stock'),
     bonusTokensPioche = document.querySelector('.pioche-bonus-tokens'),
-    gameRound = document.querySelector('.game-round')
+    gameRound = document.querySelector('.game-round'),
+    preloader = document.querySelector('#preloader');
 
 
 //BOUTONS HTML
 
 let validTurnBtn =  document.querySelector('#validTurn');
-
 
 
 window.onload = function() {
@@ -54,24 +49,62 @@ window.onload = function() {
 //AFFICHE L'ENSEMBLE DU PLATEAU ET GÈRE LE TOUR DU JOUEUR
 function gameDisplay() {
 
+    let playerTokens, playerBonusTokens;
+
     //affiche chaque conteneur avec des cartes
-    displayCards(game.player1Cards, player1Cards);
-    displayCards(game.player1Enclos, player1Enclos);
-    displayCards(game.player2Cards, player2Cards);
-    displayCards(game.player2Enclos, player2Enclos);
-    displayCards(game.market, market);
-    displayCards(game.stockCards, pioche);
-    displayCards(game.defausse, defausse);
-    //affiche chaque conteneur avec des jetons
-    displayTokens(game.stockTokens, tokensPioche, 'token')
-    displayTokens(game.player1Tokens, player1Tokens, 'token')
-    displayTokens(game.player2Tokens, player2Tokens, 'token')
-    //affiche chaque conteneur avec des jetons bonus
-    displayTokens(game.stockBonusTokens, bonusTokensPioche, 'bonusToken')
-    displayTokens(game.player1BonusTokens, player1BonusTokens, 'bonusToken')
-    displayTokens(game.player2BonusTokens, player2BonusTokens, 'bonusToken')
+    if (parseInt(game.player1.id) === userId) {
+        displayCards([game.player1Cards, game.player1Enclos], playerCards);
+        displayCards([game.player2Cards], opponentCards, 'reverse');
+        displayCards([game.player2Enclos], opponentEnclos );
+
+        playerTokens = game.player1Tokens;
+        playerBonusTokens = game.player1BonusTokens;
+
+        displayTokens([game.player2Tokens, game.player2BonusTokens], opponentTokens, 'token')
+    } else {
+        displayCards([game.player2Cards, game.player2Enclos], playerCards);
+        displayCards([game.player1Cards], opponentCards, 'reverse');
+        displayCards([game.player1Enclos], opponentEnclos);
+
+        playerTokens = game.player2Tokens;
+        playerBonusTokens = game.player2BonusTokens;
+
+        displayTokens([game.player1Tokens, game.player1BonusTokens], opponentTokens, 'token')
+    }
+
+    displayCards([game.market], market);
+    displayCards([game.stockCards], pioche, 'reverse');
+
+    //affiche stock tokens
+    displayTokensByType(document.querySelector('.tokens-stock > div:nth-child(1)'),game.stockTokens, 'diamant');
+    displayTokensByType(document.querySelector('.tokens-stock > div:nth-child(2)'),game.stockTokens, 'or');
+    displayTokensByType(document.querySelector('.tokens-stock > div:nth-child(3)'),game.stockTokens, 'argent');
+    displayTokensByType(document.querySelector('.tokens-stock > div:nth-child(4)'),game.stockTokens, 'tissu');
+    displayTokensByType(document.querySelector('.tokens-stock > div:nth-child(5)'),game.stockTokens, 'epice');
+    displayTokensByType(document.querySelector('.tokens-stock > div:nth-child(6)'),game.stockTokens, 'cuir');
+
+    //affiche tokens joueur
+    displayTokensByType(document.querySelector('.tokens-player.left > div:nth-child(1)'),playerTokens, 'diamant');
+    displayTokensByType(document.querySelector('.tokens-player.left > div:nth-child(2)'),playerTokens, 'or');
+    displayTokensByType(document.querySelector('.tokens-player.left > div:nth-child(3)'),playerTokens, 'argent');
+    displayTokens([playerBonusTokens], document.querySelector('.tokens-player.left > div:nth-child(4)'), 'token')
+    displayTokensByType(document.querySelector('.tokens-player.right > div:nth-child(1)'),playerTokens, 'tissu');
+    displayTokensByType(document.querySelector('.tokens-player.right > div:nth-child(2)'),playerTokens, 'epice');
+    displayTokensByType(document.querySelector('.tokens-player.right > div:nth-child(3)'),playerTokens, 'cuir');
+
+
+    animateAll();
+    debug();
+
+    //preloader
+    preloader.style.transform = "translateY(100%)";
+    setTimeout(function () {
+        preloader.style.display = "none";
+    }, 850)
+
+
     //affichage des autres informations
-    gameRound.innerHTML = game.round;
+    // gameRound.innerHTML = game.round;
 
     selectedTakeCards = {};
     selectedSellCards = {};
@@ -97,36 +130,37 @@ function gameDisplay() {
 
     // affichage des boutons de jeu en fonction du tour
     if (parseInt(game.playerTurn) !== userId) { // le joueur attends son tour
-
         validTurnBtn.classList.add('block');
         validTurnBtn.innerHTML = 'C\'est à votre adversaire de jouer !';
-
     }
     else { //c'est au tour du joueur
-
         validTurnBtn.classList.add('block');
-        validTurnBtn.innerHTML = 'A votre tour !';
+        validTurnBtn.innerHTML = 'Sélectionnez des cartes !';
         detectClick(); //ajoute le click listener sur les cartes
-        // validTurnBtn.style.display = "fixed";
     }
-
-    //affiche informations pour debug
-    debugCardsNumber();
 }
 
 //AFFICHE LES CARTES D'UN TABLEAU DANS UN ELEMENT HTML
-function displayCards(array, dom) {
+function displayCards(array, dom, optClass = null) {
     let div;
     dom.innerHTML = '';
 
-    Object.entries(array).forEach(([key, card]) => {
-        div = document.createElement("div", );
-        div.className = "card " +card.type;
-        div.setAttribute("id", key);
+    //boucle pour accéder aux plusieurs tableau de données
+    array.forEach(function (ele) {
+        //boucle pour afficher les éléments de chaque tableau de donnée
+        Object.entries(ele).forEach(([key, card]) => {
+            div = document.createElement("div", );
 
-        div.innerHTML = card.type + '('+card.id+')';
-        dom.appendChild(div);
-    });
+            if (optClass !== null) {
+                div.className = "card "+optClass+" js";
+            } else {
+                div.className = "card " +card.type+" js";
+            }
+            div.setAttribute("id", key);
+            dom.appendChild(div);
+        });
+    })
+
 }
 
 //AFFICHAGE LES JETONS D'UN TABLEAU DANS UN ELEMENT HTML
@@ -134,12 +168,32 @@ function displayTokens(array, dom, type) {
     let div;
     dom.innerHTML = '';
 
-    Object.entries(array).forEach(([key, token]) => {
-        div = document.createElement("div", );
-        div.className = 'token '+type+' '+token.type;
-        div.setAttribute("id", type+key);
-        div.innerHTML = token.val;
-        dom.appendChild(div);
+    array.forEach(function (ele) {
+        Object.values(ele).forEach(token => {
+            div = document.createElement("div");
+            if (typeof  token.type !== 'string' ) {
+                div.className =  type + ' bonus'+token.type + ' js';
+            } else {
+                div.className =  type +' '+ token.type + token.val + ' js';
+            }
+            div.setAttribute("id", 'token' + token.id);
+            dom.appendChild(div);
+        });
+    });
+}
+
+function displayTokensByType(dom, array, type) {
+    let div;
+    dom.innerHTML = '';
+
+    let reverseDom = Object.entries(array).reverse();
+    Object.values(reverseDom).forEach((token) => {
+        if (token[1].type === type) {
+            div = document.createElement("div", );
+            div.className = 'token '+token[1].type+' '+token[1].type+token[1].val+' js';
+            div.setAttribute("id", 'token'+token[1].id);
+            dom.appendChild(div);
+        }
     });
 }
 
@@ -279,7 +333,7 @@ function detectClick() {
                         if (error === false) {
                             validTurnBtn.innerHTML = 'Échanger les marchandises';
                         } else {
-                            validTurnBtn.innerHTML = 'A votre tour !';
+                            validTurnBtn.innerHTML = 'Sélectionnez des cartes !';
                             validTurnBtn.classList.add("block");
                         }
 
@@ -318,7 +372,7 @@ function detectClick() {
 
                         //les marchandises ne sont pas du même type ou il y a un chameau
                         if (error === true) {
-                            validTurnBtn.innerHTML = 'A votre tour !';
+                            validTurnBtn.innerHTML = 'Sélectionnez des cartes !';
                             validTurnBtn.classList.add("block");
                         } else {
                             if (sellCardsArray.length === 1) {
@@ -353,7 +407,7 @@ function detectClick() {
                         }
 
                         if (error === true) {
-                            validTurnBtn.innerHTML = 'A votre tour !';
+                            validTurnBtn.innerHTML = 'Sélectionnez des cartes !';
                             validTurnBtn.classList.add("block");
                         } else {
                             validTurnBtn.innerHTML = 'Prendre la marchandise';
@@ -372,9 +426,9 @@ function detectClick() {
 
                         //si l'ensemble des cartes sont des chameaux
                         if (error === false) {
-                            validTurnBtn.innerHTML = 'Prendre tous les chameaux';
+                            validTurnBtn.innerHTML = 'Prendre tous les chariots';
                         } else {
-                            validTurnBtn.innerHTML = 'A votre tour !';
+                            validTurnBtn.innerHTML = 'Sélectionnez des cartes !';
                             validTurnBtn.classList.add("block");
                         }
 
@@ -386,7 +440,7 @@ function detectClick() {
             }
             // aucune carte n'est sélectionnée
             else {
-                validTurnBtn.innerHTML = 'A votre tour !';
+                validTurnBtn.innerHTML = 'Sélectionnez des cartes !';
                 validTurnBtn.classList.add("block");
             }
 
@@ -456,6 +510,11 @@ function ifCardSelected(selectedCards) {
 //AJOUTE CARTE DANS LA SÉLECTION
 function addSelectedCard(selectedCards, domSelectedCard, className) {
     domSelectedCard.classList.add(className);
+    if (className === 'selectSell') {
+        domSelectedCard.style.transform += 'translateY(-10px)';
+    } else {
+        domSelectedCard.style.transform = 'translateY(5px) scale(1.1)';
+    }
     //ajoute la carte au tableau des cartes sélectionnées
     selectedCards[singleCardContent['id']] = singleCardContent;
 }
@@ -463,6 +522,9 @@ function addSelectedCard(selectedCards, domSelectedCard, className) {
 //SUPPRIME CARTE DE LA SÉLECTION
 function removeSelectedCard(selectedCards, domSelectedCard, className) {
     domSelectedCard.classList.remove(className);
+    if (className === 'selectTake') {
+        domSelectedCard.style.transform = 'rotate('+getRandom(-5,5)+'deg)';
+    }
     delete selectedCards[singleCardContent['id']];
 }
 
@@ -474,13 +536,18 @@ function removeSelectedCard(selectedCards, domSelectedCard, className) {
 
 //ÉCHANGE LES CARTES ENTRE CELLES DU JOUEUR ET CELLES DU MARCHÉ
 function validTurn() {
-    let sendData = {};
-    sendData["selectedTakeCards"] = selectedTakeCards;
-    sendData["selectedSellCards"] = selectedSellCards;
+    if (turnSent === false) {
+        let sendData = {};
+        sendData["selectedTakeCards"] = selectedTakeCards;
+        sendData["selectedSellCards"] = selectedSellCards;
 
 
-    if (Object.keys(sendData["selectedTakeCards"]).length > 0 || Object.keys(sendData["selectedSellCards"]).length > 0) {
-        sendRequest('validTurn', gameId, sendData);
+        if (Object.keys(sendData["selectedTakeCards"]).length > 0 || Object.keys(sendData["selectedSellCards"]).length > 0) {
+            sendRequest('validTurn', gameId, sendData);
+            turnSent = true;
+            validTurnBtn.classList.add('block');
+            validTurnBtn.innerHTML = "Transfert en cours...";
+        }
     }
 }
 
@@ -505,6 +572,7 @@ function sendRequest(apiMethod, gameId, gameData) {
         } else {
             console.warn(data);
             getAllData();
+            turnSent = false;
         }
     });
 }
@@ -531,12 +599,6 @@ function getAllData() {
             console.error('DATA API ERROR : '+ error );
         });
 }
-
-/************************
- ************************
-  ANIMATIONS FONCTIONS
- ************************
- ************************/
 
 function roundFinish() {
 
@@ -636,11 +698,118 @@ function roundFinish() {
 
 /************************
  ************************
-    DEBUG FONCTIONS
+    ANIMATIONS
  ************************
  ************************/
 
-function debugCardsNumber() {
+function animateAll() {
+    /****** CARTES ADVERSAIRE *******/
+    let oppositeCards = [...document.querySelector(".opponent-cards").children],
+        rotation = 30,
+        rotationChange = (rotation*2) / (oppositeCards.length-1);
+
+    oppositeCards.forEach(function (e) {
+        e.style.transform = 'rotate('+rotation+'deg) scaleY(-1) scaleX(-1)' +'translateY('+Math.abs(rotation)*1.5+'px)';
+        rotation -= rotationChange;
+    })
+
+    /****** TOKENS ADVERSAIRE  *******/
+    let opponentTokens = [...document.querySelector(".opponent-tokens").children],
+        tokensTranslateX = -50,
+        tokensTranslateXChange = (tokensTranslateX*2) / (opponentTokens.length-1);
+
+    opponentTokens.forEach(function (e) {
+        e.style.transform = 'translateX('+tokensTranslateX+'px) translateY('+getRandom(-2,2)+'px)';
+        tokensTranslateX += tokensTranslateXChange;
+    })
+
+    /****** CARTES JOUEUR *******/
+    let playerCards = [...document.querySelector(".cards-player").children],
+        rotation2 = -15,
+        rotationChange2 = (rotation2*2) / (playerCards.length-1),
+        playerTranslateX = -200;
+
+    if (playerCards.length < 4) {
+        playerTranslateX = -70;
+    }
+
+    let playerTranslateXChange = (playerTranslateX*2) / (playerCards.length-1);
+
+    playerCards.forEach(function (e) {
+        let saveRotate = rotation2,
+            saveTranslate = playerTranslateX;
+        // e.style.transform = 'rotate('+rotation2+'deg) '+'translateY('+Math.abs(rotation2)*1.8+'px) '+'translateX('+playerTranslateX+'px)';
+        e.style.transform = 'rotate('+rotation2+'deg) '+'translateX('+playerTranslateX+'px)' + 'translateY(-20px)';
+        rotation2 -= rotationChange2;
+        playerTranslateX -= playerTranslateXChange;
+
+        //ANIMATIONS DES CARTES
+        //hover
+        e.addEventListener("mouseover", function() {
+            if(!e.classList.contains('selectSell')) {
+                e.style.transform = 'rotate('+saveRotate+'deg) '+'translateY(-50px) '+'translateX('+saveTranslate+'px)';
+            }
+        });
+        //hover-out
+        e.addEventListener("mouseout", function() {
+            if(!e.classList.contains('selectSell')) {
+                e.style.transform = 'rotate('+saveRotate+'deg) '+'translateY(-20px)'+'translateX('+saveTranslate+'px)';
+            }
+        });
+    })
+
+    /****** CHAMEAUX ADVERSAIRES  *******/
+    let chameauxPlayer = [...document.querySelector(".opponent-chameaux").children],
+        chameauxTranslateY = -30,
+        chameauxTranslateYChange = (chameauxTranslateY*2) / (chameauxPlayer.length-1);
+
+    chameauxPlayer.forEach(function (e) {
+        e.style.transform = 'translateY('+chameauxTranslateY+'px) '+'rotate('+getRandom(-2,2)+'deg)';
+        chameauxTranslateY += chameauxTranslateYChange;
+    })
+
+    /****** CARTES PIOCHES  *******/
+    let stockCards = [...document.querySelector(".cards-stock").children];
+    stockCards.forEach(function (e) {
+        e.style.transform = 'rotate('+getRandom(-5, 5)+'deg) translateX('+getRandom(-10,10)+'px) translateY('+getRandom(-10,10)+'px)';
+    })
+
+    /****** CARTES MARCHÉ  *******/
+    let marketCards = [...document.querySelector(".cards-market").children];
+    marketCards.forEach(function (e) {
+        e.style.transform = 'rotate('+getRandom(-5, 5)+'deg)';
+    })
+
+
+    /****** TOKENS STOCK *******/
+    tokenTranslate([...document.querySelector(".tokens-stock > div:nth-child(1)").children]);
+    tokenTranslate([...document.querySelector(".tokens-stock > div:nth-child(2)").children]);
+    tokenTranslate([...document.querySelector(".tokens-stock > div:nth-child(3)").children]);
+    tokenTranslate([...document.querySelector(".tokens-stock > div:nth-child(4)").children]);
+    tokenTranslate([...document.querySelector(".tokens-stock > div:nth-child(5)").children]);
+    tokenTranslate([...document.querySelector(".tokens-stock > div:nth-child(6)").children]);
+}
+
+function getRandom(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min +1)) + min;
+}
+
+function tokenTranslate(dom) {
+    // let tokensTranslation = 50,
+    //     tokensTranslationChange = (tokensTranslation) / (dom.length-1);
+
+    dom.forEach(function (e) {
+        // e.style.transform = 'translateX('+Math.abs(tokensTranslation)+'px)' + 'translateY('+getRandom(-1,1)+'px)';
+        // tokensTranslation -= tokensTranslationChange;
+        e.style.transform = 'rotate('+getRandom(-2,2)+'deg)' + 'translateY('+getRandom(-1,1)+'px)';
+    })
+}
+
+function debug() {
+    let debugDisplay = document.querySelector('#debug');
+
     let p1Total = Object.keys(game.player1Cards).length,
         p1Enclos = Object.keys(game.player1Enclos).length,
         p2Total = Object.keys(game.player2Cards).length,
@@ -651,14 +820,5 @@ function debugCardsNumber() {
         totalTokens = parseInt(Object.keys(game.player1Tokens).length) + parseInt(Object.keys(game.player2Tokens).length) + parseInt(Object.keys(game.stockTokens).length),
         totalCards = parseInt(p1Total) + parseInt(p2Total) + parseInt(marketTotal) + parseInt(piocheTotal) + parseInt(defausseTotal) + parseInt(p1Enclos) + parseInt(p2Enclos);
 
-    document.querySelector('#p1Total').innerHTML = p1Total;
-    document.querySelector('#p1Points').innerHTML = game.player1Points;
-    document.querySelector('#p2Total').innerHTML = p2Total;
-    document.querySelector('#p2Points').innerHTML = game.player2Points;
-    document.querySelector('#marketTotal').innerHTML = marketTotal;
-    document.querySelector('#piocheTotal').innerHTML = piocheTotal;
-    document.querySelector('#fausseTotal').innerHTML = defausseTotal;
-    document.querySelector('#totalCards').innerHTML = totalCards;
-    document.querySelector('#totalTotal').innerHTML = totalTokens;
-    document.querySelector('.playerTurn').innerHTML = game.playerTurn; //affiche le tour de l'utilisateur
+    debugDisplay.innerHTML = totalCards+' '+totalTokens;
 }
