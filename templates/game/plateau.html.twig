@@ -11,13 +11,43 @@
     <input class="gameId" type="hidden" value="{{ game.id }}">
     <input class="userId" type="hidden" value="{{ app.user.id }}">
 
+
     <div class="game-display">
+
+        {# PRELOADER #}
+        <div id="preloader">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
 
         {# UI #}
         <img src="{{ asset('images/logo-white.png') }}" alt="Logo BarterJailer" class="logo">
         <a class="exit" href="{{ path('app_game_home') }}"><img src="{{ asset('images/svg/exit.svg') }}" alt="Logo Exit"></a>
         <button id="validTurn" class="valid">A votre tour !</button>
         <div id="debug" style="position: fixed; top: 10px; right: 10px; background: red; color: white"></div>
+
+        {# chat #}
+        <div class="chatBtn">
+            <img src="{{ asset('images/svg/chat.svg') }}" alt="Pictogramme de chat">
+        </div>
+        <div class="chatContainer">
+            <div class="chatMessages">
+
+                <div id="chat">
+                    <div class="message">
+                        <strong>Armand</strong>
+                        <p>Letsgoooooo111</p>
+                    </div>
+                </div>
+                <div class="chatForm">
+                    <input type="text" placeholder="Votre message">
+                    <img class="chatSend" src="{{ asset('images/svg/send.svg') }}" alt="Pictogramme envoie" title="Envoyer le message">
+                </div>
+
+            </div>
+        </div>
 
         {# AVATARS #}
         {% if app.user.id == game.player1.id %}
@@ -278,4 +308,5 @@
 
 {% block additional_scripts %}
     <script src={{ asset('js/game.js') }}></script>
+    <script src={{ asset('js/chat.js') }}></script>
 {% endblock %}

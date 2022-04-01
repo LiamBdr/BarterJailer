@@ -2,7 +2,7 @@
 let gameId = document.querySelector('.gameId').value,
     userId = parseInt(document.querySelector('.userId').value),
     getUrl = window.location,
-    //baseUrl = getUrl.protocol + "//" + getUrl.host + "/jeu/",
+    // baseUrl = getUrl.protocol + "//" + getUrl.host + "/jeu/",
     baseUrl = getUrl.protocol + "//" + getUrl.host + "/",
     apiGetUrl = baseUrl + "api/games/" + gameId,
     game = [];
@@ -12,7 +12,8 @@ let singleCardContent,
     singleCardParent,
     selectedCards = {},
     selectedSellCards = {},
-    currentRound = 0;
+    currentRound = 0,
+    turnSent = false;
 
 //ÉLÉMENTS HTML
 let playerCards = document.querySelector('.cards-player'),
@@ -23,7 +24,8 @@ let playerCards = document.querySelector('.cards-player'),
     pioche = document.querySelector('.cards-stock'),
     tokensPioche = document.querySelector('.tokens-stock'),
     bonusTokensPioche = document.querySelector('.pioche-bonus-tokens'),
-    gameRound = document.querySelector('.game-round')
+    gameRound = document.querySelector('.game-round'),
+    preloader = document.querySelector('#preloader');
 
 
 //BOUTONS HTML
@@ -93,6 +95,13 @@ function gameDisplay() {
 
     animateAll();
     debug();
+
+    //preloader
+    preloader.style.transform = "translateY(100%)";
+    setTimeout(function () {
+        preloader.style.display = "none";
+    }, 850)
+
 
     //affichage des autres informations
     // gameRound.innerHTML = game.round;
@@ -527,13 +536,18 @@ function removeSelectedCard(selectedCards, domSelectedCard, className) {
 
 //ÉCHANGE LES CARTES ENTRE CELLES DU JOUEUR ET CELLES DU MARCHÉ
 function validTurn() {
-    let sendData = {};
-    sendData["selectedTakeCards"] = selectedTakeCards;
-    sendData["selectedSellCards"] = selectedSellCards;
+    if (turnSent === false) {
+        let sendData = {};
+        sendData["selectedTakeCards"] = selectedTakeCards;
+        sendData["selectedSellCards"] = selectedSellCards;
 
 
-    if (Object.keys(sendData["selectedTakeCards"]).length > 0 || Object.keys(sendData["selectedSellCards"]).length > 0) {
-        sendRequest('validTurn', gameId, sendData);
+        if (Object.keys(sendData["selectedTakeCards"]).length > 0 || Object.keys(sendData["selectedSellCards"]).length > 0) {
+            sendRequest('validTurn', gameId, sendData);
+            turnSent = true;
+            validTurnBtn.classList.add('block');
+            validTurnBtn.innerHTML = "Transfert en cours...";
+        }
     }
 }
 
@@ -558,6 +572,7 @@ function sendRequest(apiMethod, gameId, gameData) {
         } else {
             console.warn(data);
             getAllData();
+            turnSent = false;
         }
     });
 }
