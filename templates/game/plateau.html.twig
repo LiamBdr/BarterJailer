@@ -36,13 +36,9 @@
             <div class="chatMessages">
 
                 <div id="chat">
-                    <div class="message">
-                        <strong>Armand</strong>
-                        <p>Letsgoooooo111</p>
-                    </div>
                 </div>
                 <div class="chatForm">
-                    <input type="text" placeholder="Votre message">
+                    <input class="chatInput" type="text" placeholder="Votre message">
                     <img class="chatSend" src="{{ asset('images/svg/send.svg') }}" alt="Pictogramme envoie" title="Envoyer le message">
                 </div>
 
@@ -308,5 +304,75 @@
 
 {% block additional_scripts %}
     <script src={{ asset('js/game.js') }}></script>
-    <script src={{ asset('js/chat.js') }}></script>
+    <script src="http://193.168.146.106:8080/socket.io/socket.io.js"></script>
+    <script>
+        let chatBtn = document.querySelector('.chatBtn'),
+            chatContainer = document.querySelector('.chatContainer'),
+            chat = document.querySelector('#chat');
+
+        chatBtn.addEventListener("click", () => {
+
+            if (chatBtn.classList.contains("open")) {
+                chatBtn.classList.remove("open");
+                chatBtn.innerHTML = '<img src="{{ asset('images/svg/chat.svg') }}" alt="Pictogramme chat">'
+                chatContainer.style.transform = "translateX(350px)";
+            } else {
+                chatBtn.classList.add("open");
+                chatBtn.innerHTML = '<img src="{{ asset('images/svg/quit.svg') }}" alt="Pictogramme chat">'
+                chatContainer.style.transform = "translateX(0)";
+            }
+        })
+
+        var socket = io.connect('http://193.168.146.106:8080/');
+
+        let sendBtn = document.querySelector('.chatSend'),
+            chatInput = document.querySelector('.chatInput');
+
+        //ENVOIE MESSAGE
+        sendBtn.addEventListener("click", () => {
+
+            let message;
+
+            if (chatInput.value.length > 0) {
+                message = { "pseudo": "{{ app.user.username }}","text": chatInput.value }
+            }
+
+            socket.emit('clienttoserver', message);
+
+            chatInput.value = '';
+        });
+
+        chatInput.addEventListener("keyup", function(event) {
+            if (event.keyCode === 13) {
+                let message;
+
+                if (chatInput.value.length > 0) {
+                    message = { "pseudo": "{{ app.user.username }}","text": chatInput.value }
+                }
+
+                socket.emit('clienttoserver', message);
+
+                chatInput.value = '';
+            }
+        });
+
+        //RECEPTION MESSAGE
+        socket.on('servertoclient', function (msg) {
+
+            let div = document.createElement('div');
+
+            div.classList.add('message');
+
+            let strong = document.createElement('strong');
+            strong.textContent = msg.pseudo;
+
+            let p = document.createElement('p');
+            p.textContent = msg.text;
+
+            div.append(strong);
+            div.append(p);
+
+            chat.appendChild(div);
+        });
+    </script>
 {% endblock %}
