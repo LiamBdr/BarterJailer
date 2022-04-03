@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Friendship;
 use App\Entity\Game;
 use App\Entity\Player;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,9 +17,71 @@ class GameController extends AbstractController
     {
         $games = $doctrine->getRepository(Game::class)->findAll();
 
+        $allPlayers = $doctrine->getRepository(Player::class)->findAll();
+
+        // toutes les demandes d'amis que le joueur a envoyé
+        $friendRequestsSend = $doctrine->getRepository(Friendship::class)->findBy(
+            ['user' => $this->getUser()->getId()]
+        );
+
+        // toutes les demandes d'amis que le joueur a reçu
+        $friendRequestsReceived = $doctrine->getRepository(Friendship::class)->findBy(
+            ['friend' => $this->getUser()->getId()]
+        );
+
+        $friends = [];
+
+        //pour chaque demande envoyé
+        foreach ($friendRequestsSend as $sendRequest) {
+            //pour chaque demande reçu
+            foreach ($friendRequestsReceived as $receivedRequest) {
+
+                if ($sendRequest->getFriend() === $receivedRequest->getUser()) {
+                    $friends[] = $sendRequest;
+
+                    if (($key = array_search($sendRequest, $friendRequestsSend)) !== false) {
+                        unset($friendRequestsSend[$key]);
+                    }
+
+                    if (($key = array_search($receivedRequest, $friendRequestsReceived)) !== false) {
+                        unset($friendRequestsReceived[$key]);
+                    }
+
+                }
+
+            }
+        }
+
+        //supprime le joueur de tous les joueurs
+        if (($key = array_search($this->getUser(), $allPlayers)) !== false) {
+            unset($allPlayers[$key]);
+        }
+
+        foreach ($friends as $request) {
+            if (($key = array_search($request->getFriend(), $allPlayers)) !== false) {
+                unset($allPlayers[$key]);
+            }
+        }
+
+        foreach ($friendRequestsReceived as $request) {
+            if (($key = array_search($request->getUser(), $allPlayers)) !== false) {
+                unset($allPlayers[$key]);
+            }
+        }
+
+        foreach ($friendRequestsSend as $request) {
+            if (($key = array_search($request->getFriend(), $allPlayers)) !== false) {
+                unset($allPlayers[$key]);
+            }
+        }
+
 
         return $this->render('game/index.html.twig', [
             'games' => $games,
+            'allPlayers' => $allPlayers,
+            'friends' => $friends,
+            'sentPendingRequest' => $friendRequestsSend,
+            'receivedPendingRequest' => $friendRequestsReceived
         ]);
     }
 

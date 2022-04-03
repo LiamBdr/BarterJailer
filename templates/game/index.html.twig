@@ -3,25 +3,97 @@
 {% block title %}Jouer{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/game.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/lobby.css') }}">
 {% endblock %}
 
 {% block body %}
 
-    <h1>JOUER</h1>
+    {# LISTE DES PARTIES #}
+    <div class="lobby-container">
+        <h1>Choisir une cellule</h1>
 
+        <div id="games">
+            {% for game in games %}
+                <div>
+                    <div>
+                        <p><b>{{ game.name }} -</b>  {{ game.player1.username }} vs {{ game.player2.username }}</p>
+                        <p><i>ouverte le {{ game.dateCreation|date('d/m/Y à H:i')|capitalize }}</i> <span> | Tour n° {{ game.round }}</span></p>
+                    </div>
+                    {% if game.player1.id == app.user.id or game.player2.id == app.user.id %}
+                    <a href="{{ path('app_game', { 'id': game.id }) }}">Rejoindre</a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
 
-    <p><a class="btn" href="{{ path('app_game_create') }}">Créer partie</a></p>
-    <br><br>
+        <a class="btn" href="{{ path('app_game_create') }}">Ouvrir une cellule</a>
+    </div>
 
-    <ul>
-        {% for game in games %}
-            <li>
-                <b>{{ game.name }}</b> | {{ game.player1.username }} vs {{ game.player2.username }}
-                <a href="{{ path('app_game', { 'id': game.id }) }}">Rejoindre</a>
-            </li>
-        {% endfor %}
-    </ul>
+    {# AMIS #}
+    <div class="chatContainer">
+        <div class="chatMessages">
+            {% if friends|length > 0 %}
+            <h3>Collègues</h3>
+            <div class="list-player">
+                {% for request in friends %}
+                    <div class="player">
+                        <img class="avatar" src="{{ asset('avatars/' ~ request.friend.avatar ~ '.png') }}" alt="Avatar">
+                        <div>
+                            <p>{{ request.friend.firstname }} alias <i>{{ request.friend.username }} </i></p>
+                            <a href="{{ path('app_friend_delete', { 'id': request.friend.id }) }}">Supprimer</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
 
+            {% if receivedPendingRequest|length > 0 %}
+            <h3>En attente</h3>
+            <div class="list-player">
+                {% for request in receivedPendingRequest %}
+                    <div class="player">
+                        <img class="avatar" src="{{ asset('avatars/' ~ request.user.avatar ~ '.png') }}" alt="Avatar">
+                        <div>
+                            <p>{{ request.user.firstname }} alias <i>{{ request.user.username }} </i></p>
+                            <a href="{{ path('app_friend_add', { 'id': request.user.id }) }}">Accepter</a>
+                            <a href="{{ path('app_friend_delete', { 'id': request.user.id }) }}">Refuser</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if sentPendingRequest|length > 0 %}
+            <h3>Envoyées</h3>
+            <div class="list-player">
+                {% for request in sentPendingRequest %}
+                    <div class="player">
+                        <img class="avatar" src="{{ asset('avatars/' ~ request.friend.avatar ~ '.png') }}" alt="Avatar">
+                        <div>
+                            <p>{{ request.friend.firstname }} alias <i>{{ request.friend.username }} </i></p>
+                            <a href="{{ path('app_friend_cancel', {'id' : request.id }) }}">Annuler</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if allPlayers|length > 0 %}
+            <h3>Autres gardiens</h3>
+            <div class="list-player">
+                {% for player in allPlayers %}
+                    <div class="player">
+                        <img class="avatar" src="{{ asset('avatars/' ~ player.avatar ~ '.png') }}" alt="Avatar">
+                        <div>
+                            <p>{{ player.firstname }} alias <i>{{ player.username }} </i></p>
+                            <a href="{{ path('app_friend_add', { 'id': player.id }) }}">Ajouter</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
 
 {% endblock %}
