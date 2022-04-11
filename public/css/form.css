@@ -71,7 +71,47 @@ form .form-avatars {
     align-items: center;
     flex-direction: row;
     padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
     overflow-x: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.form-avatars::-webkit-scrollbar {
+    display: none;
+}
+
+form .arrow {
+    position: absolute;
+    height: 145px;
+    width: 100%;
+    left: 0;
+    padding: 0 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.arrow img {
+    position: relative;
+    height: 100%;
+    width: 40px;
+    padding: 15px;
+    z-index: 10;
+    background: linear-gradient(270deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%);
+    cursor: pointer;
+    transition: all ease 0.2s;
+}
+
+.arrow img:nth-child(1) {
+    transform: rotate(180deg);
+}
+
+.arrow img:hover {
+    padding: 13px;
 }
 
 form .form-avatars div {
@@ -258,4 +298,19 @@ form ul li {
 
 #inscription_form_captcha div {
     margin: 10px auto;
+}
+
+.select-gardien select{
+    position: relative;
+    width: 100%;
+    font-size: 1.3rem;
+    padding: 5px 10px;
+    border: unset;
+    border-radius: 4px;
+    outline-color: rgb(84 105 212 / 0.5);
+    box-shadow: 0 0 1px 1px rgb(60 66 87 / 16%);
+}
+
+.select-gardien select:focus, .select-gardien select:focus-within {
+    outline-color: var(--tonic1);
 }

@@ -10,6 +10,7 @@ footer {
 .main-container {
     width: 100%;
     padding: 0;
+    margin-top: 0 !important;
 }
 
 /********** GAME DISPLAY **********/
@@ -130,7 +131,7 @@ footer {
     flex-wrap: nowrap;
     height: 200px;
     width: 85%;
-    margin-top: -70px;
+    margin-top: -90px;
 }
 
 .middle-row .cards-market {

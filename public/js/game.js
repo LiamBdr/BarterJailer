@@ -94,7 +94,7 @@ function gameDisplay() {
 
 
     animateAll();
-    debug();
+    // debug();
 
     //preloader
     preloader.style.transform = "translateY(100%)";
@@ -807,18 +807,18 @@ function tokenTranslate(dom) {
     })
 }
 
-function debug() {
-    let debugDisplay = document.querySelector('#debug');
-
-    let p1Total = Object.keys(game.player1Cards).length,
-        p1Enclos = Object.keys(game.player1Enclos).length,
-        p2Total = Object.keys(game.player2Cards).length,
-        p2Enclos = Object.keys(game.player2Enclos).length,
-        marketTotal = Object.keys(game.market).length,
-        piocheTotal = Object.keys(game.stockCards).length,
-        defausseTotal = Object.keys(game.defausse).length,
-        totalTokens = parseInt(Object.keys(game.player1Tokens).length) + parseInt(Object.keys(game.player2Tokens).length) + parseInt(Object.keys(game.stockTokens).length),
-        totalCards = parseInt(p1Total) + parseInt(p2Total) + parseInt(marketTotal) + parseInt(piocheTotal) + parseInt(defausseTotal) + parseInt(p1Enclos) + parseInt(p2Enclos);
-
-    debugDisplay.innerHTML = totalCards+' '+totalTokens;
-}
+// function debug() {
+//     let debugDisplay = document.querySelector('#debug');
+//
+//     let p1Total = Object.keys(game.player1Cards).length,
+//         p1Enclos = Object.keys(game.player1Enclos).length,
+//         p2Total = Object.keys(game.player2Cards).length,
+//         p2Enclos = Object.keys(game.player2Enclos).length,
+//         marketTotal = Object.keys(game.market).length,
+//         piocheTotal = Object.keys(game.stockCards).length,
+//         defausseTotal = Object.keys(game.defausse).length,
+//         totalTokens = parseInt(Object.keys(game.player1Tokens).length) + parseInt(Object.keys(game.player2Tokens).length) + parseInt(Object.keys(game.stockTokens).length),
+//         totalCards = parseInt(p1Total) + parseInt(p2Total) + parseInt(marketTotal) + parseInt(piocheTotal) + parseInt(defausseTotal) + parseInt(p1Enclos) + parseInt(p2Enclos);
+//
+//     debugDisplay.innerHTML = totalCards+' '+totalTokens;
+// }

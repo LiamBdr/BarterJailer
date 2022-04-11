@@ -41,39 +41,41 @@ h1 {
     width: 80%;
     padding: 50px 0;
     overflow: visible;
+    margin-top: 90px;
 }
 
 /******** HEADER ********/
 
 .main-menu {
-    position: relative;
-    height: 100px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 90px;
     width: 100%;
     padding: 0 7%;
 
-    background: var(--secondary);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    background: var(--tonic2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
-    z-index: 100;
+    z-index: 1000;
 }
 
 .main-menu__logo {
     position: absolute;
-
-    height: 60%;
-
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    margin: auto;
+    height: 95px;
+    width: auto;
+    top: 30px;
+    left: 70px;
+    background: var(--dark-blue);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0, 0.3);
 }
 
-.main-menu__left, .main-menu__right {
+.main-menu__right {
     position: relative;
     display: flex;
     align-items: center;
@@ -91,38 +93,30 @@ h1 {
     flex-direction: column;
     align-items: center;
 
-    font-size: 1.4rem;
+    font-size: 1.7rem;
     font-weight: 300;
+    font-family: 'krungthep', sans-serif;
 }
 
-.main-menu__link svg {
-    height: 30px;
-    padding: 2px;
-    fill: white;
-    transition: all ease 0.2s;
-    margin-bottom: 5px;
-    transform-origin: bottom;
+.main-menu__link:not(.important, .active):hover {
+    color: #e0e0e0;
 }
 
-#logout-svg {
-    height: 30px;
-    padding: 3px;
+.main-menu__link.important {
+    background: var(--tonic1);
+    padding: 10px;
+    border-radius: 5px;
 }
 
-.main-menu__link:hover:not(.active) svg{
-    fill: var(--tonic1);
-    transform: scale(1.1);
+.main-menu__link.important:hover {
+    background: #ea754d;
 }
 
 .main-menu__link.active {
-    color: var(--tonic1);
+    color: var(--dark-blue);
     font-weight: 500;
+    cursor: default;
 }
-
-.main-menu__link.active svg {
-    filter: drop-shadow(0 3px 10px rgba(0,0,0,0.4));
-}
-
 /******** FLASH ********/
 
 .flash-message {

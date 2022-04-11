@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle cellule{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    {{ form_start(form) }}
+
+        <h1>Nouvelle cellule</h1>
+        <br>
+
+        {{ form_row(form.name) }}
+
+        <div class="select-gardien">
+            {{ form_row(form.player2) }}
+            <br>
+            <i class="help">Parmi vos collègues uniquement</i>
+        </div>
+
+        {{ form_rest(form) }}
+
+        <div class="form-errors">
+            {{ form_errors(form) }}
+        </div>
+
+        <button type="submit" class="btn">Ouvrir la nouvelle cellule</button>
+
+        <a href="{{ path('app_game_home') }}">Annuler la création</a>
+    {{ form_end(form) }}
+{% endblock %}

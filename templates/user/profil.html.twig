@@ -56,7 +56,10 @@
         </div>
 
         {% if app.user.id == player.id %}
-            <a class="profil-btn" href="{{ path('app_account_update') }}">Modifier le profil</a>
+            <div>
+                <a style="float: right; margin-left: 20px" class="profil-btn" href="{{ path('app_logout') }}">Déconnexion</a>
+                <a style="float: right;" class="profil-btn" href="{{ path('app_account_update') }}">Modifier le profil</a>
+            </div>
         {% endif %}
         <h1 class="profil-title">Statistiques gardien</h1>
 

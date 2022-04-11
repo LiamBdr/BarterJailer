@@ -17,10 +17,13 @@
                 <div>
                     <div>
                         <p><b>{{ game.name }} -</b>  {{ game.player1.username }} vs {{ game.player2.username }}</p>
-                        <p><i>ouverte le {{ game.dateCreation|date('d/m/Y à H:i')|capitalize }}</i> <span> | Tour n° {{ game.round }}</span></p>
+                        <p><i>ouverte le {{ game.dateCreation|date('d/m/Y, H:i:s')|capitalize }}</i> <span> | Tour n° {{ game.round }}</span></p>
                     </div>
                     {% if game.player1.id == app.user.id or game.player2.id == app.user.id %}
-                    <a href="{{ path('app_game', { 'id': game.id }) }}">Rejoindre</a>
+                        <div>
+                            <a href="{{ path('app_game', { 'id': game.id }) }}">Rejoindre</a>
+                            <a href="{{ path('app_game_delete', { 'id': game.id }) }}">Clôturer</a>
+                        </div>
                     {% endif %}
                 </div>
             {% endfor %}
@@ -32,9 +35,11 @@
     {# AMIS #}
     <div class="chatContainer">
         <div class="chatMessages">
-            {% if friends|length > 0 %}
-            <h3>Collègues</h3>
-            <div class="list-player">
+
+           
+            <div class="list-player friends" {% if friends|length <= 0 %}style="display:none;"{% endif %}>
+                <h3>Collègues</h3>
+                {% if friends|length > 0 %}
                 {% for request in friends %}
                     <div class="player">
                         <img class="avatar" src="{{ asset('avatars/' ~ request.friend.avatar ~ '.png') }}" alt="Avatar">
@@ -44,12 +49,12 @@
                         </div>
                     </div>
                 {% endfor %}
+                {% endif %}
             </div>
-            {% endif %}
 
-            {% if receivedPendingRequest|length > 0 %}
-            <h3>En attente</h3>
-            <div class="list-player">
+            <div class="list-player pending" {% if receivedPendingRequest|length <= 0 %}style="display:none;"{% endif %}>
+                <h3>En attente</h3>
+                {% if receivedPendingRequest|length > 0 %}
                 {% for request in receivedPendingRequest %}
                     <div class="player">
                         <img class="avatar" src="{{ asset('avatars/' ~ request.user.avatar ~ '.png') }}" alt="Avatar">
@@ -60,12 +65,12 @@
                         </div>
                     </div>
                 {% endfor %}
+                {% endif %}
             </div>
-            {% endif %}
 
-            {% if sentPendingRequest|length > 0 %}
-            <h3>Envoyées</h3>
-            <div class="list-player">
+            <div class="list-player sent" {% if sentPendingRequest|length <= 0 %}style="display: none"{% endif %}>
+                <h3>Envoyées</h3>
+                {% if sentPendingRequest|length > 0 %}
                 {% for request in sentPendingRequest %}
                     <div class="player">
                         <img class="avatar" src="{{ asset('avatars/' ~ request.friend.avatar ~ '.png') }}" alt="Avatar">
@@ -75,12 +80,12 @@
                         </div>
                     </div>
                 {% endfor %}
+                {% endif %}
             </div>
-            {% endif %}
 
-            {% if allPlayers|length > 0 %}
-            <h3>Autres gardiens</h3>
-            <div class="list-player">
+            <div class="list-player others"  {% if allPlayers|length <= 0 %}style="display: none"{% endif %}>
+                <h3>Autres gardiens</h3>
+                {% if allPlayers|length > 0 %}
                 {% for player in allPlayers %}
                     <div class="player">
                         <img class="avatar" src="{{ asset('avatars/' ~ player.avatar ~ '.png') }}" alt="Avatar">
@@ -90,10 +95,194 @@
                         </div>
                     </div>
                 {% endfor %}
+                {% endif %}
             </div>
-            {% endif %}
 
         </div>
     </div>
 
+{% endblock %}
+
+{% block additional_scripts %}
+    <script>
+
+        const baseUrl = "{{ url('app_home') }}";
+
+        function refreshFriends() {
+            fetch(baseUrl+'game/get/games',{
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    displayPlayers(data);
+                    console.log(data);
+                })
+                .catch(function(error) {
+                    console.error('DATA API ERROR : '+ error );
+                });
+        }
+
+        function displayPlayers(data) {
+
+            //AMIS
+            // le joueur a des amis
+            if (Object.keys(data.friends).length > 0) {
+                let friendsHtml = document.querySelector(".friends");
+                friendsHtml.style.display = 'block';
+                friendsHtml.innerHTML = '';
+
+                let h3 = document.createElement("h3");
+                h3.innerHTML = 'Collègues';
+                friendsHtml.append(h3);
+
+                Object.values(data.friends).forEach(function (request) {
+                    let div = document.createElement("div");
+                    div.classList.add('player');
+                    div.innerHTML =
+                        `
+                        <img class="avatar" src="`+baseUrl+`avatars/`+request.friend.avatar+`.png" alt="Avatar">
+                        <div>
+                            <p>`+request.friend.firstname+` alias <i>`+request.friend.username+` </i></p>
+                            <a href="`+baseUrl+`friend/delete/`+request.friend.id+`">Supprimer</a>
+                        </div>
+                    `;
+                    friendsHtml.append(div);
+                })
+            }
+            // le joueur n'a pas d'amis
+            else {
+                let friendsHtml = document.querySelector(".friends");
+                friendsHtml.style.display = 'none';
+                friendsHtml.innerHTML = '';
+            }
+
+            //EN ATTENTE
+            if (Object.keys(data.requestsReceived).length > 0) {
+                let pendingHtml = document.querySelector(".pending");
+                pendingHtml.style.display = 'block';
+                pendingHtml.innerHTML = '';
+
+                let h3 = document.createElement("h3");
+                h3.innerHTML = 'En attente';
+                pendingHtml.append(h3);
+
+                Object.values(data.requestsReceived).forEach(function (request) {
+                    let div = document.createElement("div");
+                    div.classList.add('player');
+                    div.innerHTML =
+                        `
+                        <img class="avatar" src="` + baseUrl + `avatars/` + request.user.avatar + `.png" alt="Avatar">
+                        <div>
+                            <p>` + request.user.firstname + ` alias <i>` + request.user.username + ` </i></p>
+                            <a href="` + baseUrl + `friend/add/` + request.user.id + `">Accepter</a>
+                            <a href="` + baseUrl + `friend/delete/` + request.user.id + `">Refuser</a>
+                        </div>
+                    `;
+                    pendingHtml.append(div);
+                })
+            }
+            else {
+                let pendingHtml = document.querySelector(".pending");
+                pendingHtml.style.display = 'none';
+                pendingHtml.innerHTML = '';
+            }
+
+            //ENVOYÉS
+            if (Object.keys(data.requestsSend).length > 0) {
+                let sentHtml = document.querySelector(".sent");
+                sentHtml.style.display = 'block';
+                sentHtml.innerHTML = '';
+
+                let h3 = document.createElement("h3");
+                h3.innerHTML = 'Envoyées';
+                sentHtml.append(h3);
+
+                Object.values(data.requestsSend).forEach(function (request) {
+                    let div = document.createElement("div");
+                    div.classList.add('player');
+                    div.innerHTML =
+                        `
+                        <img class="avatar" src="` + baseUrl + `avatars/` + request.friend.avatar + `.png" alt="Avatar">
+                        <div>
+                            <p>` + request.friend.firstname + ` alias <i>` + request.friend.username + ` </i></p>
+                            <a href="` + baseUrl + `friend/cancel/` + request.id + `">Annuler</a>
+                        </div>
+                    `;
+                    sentHtml.append(div);
+                })
+            }
+            else {
+                let sentHtml = document.querySelector(".sent");
+                sentHtml.style.display = 'none';
+                sentHtml.innerHTML = '';
+            }
+
+            //AUTRES JOUEURS
+            if (Object.keys(data.allPlayers).length > 0) {
+                let othersHtml = document.querySelector(".others");
+                othersHtml.style.display = 'block';
+                othersHtml.innerHTML = '';
+
+                let h3 = document.createElement("h3");
+                h3.innerHTML = 'Autres gardiens';
+                othersHtml.append(h3);
+
+                Object.values(data.allPlayers).forEach(function (player) {
+                    let div = document.createElement("div");
+                    div.classList.add('player');
+                    div.innerHTML =
+                        `
+                        <img class="avatar" src="` + baseUrl + `avatars/` + player.avatar + `.png" alt="Avatar">
+                        <div>
+                            <p>` + player.firstname + ` alias <i>` + player.username + ` </i></p>
+                            <a href="` + baseUrl + `friend/add/` + player.id + `">Ajouter</a>
+                        </div>
+                    `;
+                    othersHtml.append(div);
+                })
+            }
+            else {
+                let othersHtml = document.querySelector(".others");
+                othersHtml.style.display = 'none';
+                othersHtml.innerHTML = '';
+            }
+
+            //PARTIES
+            if (Object.keys(data.games).length > 0) {
+                let gamesHtml = document.querySelector("#games");
+                gamesHtml.innerHTML = '';
+
+                Object.values(data.games).forEach(function (game) {
+                    let div = document.createElement("div");
+                    let date = new Date(game.dateCreation);
+                    date = date.toLocaleString('fr-FR', { timeZone: 'UTC' })
+                    div.innerHTML = `
+                        <div>
+                            <p><b>`+game.name+` -</b>  `+game.player1.username+` vs `+game.player2.username+`</p>
+                            <p><i>ouverte le `+date+` </i> <span> | Tour n° `+game.round+`</span></p>
+                        </div>
+                    `;
+                    if (game.player1.id == {{ app.user.id }} || game.player2.id == {{ app.user.id }}) {
+                        let div2 = document.createElement("div");
+                        div2.innerHTML = `
+                             <div>
+                                <a href="`+baseUrl+`game/`+game.id+`">Rejoindre</a>
+                                <a href="`+baseUrl+`game/delete/`+game.id+`">Clôturer</a>
+                            </div>
+                        `;
+                        div.append(div2);
+                    }
+                    gamesHtml.append(div);
+                })
+            }
+        }
+
+        setInterval(refreshFriends, 2000);
+    </script>
 {% endblock %}

@@ -29,8 +29,12 @@ class PlayerCrudController extends AbstractCrudController
             TextField::new('lastname'),
             IntegerField::new('state')->setLabel('État'),
             ChoiceField::new('avatar')->setChoices([
-                'armand' => 'armand',
-                'roberto' => 'roberto'
+                'Jean-Greg' => 'jean-greg',
+                'Joy' => 'joy',
+                'Jules' => 'jules',
+                'Kim' => 'kim',
+                'Marcel' => 'marcel',
+                'Mathis' => 'mathis'
             ]),
             BooleanField::new('is_verified')->setLabel('Email verifié'),
             DateTimeField::new('date_inscription')->onlyOnForms(),

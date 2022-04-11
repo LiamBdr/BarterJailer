@@ -13,7 +13,7 @@
 
         <div>
             <h1>Barter Jailer</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut sodales elit. Duis interdum pulvinar ex a scelerisque. Cras sagittis, purus eget luctus lobortis, lorem dui ullamcorper nisi, nec ornare elit lacus in justo. In sit amet dui arcu. </p>
+            <p>Vous avez envie de jouer ? De vous amuser ? De combattre vos adversaires ?<br> Vous êtes au bon endroit ! Incarnez-vous en gardien de prison et tentez de devenir le plus respecté de tous.</p>
         </div>
     </div>
 
@@ -24,18 +24,29 @@
 
         <div>
             <h2>Barter Jailer, qu’est ce que c’est ?</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut sodales elit. Duis interdum pulvinar ex a scelerisque. Cras sagittis, purus eget luctus lobortis, lorem dui ullamcorper nisi, nec ornare elit lacus in justo. In sit amet dui arcu. Nullam vehicula tellus quis sapien tempus, a auctor ante commodo. Aliquam fermentum, est at egestas gravida, felis erat volutpat erat, id condimentum mi dolor sed risus. Donec quis eros in turpis accumsan finibus vel non ligula.</p>
-            <p>Fusce ante tellus, viverra vitae mauris non, mollis tempor ex. Duis rutrum accumsan arcu, non pretium odio fermentum a. Proin pulvinar pellentesque orci non consectetur. Praesent tempus sit amet mauris imperdiet volutpat. In eu auctor odio. Proin non congue nulla, non tempus erat. Proin purus nisl, tempus quis eleifend eu, fermentum a nibh.</p>
+            <p>
+                Vous venez de vous faire embaucher dans la prison de Richtfield, l’une des prisons les plus importantes du pays. Cette prison emploie de nombreux gardiens afin que l’ordre règne.
+                Vous êtes en face à face avec un autre gardien qui est donc votre concurrent, vous devez alors gagner cette partie pour obtenir un point de respect de la prison. Votre but est donc de vendre le maximum davantage aux prisonniers de Richtfield.
+            </p>
+            <p>
+                Si vous réussissez à vendre plus davantage que votre concourant vous obtiendrez un point de respect. Les avantages que vous pouvez vendre aux prisonniers sont des cigarettes, des téléphones, des clés, de l’alcool, de la drogue et des couteaux. À travers ce jeu, vous devrez vous imposer comme le meilleur troqueur de la prison !
+            </p>
         </div>
     </div>
 
     <div class="home-rules">
         <h2>Comment jouer à Barter Jailer</h2>
 
-        <div class="rules-content">
+        <div class="rules-content" id="rules1">
             <div>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut sodales elit. Duis interdum pulvinar ex a scelerisque. Cras sagittis, purus eget luctus lobortis, lorem dui ullamcorper nisi, nec ornare elit lacus in justo. In sit amet dui arcu. Nullam vehicula tellus quis sapien tempus, a auctor ante commodo. Aliquam fermentum, est at egestas gravida, felis erat volutpat erat, id condimentum mi dolor sed risus. Donec quis eros in turpis accumsan finibus vel non ligula.</p>
-                <p>Fusce ante tellus, viverra vitae mauris non, mollis tempor ex. Duis rutrum accumsan arcu, non pretium odio fermentum a. Proin pulvinar pellentesque orci non consectetur. Praesent tempus sit amet mauris imperdiet volutpat. In eu auctor odio. Proin non congue nulla, non tempus erat. Proin purus nisl, tempus quis eleifend eu, fermentum a nibh.</p>
+                <p>
+                    Le jeu de Barter Jailer se joue à 2 joueurs, vous êtes l’un des deux gardiens de prison les plus respecté de la prison. Seul le gardien aux deux points de respect aura le privilège d’avoir tout le respect de la prison. Pour cela, il faudra acheter, troquer et vendre à des meilleurs prix que votre adversaire. Veillez à bien surveiller vos chariots respectifs.
+                </p>
+
+                <p>
+                    Le jeu se déroule en 2 manches gagnantes. À chaque manche les joueurs vont tenter de vendre des avantages aux prisonniers sous forme de cartes afin de récupérer des jetons de valeurs décroissantes. Plus vous vendez tôt, plus vous récupérerez les jetons de haute valeur. Plus vous vendez des avantages identiques d'un coup, plus vous emportez de jetons "bonus".
+                </p>
+
                 <a id="more-button" href="">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 51 51" xml:space="preserve">
                         <polygon points="7.6,15.7 25.8,33.9 43.9,15.7 50,21.9 26,45.9 1.4,21.3 "/>
@@ -48,18 +59,41 @@
         </div>
 
         <div class="rules-appear">
-            <div class="rules-content">
+            <div class="rules-content" id="rules2">
                 <img src="{{ asset('avatars/jules.png') }}" alt="Marcel Barter Jailer">
 
                 <div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut sodales elit. Duis interdum pulvinar ex a scelerisque. Cras sagittis, purus eget luctus lobortis, lorem dui ullamcorper nisi, nec ornare elit lacus in justo. In sit amet dui arcu. Nullam vehicula tellus quis sapien tempus, a auctor ante commodo. Aliquam fermentum, est at egestas gravida, felis erat volutpat erat, id condimentum mi dolor sed risus. Donec quis eros in turpis accumsan finibus vel non ligula.</p>
-                    <p>Fusce ante tellus, viverra vitae mauris non, mollis tempor ex. Duis rutrum accumsan arcu, non pretium odio fermentum a. Proin pulvinar pellentesque orci non consectetur. Praesent tempus sit amet mauris imperdiet volutpat. In eu auctor odio. Proin non congue nulla, non tempus erat. Proin purus nisl, tempus quis eleifend eu, fermentum a nibh.</p>
+                    <p>
+                        <strong>À chaque tour, un joueur à le choix entre :</strong><br>
+                        - Piocher des cartes sur le plateau (5 cartes face visible disposées entre les joueurs)<br>
+                        - Vendre des cartes pour récupérer des jetons de valeur.
+                    </p>
+                    <p>
+                        <strong>Si vous choisissez de piocher, vous pouvez soit :</strong><br>
+                        - Prendre une carte avantage et la remplacer par une carte du talon. <br>
+                        - Prendre plusieurs cartes avantage et les remplacer par des cartes de votre main ou des chariot.
+                        <br>
+                        - Prendre tous les chariot et les remplacer par des cartes du talon.
+                    </p>
+
                 </div>
             </div>
-            <div class="rules-content">
+            <div class="rules-content" id="rules3">
                 <div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ut sodales elit. Duis interdum pulvinar ex a scelerisque. Cras sagittis, purus eget luctus lobortis, lorem dui ullamcorper nisi, nec ornare elit lacus in justo. In sit amet dui arcu. Nullam vehicula tellus quis sapien tempus, a auctor ante commodo. Aliquam fermentum, est at egestas gravida, felis erat volutpat erat, id condimentum mi dolor sed risus. Donec quis eros in turpis accumsan finibus vel non ligula.</p>
-                    <p>Fusce ante tellus, viverra vitae mauris non, mollis tempor ex. Duis rutrum accumsan arcu, non pretium odio fermentum a. Proin pulvinar pellentesque orci non consectetur. Praesent tempus sit amet mauris imperdiet volutpat. In eu auctor odio. Proin non congue nulla, non tempus erat. Proin purus nisl, tempus quis eleifend eu, fermentum a nibh.</p>
+                    <p>
+                        <strong>Si vous vendez, vous pouvez:</strong><br>
+                        - Défausser une ou plusieurs cartes d'un même avantage et prendre autant de jetons correspondants (2 minimum pour les avantages de haute valeur: Téléphone, clé, drogue).<br>
+                        - Récupérer des jetons "bonus" si vous vendez de 3 à 5 cartes à la fois.
+                    </p>
+
+
+                    <p>
+                        Une manche prend fin lorsque 3 piles de jetons sont épuisées ou que le paquet de carte est vidé. Le joueur ayant le plus de chariot dans son enclos remporte un jeton bonus "5".
+                        <br>
+                        Le joueur ayant engrangé le plus d'argent (les points des jetons) remporte la manche. <br>
+                        À la fin de chaque manche, le gardien de prison le plus riche remporte un le respect de la prison. Le premier joueur qui en aura récolté 2 gagne la partie.
+                    </p>
+
                 </div>
 
                 <img src="{{ asset('images/rules-tokens.png') }}" alt="Marcel Barter Jailer">
@@ -81,4 +115,147 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block additional_scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.2/Draggable.min.js"></script>
+    <script>
+        gsap.registerPlugin(ScrollTrigger, Draggable);
+
+
+        gsap.set(".home-intro", { backgroundRepeat: 'no-repeat', backgroundPositionY: '-1000px', backgroundSize: '100% 100%'});
+        gsap.set(".home-intro__card", { x: -1000});
+        gsap.set(".home-intro h1", { scaleY: 0, transformOrigin: 'bottom'});
+        gsap.set(".home-intro p", { x: 1000});
+        gsap.set(".home-description > div p", { y: 50, opacity: 0});
+        gsap.set("#rules1 > div p", { y: 50, opacity: 0});
+        gsap.set("#rules1 > img", { perspective: '10em'});
+        gsap.set("#rules2 > div p", { y: 50, opacity: 0});
+        gsap.set("#rules3 > div p", { y: 50, opacity: 0});
+        gsap.set(".home-rules > iframe", { opacity: 0, y: -200, transformOrigin: 'top'});
+
+
+        gsap.to(".home-intro", {
+            scrollTrigger: {
+                trigger: ".home-intro",
+                start: "33% center",
+                end: "bottom bottom"
+            },
+            backgroundPositionY: 0,
+            ease: "power2.inOut",
+            duration: 1
+        });
+
+        gsap.to(".home-intro h1", {
+            scrollTrigger: {
+                trigger: ".home-intro",
+                start: "33% center",
+                end: "bottom bottom"
+            },
+            scaleY: 1,
+            ease: "power1.inOut",
+            delay: 1,
+            duration: 0.3
+        });
+
+        gsap.to(".home-intro p", {
+            scrollTrigger: {
+                trigger: ".home-intro",
+                start: "33% center",
+                end: "bottom bottom"
+            },
+            x: 0,
+            ease: "power1.inOut",
+            delay: 0.5,
+            duration: 1
+        });
+
+        gsap.to(".home-intro__card", {
+           scrollTrigger: {
+              trigger: ".home-intro",
+               start: "33% center",
+               end: "bottom bottom"
+           },
+           x: 0,
+           ease: "power1.inOut",
+            delay: 0.2,
+            duration: 1
+        });
+
+        gsap.to(".home-description > div p", {
+            scrollTrigger: {
+                trigger: ".home-description",
+                start: "33% center",
+                end: "bottom bottom"
+            },
+            y: 0,
+            opacity: 1,
+            ease: "power1.inOut",
+            duration: 0.5,
+            stagger: 0.2
+        });
+
+        gsap.to("#rules1 > div p", {
+            scrollTrigger: {
+                trigger: "#rules1",
+                start: "0 center",
+                end: "bottom bottom"
+            },
+            y: 0,
+            opacity: 1,
+            ease: "power1.inOut",
+            duration: 0.5,
+            stagger: 0.2
+        });
+
+        gsap.to("#rules1 > img", {
+            scrollTrigger: {
+                trigger: "#rules1",
+                start: "0 center"
+            },
+            rotateY: 360,
+            ease: "power1.inOut",
+            duration: 1
+        });
+
+        gsap.to("#rules2 > div p", {
+            scrollTrigger: {
+                trigger: "#rules1",
+                start: "100% center",
+            },
+            y: 0,
+            opacity: 1,
+            ease: "power1.inOut",
+            duration: 0.5,
+            stagger: 0.2
+        });
+
+        gsap.to("#rules3 > div p", {
+            scrollTrigger: {
+                trigger: "#rules1",
+                start: "200% center",
+                end: "bottom bottom"
+            },
+            y: 0,
+            opacity: 1,
+            ease: "power1.inOut",
+            duration: 0.5,
+            stagger: 0.2
+        });
+
+        gsap.to(".home-rules > iframe", {
+            scrollTrigger: {
+                trigger: ".home-game",
+                start: "0 center"
+            },
+            opacity: 1,
+            y: 0,
+            ease: "power2.inOut",
+            duration: 0.5
+        });
+
+
+    </script>
 {% endblock %}

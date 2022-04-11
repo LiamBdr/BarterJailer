@@ -25,6 +25,10 @@
         {{ form_row(registrationForm.email) }}
 
         <p>Avatar</p>
+        <div class="arrow">
+            <img src="{{ asset('images/svg/arrow-tonic.svg') }}" alt="Tonic arrow">
+            <img src="{{ asset('images/svg/arrow-tonic.svg') }}" alt="Tonic arrow">
+        </div>
         <div class="form-avatars">
             {% for avatar in  registrationForm.avatar %}
                 <div>
@@ -72,4 +76,29 @@
     {# GOOGLE CAPTCHA #}
     <script type="text/javascript" src="{{ asset('js/captcha.js') }}"></script>
     <script type="text/javascript" src="https://www.google.com/recaptcha/api.js?onload=onGoogleReCaptchaApiLoad&render=explicit&hl={{app.request.locale}}" async defer></script>
+    <script>
+        let avatars = document.querySelector('.form-avatars'),
+            leftArrow = document.querySelector('.arrow img:nth-child(1)'),
+            rightArrow = document.querySelector('.arrow img:nth-child(2)'),
+            scrollLeft = avatars.scrollLeft;
+
+        avatars.addEventListener("scroll", function () {
+            scrollLeft = avatars.scrollLeft;
+        })
+
+        leftArrow.addEventListener("click", function () {
+            avatars.scroll({
+                left: scrollLeft-110,
+                behavior: 'smooth'
+            });
+        });
+
+        rightArrow.addEventListener("click", function () {
+            avatars.scroll({
+                left: scrollLeft+110,
+                behavior: 'smooth'
+            });
+        });
+
+    </script>
 {% endblock %}

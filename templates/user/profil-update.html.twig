@@ -20,6 +20,10 @@
         </div>
 
         <p>Avatar</p>
+        <div class="arrow">
+            <img src="{{ asset('images/svg/arrow-tonic.svg') }}" alt="Tonic arrow">
+            <img src="{{ asset('images/svg/arrow-tonic.svg') }}" alt="Tonic arrow">
+        </div>
         <div class="form-avatars">
             {% for avatar in  form.avatar %}
                 <div>
@@ -51,4 +55,32 @@
         <button type="submit" class="btn">Sauvegarder les modifications</button>
 
         <a href="{{ path('app_account') }}">Retour au profil</a>
+{% endblock %}
+
+{% block additional_scripts %}
+    <script>
+        let avatars = document.querySelector('.form-avatars'),
+            leftArrow = document.querySelector('.arrow img:nth-child(1)'),
+            rightArrow = document.querySelector('.arrow img:nth-child(2)'),
+            scrollLeft = avatars.scrollLeft;
+
+        avatars.addEventListener("scroll", function () {
+            scrollLeft = avatars.scrollLeft;
+        })
+
+        leftArrow.addEventListener("click", function () {
+            avatars.scroll({
+                left: scrollLeft-110,
+                behavior: 'smooth'
+            });
+        });
+
+        rightArrow.addEventListener("click", function () {
+            avatars.scroll({
+                left: scrollLeft+110,
+                behavior: 'smooth'
+            });
+        });
+
+    </script>
 {% endblock %}

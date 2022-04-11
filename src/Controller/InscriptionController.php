@@ -63,6 +63,9 @@ class InscriptionController extends AbstractController
             $user->setLastConnection($now);
             $user->setState(0);
 
+            $user->setIsVerified(true);
+            $user->setRoles(['ROLE_PLAYER']);
+
             //envoie joueur dans bdd
             $entityManager->persist($user);
             $entityManager->flush();
